@@ -7,5 +7,10 @@
 			"path": "client"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"[typescript]": {
+			"editor.tabSize": 2,
+			"editor.detectIndentation": false
+		}
+	}
 }
