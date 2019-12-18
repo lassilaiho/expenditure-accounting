@@ -70,45 +70,51 @@ func deleteSession(ctx context.Context, id int64) error {
 	return err
 }
 
-func validateSession(r *http.Request) (int64, error) {
+func validateSession(r *http.Request) (int64, int64, error) {
 	authStr := r.Header.Get("Authorization")
 	if authStr == "" {
-		return -1, errInvalidSession
+		return -1, -1, errInvalidSession
 	}
 	authParts := strings.Split(authStr, " ")
 	if len(authParts) != 2 || strings.ToLower(authParts[0]) != "basic" {
-		return -1, errInvalidSession
+		return -1, -1, errInvalidSession
 	}
 	tokenBytes, err := base64.StdEncoding.DecodeString(authParts[1])
 	if err != nil {
-		return -1, errInvalidSession
+		return -1, -1, errInvalidSession
 	}
 	var (
-		id         int64
+		sessionID  int64
+		accountID  int64
 		expiryTime time.Time
 	)
 	err = Config.DB.QueryRowContext(
 		r.Context(),
-		"SELECT id, expiry_time FROM sessions WHERE token = $1",
-		string(tokenBytes)).Scan(&id, &expiryTime)
+		"SELECT id, account_id, expiry_time FROM sessions WHERE token = $1",
+		string(tokenBytes)).Scan(&sessionID, &accountID, &expiryTime)
 	if err != nil {
-		return -1, err
+		return -1, -1, err
 	}
 	now := time.Now().UTC()
 	if now.After(expiryTime) {
-		return -1, errSessionExpired
+		return -1, -1, errSessionExpired
 	}
 	if now.Add(Config.RefreshTime).After(expiryTime) {
 		go func() {
 			_, err := Config.DB.Exec(
 				"UPDATE sessions SET expiry_time = $1 WHERE id = $2",
-				now.Add(Config.SessionTimeout), id)
+				now.Add(Config.SessionTimeout), sessionID)
 			if err != nil {
 				log.Print("error refreshing session: ", err)
 			}
 		}()
 	}
-	return id, nil
+	return sessionID, accountID, nil
+}
+
+func checkAuthentication(r *http.Request) (int64, error) {
+	_, accountID, err := validateSession(r)
+	return accountID, err
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -142,7 +148,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
-	sessionID, err := validateSession(r)
+	sessionID, _, err := validateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)

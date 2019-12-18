@@ -1,6 +1,7 @@
-import { Drawer, List, ListItem, ListItemText } from '@material-ui/core';
+import { Divider, Drawer, List, ListItem, ListItemText } from '@material-ui/core';
 import { observer } from 'mobx-react';
-import React from 'react';
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import { useSession } from './session';
 
@@ -11,18 +12,30 @@ export interface NavigationDrawerProps {
 
 const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
   const session = useSession();
-  return (
+  const [redirect, setRedirect] = useState<JSX.Element | null>(null);
+
+  function linkOpener(url: string) {
+    return () => {
+      setRedirect(<Redirect to={url} />);
+      props.onClose();
+    };
+  }
+
+  return <>
+    {redirect}
     <Drawer open={props.open} onClose={props.onClose}>
       <List>
+        <ListItem button onClick={linkOpener('/purchases')}>
+          <ListItemText>Purchases</ListItemText>
+        </ListItem>
+        <Divider />
         {session.isLoggedIn
           ? <>
             <ListItem>
               <ListItemText>{session.currentEmail}</ListItemText>
             </ListItem>
-            <ListItem>
             <ListItem button onClick={() => session.logout()}>
               <ListItemText>Logout</ListItemText>
-            </ListItem>
             </ListItem>
           </>
           : <ListItem button>
@@ -30,7 +43,7 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
           </ListItem>}
       </List>
     </Drawer>
-  );
+  </>;
 });
 
 export default NavigationDrawer;

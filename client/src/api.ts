@@ -1,3 +1,9 @@
+export type LoadState =
+  | 'not-started'
+  | 'loading'
+  | 'finished'
+  | 'failed';
+
 export default class Api {
   public baseUrl: string = '';
 
@@ -15,6 +21,13 @@ export default class Api {
 
   public constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
+  }
+
+  public async get(url: string) {
+    return fetch(this.baseUrl + url, {
+      mode: 'cors',
+      headers: { ...this.defaultHeaders },
+    });
   }
 
   public async postJson(url: string, body: any) {

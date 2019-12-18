@@ -77,6 +77,7 @@ func defineRoutes() http.Handler {
 	r := mux.NewRouter()
 	r.Path("/login").Methods("POST").HandlerFunc(api.Login)
 	r.Path("/logout").Methods("POST").HandlerFunc(api.Logout)
+	r.Path("/purchases").Methods("GET").HandlerFunc(api.GetPurchases)
 	return r
 }
 
