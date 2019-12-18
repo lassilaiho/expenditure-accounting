@@ -1,10 +1,5 @@
 import {
   Button,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
   TextField,
   Typography
 } from '@material-ui/core';
@@ -12,10 +7,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Container from '@material-ui/core/Container';
 import FormGroup from '@material-ui/core/FormGroup';
 import Toolbar from '@material-ui/core/Toolbar';
-import MenuIcon from '@material-ui/icons/Menu';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
+import MenuButton from './MenuButton';
+import NavigationDrawer from './NavigationDrawer';
 import { useSession } from './session';
 
 const LoginPage: React.FC = observer(() => {
@@ -37,9 +33,7 @@ const LoginPage: React.FC = observer(() => {
     <>
       <AppBar position='sticky'>
         <Toolbar>
-          <IconButton onClick={() => setDrawerOpen(true)} color='inherit'>
-            <MenuIcon />
-          </IconButton>
+          <MenuButton onClick={() => setDrawerOpen(true)} />
           <Typography variant='h6'>Login</Typography>
         </Toolbar>
       </AppBar>
@@ -61,24 +55,9 @@ const LoginPage: React.FC = observer(() => {
           </FormGroup>
         </form>
       </Container>
-      <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <List>
-          {session.isLoggedIn
-            ? <>
-              <ListItem>
-                <ListItemText>{session.currentEmail}</ListItemText>
-              </ListItem>
-              <ListItem>
-                <ListItem button onClick={() => session.logout()}>
-                  <ListItemText>Logout</ListItemText>
-                </ListItem>
-              </ListItem>
-            </>
-            : <ListItem button>
-              <ListItemText>Login</ListItemText>
-            </ListItem>}
-        </List>
-      </Drawer>
+      <NavigationDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)} />
     </>
   );
 });
