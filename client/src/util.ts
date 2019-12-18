@@ -8,6 +8,10 @@ export function formatDate(d: Date) {
   return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
 }
 
+export function formatMonth(d: Date) {
+  return `${d.getMonth() + 1}/${d.getFullYear()}`;
+}
+
 export const threeDecimals = new Intl.NumberFormat('fi-FI', {
   style: 'decimal',
   minimumFractionDigits: 3,

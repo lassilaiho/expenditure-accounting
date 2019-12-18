@@ -11,6 +11,7 @@ import {
 import Api from './api';
 import DailyExpenditurePage from './DailyExpenditurePage';
 import LoginPage from './LoginPage';
+import MonthlyExpenditurePage from './MonthlyExpenditurePage';
 import { ProductStore, ProductStoreContext } from './product';
 import { PurchaseStore, PurchaseStoreContext } from './purchases';
 import PurchasesPage from './PurchasesPage';
@@ -52,6 +53,9 @@ const App: React.FC = observer(() => {
               </Route>
               <Route path='/expenditure/daily'>
                 <DailyExpenditurePage />
+              </Route>
+              <Route path='/expenditure/monthly'>
+                <MonthlyExpenditurePage />
               </Route>
               <Route path='/'>
                 <Redirect to='/purchases' />

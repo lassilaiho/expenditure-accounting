@@ -31,6 +31,9 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
         <ListItem button onClick={linkOpener('/expenditure/daily')}>
           <ListItemText>Daily Expenditure</ListItemText>
         </ListItem>
+        <ListItem button onClick={linkOpener('/expenditure/monthly')}>
+          <ListItemText>Monthly Expenditure</ListItemText>
+        </ListItem>
         <Divider />
         {session.isLoggedIn
           ? <>
