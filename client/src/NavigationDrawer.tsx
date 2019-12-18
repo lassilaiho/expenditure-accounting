@@ -20,9 +20,9 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
               <ListItemText>{session.currentEmail}</ListItemText>
             </ListItem>
             <ListItem>
-              <ListItem button onClick={() => session.logout()}>
-                <ListItemText>Logout</ListItemText>
-              </ListItem>
+            <ListItem button onClick={() => session.logout()}>
+              <ListItemText>Logout</ListItemText>
+            </ListItem>
             </ListItem>
           </>
           : <ListItem button>
