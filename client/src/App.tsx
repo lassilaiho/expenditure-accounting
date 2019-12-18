@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 
 import Api from './api';
+import DailyExpenditurePage from './DailyExpenditurePage';
 import LoginPage from './LoginPage';
 import { ProductStore, ProductStoreContext } from './product';
 import { PurchaseStore, PurchaseStoreContext } from './purchases';
@@ -48,6 +49,9 @@ const App: React.FC = observer(() => {
                 </Route>}
               <Route path='/purchases'>
                 <PurchasesPage />
+              </Route>
+              <Route path='/expenditure/daily'>
+                <DailyExpenditurePage />
               </Route>
               <Route path='/'>
                 <Redirect to='/purchases' />

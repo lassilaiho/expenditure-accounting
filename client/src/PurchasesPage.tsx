@@ -5,9 +5,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  Paper,
   Toolbar,
-  Typography,
-  Paper
+  Typography
 } from "@material-ui/core";
 import { observer } from "mobx-react";
 import React, { useState } from 'react';
@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 import MenuButton from './MenuButton';
 import NavigationDrawer from "./NavigationDrawer";
 import { PurchaseStore, usePurchases } from "./purchases";
+import { currency, formatDate, threeDecimals } from "./util";
 
 const PurchasesPage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -63,20 +64,5 @@ function renderPurchases(purchaseStore: PurchaseStore): JSX.Element {
     })}
   </List>;
 }
-
-function formatDate(d: Date) {
-  return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
-}
-
-const threeDecimals = new Intl.NumberFormat('fi-FI', {
-  style: 'decimal',
-  minimumFractionDigits: 3,
-  maximumFractionDigits: 3,
-});
-
-const currency = new Intl.NumberFormat('fi-FI', {
-  style: 'currency',
-  currency: 'EUR',
-});
 
 export default PurchasesPage;
