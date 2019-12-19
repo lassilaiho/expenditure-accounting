@@ -16,52 +16,58 @@ import { ProductStore, ProductStoreContext } from './product';
 import { PurchaseStore, PurchaseStoreContext } from './purchases';
 import PurchasesPage from './PurchasesPage';
 import { Session, SessionContext } from './session';
+import { TagStore, TagStoreContext } from './tags';
 
 interface Stores {
   session: Session;
   purchases: PurchaseStore;
   products: ProductStore;
+  tags: TagStore;
 }
 
 const App: React.FC = observer(() => {
   const stores = useRef<Stores | null>(null);
   if (stores.current === null) {
     const api = new Api('http://localhost:8080/api');
-    const products = new ProductStore();
+    const tags = new TagStore(api);
+    const products = new ProductStore(tags);
     stores.current = {
       session: Session.fromLocalStorage(api),
       purchases: new PurchaseStore(api, products),
       products,
+      tags,
     };
   }
-  const { session, purchases, products } = stores.current;
+  const { session, purchases, products, tags } = stores.current;
 
   return (
     <SessionContext.Provider value={session}>
       <ProductStoreContext.Provider value={products}>
         <PurchaseStoreContext.Provider value={purchases}>
-          <CssBaseline />
-          <Router>
-            <Switch>
-              {session.isLoggedIn
-                ? null
-                : <Route path='/'>
-                  <LoginPage />
-                </Route>}
-              <Route path='/purchases'>
-                <PurchasesPage />
-              </Route>
-              <Route path='/expenditure/daily'>
-                <DailyExpenditurePage />
-              </Route>
-              <Route path='/expenditure/monthly'>
-                <MonthlyExpenditurePage />
-              </Route>
-              <Route path='/'>
-                <Redirect to='/purchases' />
-              </Route>
-            </Switch>
-          </Router>
+          <TagStoreContext.Provider value={tags}>
+            <CssBaseline />
+            <Router>
+              <Switch>
+                {session.isLoggedIn
+                  ? null
+                  : <Route path='/'>
+                    <LoginPage />
+                  </Route>}
+                <Route path='/purchases'>
+                  <PurchasesPage />
+                </Route>
+                <Route path='/expenditure/daily'>
+                  <DailyExpenditurePage />
+                </Route>
+                <Route path='/expenditure/monthly'>
+                  <MonthlyExpenditurePage />
+                </Route>
+                <Route path='/'>
+                  <Redirect to='/purchases' />
+                </Route>
+              </Switch>
+            </Router>
+          </TagStoreContext.Provider>
         </PurchaseStoreContext.Provider>
       </ProductStoreContext.Provider>
     </SessionContext.Provider>

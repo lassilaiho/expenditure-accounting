@@ -37,7 +37,7 @@ export class Purchase {
     }
     return new Purchase(
       json.id,
-      Product.fromJson(json.product),
+      Product.fromJsonNoTags(json.product),
       new Date(json.date),
       json.quantity,
       json.price,
@@ -67,7 +67,12 @@ export class PurchaseStore {
       runInAction(() => {
         for (const obj of purchases) {
           const purchase = Purchase.fromJson(obj);
-          this.productStore.addById(purchase.product);
+          const product = this.productStore.getById(purchase.product.id);
+          if (product) {
+            purchase.product = product;
+          } else {
+            this.productStore.addById(purchase.product);
+          }
           this.purchases.push(purchase);
         }
         this.dataState = 'finished';

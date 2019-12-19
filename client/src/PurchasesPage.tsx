@@ -2,10 +2,6 @@ import {
   AppBar,
   CircularProgress,
   Container,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
   Toolbar,
   Typography
 } from "@material-ui/core";
@@ -14,14 +10,23 @@ import React, { useState } from 'react';
 
 import MenuButton from './MenuButton';
 import NavigationDrawer from "./NavigationDrawer";
-import { PurchaseStore, usePurchases } from "./purchases";
-import { currency, formatDate, threeDecimals } from "./util";
+import { useProducts } from "./product";
+import PurchaseItem from "./PurchaseItem";
+import { Purchase, usePurchases } from "./purchases";
+import { useTags } from "./tags";
 
 const PurchasesPage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const purchaseStore = usePurchases();
+  const tagStore = useTags();
+  const productStore = useProducts();
+  const [expandedPurchase, setExpandedPurchase] =
+    useState<Purchase | null>(null);
   if (purchaseStore.dataState === 'not-started') {
     purchaseStore.getPurchases();
+  }
+  if (tagStore.dataState === 'not-started') {
+    productStore.fetchTags();
   }
   return <>
     <AppBar position='sticky'>
@@ -31,38 +36,29 @@ const PurchasesPage: React.FC = observer(() => {
       </Toolbar>
     </AppBar>
     <Container fixed>
-      <Paper>
-        {purchaseStore.dataState === 'loading'
-          ? <CircularProgress color='secondary' />
-          : renderPurchases(purchaseStore)}
-      </Paper>
+      {purchaseStore.dataState === 'loading'
+        ? <CircularProgress color='secondary' />
+        : purchaseStore.purchases.map(p => {
+          const toggle = () => {
+            if (expandedPurchase?.id === p.id) {
+              setExpandedPurchase(null);
+            } else {
+              setExpandedPurchase(p);
+            }
+          };
+          return (
+            <PurchaseItem
+              key={p.id}
+              purchase={p}
+              expanded={expandedPurchase?.id === p.id}
+              onToggle={toggle} />
+          );
+        })}
     </Container>
     <NavigationDrawer
       open={drawerOpen}
       onClose={() => setDrawerOpen(false)} />
   </>;
 });
-
-function renderPurchases(purchaseStore: PurchaseStore): JSX.Element {
-  return <List>
-    {purchaseStore.purchases.map(p => {
-      let quantity = '';
-      if (p.quantity !== 1) {
-        if (Number.isInteger(p.quantity)) {
-          quantity = `${p.quantity.toFixed(0)} × `;
-        } else {
-          quantity = `${threeDecimals.format(p.quantity)} × `;
-        }
-      }
-      return (
-        <ListItem key={p.id}>
-          <ListItemText
-            primary={quantity + p.product.name}
-            secondary={`${formatDate(p.date)} • ${currency.format(p.totalPrice)}`} />
-        </ListItem>
-      );
-    })}
-  </List>;
-}
 
 export default PurchasesPage;
