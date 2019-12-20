@@ -9,17 +9,20 @@ import {
   Toolbar,
   Typography
 } from '@material-ui/core';
+import { History } from 'history';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import MenuButton from './MenuButton';
 import NavigationDrawer from './NavigationDrawer';
-import { PurchaseStore, usePurchases } from './purchases';
-import { currency, formatDate } from './util';
+import { Purchase, PurchaseStore, usePurchases } from './purchases';
+import { currency, formatDate, reverse } from './util';
 
 const DailyExpenditurePage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const purchaseStore = usePurchases();
+  const history = useHistory();
   if (purchaseStore.dataState === 'not-started') {
     purchaseStore.getPurchases();
   }
@@ -34,7 +37,7 @@ const DailyExpenditurePage: React.FC = observer(() => {
       <Paper>
         {purchaseStore.dataState === 'loading'
           ? <CircularProgress color='secondary' />
-          : renderDailyExpenditure(purchaseStore)}
+          : renderDailyExpenditure(purchaseStore, history)}
       </Paper>
     </Container>
     <NavigationDrawer
@@ -43,16 +46,12 @@ const DailyExpenditurePage: React.FC = observer(() => {
   </>;
 });
 
-function renderDailyExpenditure(store: PurchaseStore) {
+function renderDailyExpenditure(store: PurchaseStore, history: History<any>) {
   if (store.purchases.length === 0) {
     return <List></List>;
   }
   const dailyPurchases = store.purchases.slice();
-  dailyPurchases.sort((a, b) => {
-    if (a.date < b.date) { return 1; }
-    if (a.date > b.date) { return -1; }
-    return 0;
-  });
+  dailyPurchases.sort(reverse(Purchase.orderByDate));
   const result: JSX.Element[] = [];
   let prev = dailyPurchases[0];
   let expenditure = prev.totalPrice;
@@ -61,20 +60,25 @@ function renderDailyExpenditure(store: PurchaseStore) {
     if (current.date.getTime() === prev.date.getTime()) {
       expenditure += current.totalPrice;
     } else {
-      result.push(makeItem(prev.date, expenditure));
+      result.push(makeItem(prev.date, expenditure, history));
       expenditure = current.totalPrice;
     }
     prev = current;
   }
-  result.push(makeItem(prev.date, expenditure));
+  result.push(makeItem(prev.date, expenditure, history));
   return <List>{result}</List>;
 }
 
-function makeItem(date: Date, expenditure: number) {
+function makeItem(date: Date, expenditure: number, history: History<any>) {
+  const d = formatDate(date);
   return (
-    <ListItem key={date.getTime()}>
+    <ListItem
+      key={date.getTime()}
+      button
+      onClick={() => history.push('/expenditure/' + d)}
+    >
       <ListItemText
-        primary={formatDate(date)}
+        primary={d}
         secondary={currency.format(expenditure)} />
     </ListItem>
   );

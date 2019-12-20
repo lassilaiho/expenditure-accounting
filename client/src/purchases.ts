@@ -35,13 +35,20 @@ export class Purchase {
       || typeof json.price !== 'number') {
       throw new Error('Invalid json object');
     }
+    const date = new Date(json.date);
     return new Purchase(
       json.id,
       Product.fromJsonNoTags(json.product),
-      new Date(json.date),
+      new Date(date.getFullYear(), date.getMonth(), date.getDate()),
       json.quantity,
       json.price,
     );
+  }
+
+  public static orderByDate(a: Purchase, b: Purchase) {
+    if (a.date < b.date) { return -1; }
+    if (a.date > b.date) { return 1; }
+    return 0;
   }
 }
 

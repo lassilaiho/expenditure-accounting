@@ -9,17 +9,20 @@ import {
   Toolbar,
   Typography
 } from '@material-ui/core';
+import { History } from 'history';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import MenuButton from './MenuButton';
 import NavigationDrawer from './NavigationDrawer';
-import { PurchaseStore, usePurchases } from './purchases';
-import { currency, formatMonth } from './util';
+import { Purchase, PurchaseStore, usePurchases } from './purchases';
+import { currency, formatMonth, reverse } from './util';
 
 const MonthlyExpenditurePage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const purchaseStore = usePurchases();
+  const history = useHistory();
   if (purchaseStore.dataState === 'not-started') {
     purchaseStore.getPurchases();
   }
@@ -34,7 +37,7 @@ const MonthlyExpenditurePage: React.FC = observer(() => {
       <Paper>
         {purchaseStore.dataState === 'loading'
           ? <CircularProgress color='secondary' />
-          : renderMonthlyExpenditure(purchaseStore)}
+          : renderMonthlyExpenditure(purchaseStore, history)}
       </Paper>
     </Container>
     <NavigationDrawer
@@ -43,16 +46,12 @@ const MonthlyExpenditurePage: React.FC = observer(() => {
   </>;
 });
 
-function renderMonthlyExpenditure(store: PurchaseStore) {
+function renderMonthlyExpenditure(store: PurchaseStore, history: History<any>) {
   if (store.purchases.length === 0) {
     return <List></List>;
   }
   const monthlyPurchases = store.purchases.slice();
-  monthlyPurchases.sort((a, b) => {
-    if (a.date < b.date) { return 1; }
-    if (a.date > b.date) { return -1; }
-    return 0;
-  });
+  monthlyPurchases.sort(reverse(Purchase.orderByDate));
   const result: JSX.Element[] = [];
   let prev = monthlyPurchases[0];
   let expenditure = prev.totalPrice;
@@ -61,12 +60,12 @@ function renderMonthlyExpenditure(store: PurchaseStore) {
     if (equalMonths(current.date, prev.date)) {
       expenditure += current.totalPrice;
     } else {
-      result.push(makeItem(prev.date, expenditure));
+      result.push(makeItem(prev.date, expenditure, history));
       expenditure = current.totalPrice;
     }
     prev = current;
   }
-  result.push(makeItem(prev.date, expenditure));
+  result.push(makeItem(prev.date, expenditure, history));
   return <List>{result}</List>;
 }
 
@@ -74,10 +73,10 @@ function equalMonths(a: Date, b: Date) {
   return a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
 }
 
-function makeItem(monthAndYear: Date, expenditure: number) {
+function makeItem(monthAndYear: Date, expenditure: number, history: History<any>) {
   const m = formatMonth(monthAndYear);
   return (
-    <ListItem key={m}>
+    <ListItem key={m} button onClick={() => history.push('/expenditure/' + m)}>
       <ListItemText primary={m} secondary={currency.format(expenditure)} />
     </ListItem>
   );
