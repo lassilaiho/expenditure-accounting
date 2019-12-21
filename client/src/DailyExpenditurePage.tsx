@@ -14,18 +14,15 @@ import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { Purchase, Store, useStore } from './data/store';
 import MenuButton from './MenuButton';
 import NavigationDrawer from './NavigationDrawer';
-import { Purchase, PurchaseStore, usePurchases } from './purchases';
 import { currency, formatDate, reverse } from './util';
 
 const DailyExpenditurePage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const purchaseStore = usePurchases();
+  const store = useStore();
   const history = useHistory();
-  if (purchaseStore.dataState === 'not-started') {
-    purchaseStore.getPurchases();
-  }
   return <>
     <AppBar position='sticky'>
       <Toolbar>
@@ -35,9 +32,9 @@ const DailyExpenditurePage: React.FC = observer(() => {
     </AppBar>
     <Container fixed>
       <Paper>
-        {purchaseStore.dataState === 'loading'
+        {store.dataState === 'loading'
           ? <CircularProgress color='secondary' />
-          : renderDailyExpenditure(purchaseStore, history)}
+          : renderDailyExpenditure(store, history)}
       </Paper>
     </Container>
     <NavigationDrawer
@@ -46,7 +43,7 @@ const DailyExpenditurePage: React.FC = observer(() => {
   </>;
 });
 
-function renderDailyExpenditure(store: PurchaseStore, history: History<any>) {
+function renderDailyExpenditure(store: Store, history: History<any>) {
   if (store.purchases.length === 0) {
     return <List></List>;
   }

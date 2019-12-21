@@ -2,8 +2,7 @@ import { Box, List, ListItem, ListItemText } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Purchase } from './purchases';
-import { Tag } from './tags';
+import { Purchase, Tag } from './data/store';
 import { currency, DateRange } from './util';
 
 export interface ExpenditureByTagsProps {

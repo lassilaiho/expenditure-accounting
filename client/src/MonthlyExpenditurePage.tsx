@@ -16,16 +16,13 @@ import { useHistory } from 'react-router-dom';
 
 import MenuButton from './MenuButton';
 import NavigationDrawer from './NavigationDrawer';
-import { Purchase, PurchaseStore, usePurchases } from './purchases';
 import { currency, formatMonth, reverse } from './util';
+import { useStore, Store, Purchase } from './data/store';
 
 const MonthlyExpenditurePage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const purchaseStore = usePurchases();
+  const store = useStore();
   const history = useHistory();
-  if (purchaseStore.dataState === 'not-started') {
-    purchaseStore.getPurchases();
-  }
   return <>
     <AppBar position='sticky'>
       <Toolbar>
@@ -35,9 +32,9 @@ const MonthlyExpenditurePage: React.FC = observer(() => {
     </AppBar>
     <Container fixed>
       <Paper>
-        {purchaseStore.dataState === 'loading'
+        {store.dataState === 'loading'
           ? <CircularProgress color='secondary' />
-          : renderMonthlyExpenditure(purchaseStore, history)}
+          : renderMonthlyExpenditure(store, history)}
       </Paper>
     </Container>
     <NavigationDrawer
@@ -46,7 +43,7 @@ const MonthlyExpenditurePage: React.FC = observer(() => {
   </>;
 });
 
-function renderMonthlyExpenditure(store: PurchaseStore, history: History<any>) {
+function renderMonthlyExpenditure(store: Store, history: History<any>) {
   if (store.purchases.length === 0) {
     return <List></List>;
   }

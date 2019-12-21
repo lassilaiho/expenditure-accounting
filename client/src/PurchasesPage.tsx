@@ -8,26 +8,16 @@ import {
 import { observer } from "mobx-react";
 import React, { useState } from 'react';
 
+import { Purchase, useStore } from "./data/store";
 import MenuButton from './MenuButton';
 import NavigationDrawer from "./NavigationDrawer";
-import { useProducts } from "./product";
 import PurchaseItem from "./PurchaseItem";
-import { Purchase, usePurchases } from "./purchases";
-import { useTags } from "./tags";
 
 const PurchasesPage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const purchaseStore = usePurchases();
-  const tagStore = useTags();
-  const productStore = useProducts();
+  const store = useStore();
   const [expandedPurchase, setExpandedPurchase] =
     useState<Purchase | null>(null);
-  if (purchaseStore.dataState === 'not-started') {
-    purchaseStore.getPurchases();
-  }
-  if (tagStore.dataState === 'not-started') {
-    productStore.fetchTags();
-  }
   return <>
     <AppBar position='sticky'>
       <Toolbar>
@@ -36,9 +26,9 @@ const PurchasesPage: React.FC = observer(() => {
       </Toolbar>
     </AppBar>
     <Container fixed>
-      {purchaseStore.dataState === 'loading'
+      {store.dataState === 'loading'
         ? <CircularProgress color='secondary' />
-        : purchaseStore.purchases.map(p => {
+        : store.purchases.map(p => {
           const toggle = () => {
             if (expandedPurchase?.id === p.id) {
               setExpandedPurchase(null);

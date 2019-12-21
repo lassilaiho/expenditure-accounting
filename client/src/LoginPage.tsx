@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 
 import MenuButton from './MenuButton';
 import NavigationDrawer from './NavigationDrawer';
-import { useSession } from './session';
+import { useSession } from './data/session';
 
 const LoginPage: React.FC = observer(() => {
   const [email, setEmail] = useState('');

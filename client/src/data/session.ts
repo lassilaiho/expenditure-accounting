@@ -2,7 +2,7 @@ import { observable, runInAction, computed } from 'mobx';
 import React, { useContext } from 'react';
 
 import Api from './api';
-import { ensureOk } from './util';
+import { ensureOk } from '../util';
 
 export class Session {
   @observable

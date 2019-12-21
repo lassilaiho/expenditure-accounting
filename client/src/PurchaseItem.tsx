@@ -1,15 +1,15 @@
 import {
+  Box,
   Chip,
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
-  Typography,
-  Box
+  Typography
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 
-import { Purchase } from './purchases';
+import { Purchase } from './data/store';
 import { currency, formatDate, threeDecimals } from './util';
 
 export interface PurchaseListItemProps {
@@ -45,8 +45,8 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
       <ExpansionPanelDetails>
         <Box display='flex' flexWrap='wrap'>
           {p.product.tags.map(t => (
-            <Box mr={1}>
-              <Chip key={t.id} label={t.name} />
+            <Box mr={1} key={t.id}>
+              <Chip label={t.name} />
             </Box>
           ))}
         </Box>

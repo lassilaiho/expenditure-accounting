@@ -8,72 +8,60 @@ import {
   Switch
 } from 'react-router-dom';
 
-import Api from './api';
 import DailyExpenditurePage from './DailyExpenditurePage';
+import Api from './data/api';
+import { Session, SessionContext } from './data/session';
+import { Store, StoreContext } from './data/store';
 import ExpenditureDetailsPage from './ExpenditureDetailsPage';
 import LoginPage from './LoginPage';
 import MonthlyExpenditurePage from './MonthlyExpenditurePage';
-import { ProductStore, ProductStoreContext } from './product';
-import { PurchaseStore, PurchaseStoreContext } from './purchases';
 import PurchasesPage from './PurchasesPage';
-import { Session, SessionContext } from './session';
-import { TagStore, TagStoreContext } from './tags';
 
 interface Stores {
   session: Session;
-  purchases: PurchaseStore;
-  products: ProductStore;
-  tags: TagStore;
+  store: Store;
 }
 
 const App: React.FC = observer(() => {
   const stores = useRef<Stores | null>(null);
   if (stores.current === null) {
     const api = new Api('http://localhost:8080/api');
-    const tags = new TagStore(api);
-    const products = new ProductStore(tags);
     stores.current = {
       session: Session.fromLocalStorage(api),
-      purchases: new PurchaseStore(api, products),
-      products,
-      tags,
+      store: new Store(api),
     };
   }
-  const { session, purchases, products, tags } = stores.current;
+  const { session, store } = stores.current;
 
   return (
     <SessionContext.Provider value={session}>
-      <ProductStoreContext.Provider value={products}>
-        <PurchaseStoreContext.Provider value={purchases}>
-          <TagStoreContext.Provider value={tags}>
-            <CssBaseline />
-            <Router>
-              <Switch>
-                {session.isLoggedIn
-                  ? null
-                  : <Route path='/'>
-                    <LoginPage />
-                  </Route>}
-                <Route path='/purchases'>
-                  <PurchasesPage />
-                </Route>
-                <Route path='/expenditure/daily'>
-                  <DailyExpenditurePage />
-                </Route>
-                <Route path='/expenditure/monthly'>
-                  <MonthlyExpenditurePage />
-                </Route>
-                <Route path='/expenditure/'>
-                  <ExpenditureDetailsPage />
-                </Route>
-                <Route path='/'>
-                  <Redirect to='/purchases' />
-                </Route>
-              </Switch>
-            </Router>
-          </TagStoreContext.Provider>
-        </PurchaseStoreContext.Provider>
-      </ProductStoreContext.Provider>
+      <StoreContext.Provider value={store}>
+        <CssBaseline />
+        <Router>
+          <Switch>
+            {session.isLoggedIn
+              ? null
+              : <Route path='/'>
+                <LoginPage />
+              </Route>}
+            <Route path='/purchases'>
+              <PurchasesPage />
+            </Route>
+            <Route path='/expenditure/daily'>
+              <DailyExpenditurePage />
+            </Route>
+            <Route path='/expenditure/monthly'>
+              <MonthlyExpenditurePage />
+            </Route>
+            <Route path='/expenditure/'>
+              <ExpenditureDetailsPage />
+            </Route>
+            <Route path='/'>
+              <Redirect to='/purchases' />
+            </Route>
+          </Switch>
+        </Router>
+      </StoreContext.Provider>
     </SessionContext.Provider>
   );
 });

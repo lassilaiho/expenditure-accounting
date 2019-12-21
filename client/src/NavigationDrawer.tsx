@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { useSession } from './session';
+import { useSession } from './data/session';
 
 export interface NavigationDrawerProps {
   open: boolean;

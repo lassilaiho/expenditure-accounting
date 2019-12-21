@@ -12,34 +12,20 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { Redirect, useHistory, useLocation } from 'react-router-dom';
 
+import { useStore } from './data/store';
 import ExpenditureByTags from './ExpenditureByTags';
-import { useProducts } from './product';
-import { usePurchases } from './purchases';
-import { useTags } from './tags';
 import { DateRange } from './util';
 
-export interface ExpenditureDetailsPageProps { }
 
-const ExpenditureDetailsPage: React.FC<ExpenditureDetailsPageProps> = observer(props => {
+const ExpenditureDetailsPage: React.FC = observer(() => {
   const location = useLocation();
   const history = useHistory();
-  const purchaseStore = usePurchases();
-  const productStore = useProducts();
-  const tagStore = useTags();
-
-  if (purchaseStore.dataState === 'not-started') {
-    purchaseStore.getPurchases();
-  }
-  if (tagStore.dataState === 'not-started') {
-    productStore.fetchTags();
-  }
+  const store = useStore();
 
   const dateScope = parseDateScope(location.pathname);
   if (!dateScope) {
     return <Redirect to='/' />;
   }
-  const isLoading = purchaseStore.dataState === 'loading'
-    || tagStore.dataState === 'loading';
 
   return <>
     <AppBar position='sticky'>
@@ -54,10 +40,10 @@ const ExpenditureDetailsPage: React.FC<ExpenditureDetailsPageProps> = observer(p
     </AppBar>
     <Container fixed>
       <Paper>
-        {isLoading
+        {store.dataState === 'loading'
           ? <CircularProgress color='secondary' />
           : <ExpenditureByTags
-            purchases={purchaseStore.purchases}
+            purchases={store.purchases}
             dateRange={dateScopeToRange(dateScope)} />}
       </Paper>
     </Container>
