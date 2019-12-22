@@ -19,6 +19,7 @@ type purchase struct {
 	Date     time.Time `json:"date"`
 	Quantity float64   `json:"quantity"`
 	Price    float64   `json:"price"`
+	Tags     []*tag    `json:"tags"`
 }
 
 func getPurchasesByAccount(ctx context.Context, accountID int64) ([]*purchase, error) {
@@ -81,6 +82,21 @@ func GetPurchases(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+	}
+	tagsByPurchase, err :=
+		getTagsByPurchaseForAccount(r.Context(), session.AccountID)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	for _, p := range respData.Purchases {
+		tags := tagsByPurchase[p.ID]
+		if tags == nil {
+			p.Tags = []*tag{}
+		} else {
+			p.Tags = tags
+		}
 	}
 	if err = json.NewEncoder(w).Encode(&respData); err != nil {
 		log.Print(err)

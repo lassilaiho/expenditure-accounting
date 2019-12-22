@@ -29,6 +29,16 @@ export class Purchase {
   @observable public quantity: number;
   @observable public price: number;
   @computed public get totalPrice() { return this.quantity * this.price; }
+  @observable public tags: Tag[];
+  @computed public get tagsSortedByName() {
+    return this.tags.slice().sort((a, b) => {
+      const aName = a.name.toLocaleLowerCase();
+      const bName = b.name.toLocaleLowerCase();
+      if (aName < bName) { return -1; }
+      if (aName > bName) { return 1; }
+      return 0;
+    });
+  }
 
   public constructor(
     id: number,
@@ -36,12 +46,14 @@ export class Purchase {
     date: Date,
     quantity: number,
     price: number,
+    tags: Tag[],
   ) {
     this.id = id;
     this.product = product;
     this.date = date;
     this.quantity = quantity;
     this.price = price;
+    this.tags = tags;
   }
 
   public static fromJson(json: any) {
@@ -49,16 +61,18 @@ export class Purchase {
       || typeof json.product !== 'object'
       || typeof json.date !== 'string'
       || typeof json.quantity !== 'number'
-      || typeof json.price !== 'number') {
+      || typeof json.price !== 'number'
+      || !Array.isArray(json.tags)) {
       throw new Error('Invalid json object');
     }
     const date = new Date(json.date);
     return new Purchase(
       json.id,
-      Product.fromJsonNoTags(json.product),
+      Product.fromJson(json.product),
       new Date(date.getFullYear(), date.getMonth(), date.getDate()),
       json.quantity,
       json.price,
+      json.tags.map(Tag.fromJson),
     );
   }
 
@@ -72,20 +86,18 @@ export class Purchase {
 export class Product {
   @observable public id: number;
   @observable public name: string;
-  @observable public tags: Tag[];
 
-  public constructor(id: number, name: string, tags: Tag[]) {
+  public constructor(id: number, name: string) {
     this.id = id;
     this.name = name;
-    this.tags = tags;
   }
 
-  public static fromJsonNoTags(json: any) {
+  public static fromJson(json: any) {
     if (typeof json.id !== 'number'
       || typeof json.name !== 'string') {
       throw new Error('Invalid json object');
     }
-    return new Product(json.id, json.name, []);
+    return new Product(json.id, json.name);
   }
 }
 
@@ -105,26 +117,12 @@ export class Store {
       this.tagsById.clear();
       this.productsById.clear();
 
-      const [purchasesResp, tagResp] = await Promise.all([
-        this.api.get('/purchases'),
-        this.api.get('/products/tags'),
-      ]);
-      ensureOk(purchasesResp);
-      ensureOk(tagResp);
+      const resp = await this.api.get('/purchases');
+      ensureOk(resp);
 
-      const [purchasesJson, tagsJson] = await Promise.all([
-        purchasesResp.json(),
-        tagResp.json(),
-      ]);
+      const json = await resp.json();
       runInAction(() => {
-        this.parsePurchaseJson(purchasesJson);
-        const tagsByProduct = this.parseTagsJson(tagsJson);
-        for (const [id, tags] of tagsByProduct) {
-          const product = this.productsById.get(id);
-          if (product) {
-            product.tags = tags;
-          }
-        }
+        this.parsePurchaseJson(json);
         this.dataState = 'finished';
       });
     } catch (e) {
@@ -133,6 +131,7 @@ export class Store {
     }
   }
 
+  @action
   private parsePurchaseJson(data: any) {
     const purchases = data.purchases;
     if (!Array.isArray(purchases)) {
@@ -146,34 +145,17 @@ export class Store {
       } else {
         this.productsById.set(purchase.product.id, purchase.product);
       }
+      for (let i = 0; i < purchase.tags.length; i++) {
+        const currentTag = purchase.tags[i];
+        const existingTag = this.tagsById.get(currentTag.id);
+        if (existingTag) {
+          purchase.tags[i] = existingTag;
+        } else {
+          this.tagsById.set(currentTag.id, currentTag);
+        }
+      }
       this.purchases.push(purchase);
     }
-  }
-
-  private parseTagsJson(data: any): Map<number, Tag[]> {
-    const respData = data.tagsByProduct;
-    if (typeof respData !== 'object') {
-      throw new Error('Invalid response json');
-    }
-    const tagsByProduct = new Map<number, Tag[]>();
-    for (const idStr in respData) {
-      const productId = parseInt(idStr, 10);
-      if (isNaN(productId)) {
-        throw new Error('Invalid response json');
-      }
-      const tags: Tag[] = [];
-      for (const tagObj of respData[productId]) {
-        let tag = Tag.fromJson(tagObj);
-        if (this.tagsById.has(tag.id)) {
-          tag = this.tagsById.get(tag.id) as Tag;
-        } else {
-          this.tagsById.set(tag.id, tag);
-        }
-        tags.push(tag);
-      }
-      tagsByProduct.set(productId, tags);
-    }
-    return tagsByProduct;
   }
 }
 

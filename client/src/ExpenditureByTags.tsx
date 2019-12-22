@@ -18,7 +18,7 @@ const ExpenditureByTags: React.FC<ExpenditureByTagsProps> = observer(props => {
     if (!dateRange.isIn(purchase.date)) {
       continue;
     }
-    for (const tag of purchase.product.tags) {
+    for (const tag of purchase.tags) {
       let i = indexOfTag.get(tag.id);
       if (i === undefined) {
         i = result.length;

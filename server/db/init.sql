@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS purchases (
     account_id integer NOT NULL REFERENCES accounts ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS product_tag (
+CREATE TABLE IF NOT EXISTS purchase_tag (
     id SERIAL PRIMARY KEY,
-    product_id integer NOT NULL REFERENCES products ON DELETE CASCADE,
+    purchase_id integer NOT NULL REFERENCES purchases ON DELETE CASCADE,
     tag_id integer NOT NULL REFERENCES tags ON DELETE CASCADE
 );

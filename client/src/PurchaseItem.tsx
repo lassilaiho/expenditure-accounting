@@ -44,7 +44,7 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <Box display='flex' flexWrap='wrap'>
-          {p.product.tags.map(t => (
+          {p.tagsSortedByName.map(t => (
             <Box mr={1} key={t.id}>
               <Chip label={t.name} />
             </Box>
