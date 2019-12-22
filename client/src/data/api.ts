@@ -4,6 +4,32 @@ export type LoadState =
   | 'finished'
   | 'failed';
 
+export class SessionToken {
+  public constructor(
+    public readonly token: string,
+    public readonly expiryTime: Date,
+  ) { }
+
+  public static fromJson(json: any): SessionToken | null {
+    if (typeof json.token !== 'string'
+      || typeof json.expiryTime !== 'string') {
+      throw new Error('Invalid json object');
+    }
+    return new SessionToken(json.token, new Date(json.expiryTime));
+  }
+
+  public get isValid() {
+    return this.expiryTime.getTime() > Date.now();
+  }
+
+  public toJSON(): unknown {
+    return {
+      token: this.token,
+      expiryTime: this.expiryTime.toUTCString(),
+    };
+  }
+}
+
 export default class Api {
   public baseUrl: string = '';
 
@@ -11,12 +37,12 @@ export default class Api {
     'Authorization': ''
   };
 
-  private _sessionToken: string = '';
+  private _sessionToken: SessionToken | null = null;
   public get sessionToken() { return this._sessionToken; }
-  public set sessionToken(value: string) {
-    this._sessionToken = value;
+  public set sessionToken(token: SessionToken | null) {
+    this._sessionToken = token;
     this.defaultHeaders['Authorization'] =
-      value === '' ? '' : 'Basic ' + btoa(value);
+      token === null ? '' : 'Basic ' + btoa(token.token);
   }
 
   public constructor(baseUrl: string) {

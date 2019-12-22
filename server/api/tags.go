@@ -60,7 +60,7 @@ WHERE
 }
 
 func GetTagsByProduct(w http.ResponseWriter, r *http.Request) {
-	accountID, err := checkAuthentication(r)
+	session, err := validateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -70,7 +70,7 @@ func GetTagsByProduct(w http.ResponseWriter, r *http.Request) {
 		TagsByProduct map[int64][]*tag `json:"tagsByProduct"`
 	}
 	respData.TagsByProduct, err =
-		getTagsByProductForAccount(r.Context(), accountID)
+		getTagsByProductForAccount(r.Context(), session.AccountID)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)

@@ -33,7 +33,14 @@ func generateSessionToken() string {
 	return uuid.New().String()
 }
 
-func createSession(ctx context.Context, email, password string) (string, error) {
+type session struct {
+	ID         int64     `json:"id"`
+	Token      string    `json:"token"`
+	ExpiryTime time.Time `json:"expiryTime"`
+	AccountID  int64     `json:"accountId"`
+}
+
+func createSession(ctx context.Context, email, password string) (*session, error) {
 	var (
 		accountID    int64
 		passwordHash string
@@ -44,22 +51,25 @@ func createSession(ctx context.Context, email, password string) (string, error) 
 		email).Scan(&accountID, &passwordHash)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return "", errInvalidEmailOrPassword
+			return nil, errInvalidEmailOrPassword
 		}
-		return "", err
+		return nil, err
 	}
 	if err = comparePassword(password, passwordHash); err != nil {
-		return "", errInvalidEmailOrPassword
+		return nil, errInvalidEmailOrPassword
 	}
-	token := generateSessionToken()
+	session := &session{
+		Token:      generateSessionToken(),
+		ExpiryTime: time.Now().UTC().Add(Config.SessionTimeout),
+	}
 	_, err = Config.DB.ExecContext(
 		ctx,
 		"INSERT INTO sessions (token, expiry_time, account_id) VALUES ($1, $2, $3)",
-		token, time.Now().UTC().Add(Config.SessionTimeout), accountID)
+		session.Token, session.ExpiryTime, accountID)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return token, nil
+	return session, nil
 }
 
 func deleteSession(ctx context.Context, id int64) error {
@@ -70,51 +80,49 @@ func deleteSession(ctx context.Context, id int64) error {
 	return err
 }
 
-func validateSession(r *http.Request) (int64, int64, error) {
+func validateSession(r *http.Request) (*session, error) {
 	authStr := r.Header.Get("Authorization")
 	if authStr == "" {
-		return -1, -1, errInvalidSession
+		return nil, errInvalidSession
 	}
 	authParts := strings.Split(authStr, " ")
 	if len(authParts) != 2 || strings.ToLower(authParts[0]) != "basic" {
-		return -1, -1, errInvalidSession
+		return nil, errInvalidSession
 	}
 	tokenBytes, err := base64.StdEncoding.DecodeString(authParts[1])
 	if err != nil {
-		return -1, -1, errInvalidSession
+		return nil, errInvalidSession
 	}
-	var (
-		sessionID  int64
-		accountID  int64
-		expiryTime time.Time
-	)
-	err = Config.DB.QueryRowContext(
-		r.Context(),
-		"SELECT id, account_id, expiry_time FROM sessions WHERE token = $1",
-		string(tokenBytes)).Scan(&sessionID, &accountID, &expiryTime)
+	session := &session{
+		Token: string(tokenBytes),
+	}
+	err = Config.DB.
+		QueryRowContext(
+			r.Context(),
+			"SELECT id, account_id, expiry_time FROM sessions WHERE token = $1",
+			session.Token).
+		Scan(
+			&session.ID,
+			&session.AccountID,
+			&session.ExpiryTime)
 	if err != nil {
-		return -1, -1, err
+		return nil, err
 	}
 	now := time.Now().UTC()
-	if now.After(expiryTime) {
-		return -1, -1, errSessionExpired
+	if now.After(session.ExpiryTime) {
+		return nil, errSessionExpired
 	}
-	if now.Add(Config.RefreshTime).After(expiryTime) {
+	if now.Add(Config.RefreshTime).After(session.ExpiryTime) {
 		go func() {
 			_, err := Config.DB.Exec(
 				"UPDATE sessions SET expiry_time = $1 WHERE id = $2",
-				now.Add(Config.SessionTimeout), sessionID)
+				now.Add(Config.SessionTimeout), session.ID)
 			if err != nil {
 				log.Print("error refreshing session: ", err)
 			}
 		}()
 	}
-	return sessionID, accountID, nil
-}
-
-func checkAuthentication(r *http.Request) (int64, error) {
-	_, accountID, err := validateSession(r)
-	return accountID, err
+	return session, nil
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -128,10 +136,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	var resp struct {
-		Token string `json:"token"`
-	}
-	resp.Token, err = createSession(r.Context(), creds.Email, creds.Password)
+	session, err := createSession(r.Context(), creds.Email, creds.Password)
 	if err != nil {
 		log.Print(err)
 		if err == errInvalidEmailOrPassword {
@@ -141,6 +146,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
+	resp := struct {
+		Token      string    `json:"token"`
+		ExpiryTime time.Time `json:"expiryTime"`
+	}{
+		Token:      session.Token,
+		ExpiryTime: session.ExpiryTime,
+	}
 	if err = json.NewEncoder(w).Encode(&resp); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -148,13 +160,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
-	sessionID, _, err := validateSession(r)
+	session, err := validateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	if err = deleteSession(r.Context(), sessionID); err != nil {
+	if err = deleteSession(r.Context(), session.ID); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}

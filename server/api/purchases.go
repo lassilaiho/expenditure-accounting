@@ -66,7 +66,7 @@ ORDER BY purchases.date DESC, products.name ASC`,
 }
 
 func GetPurchases(w http.ResponseWriter, r *http.Request) {
-	accountID, err := checkAuthentication(r)
+	session, err := validateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -75,7 +75,8 @@ func GetPurchases(w http.ResponseWriter, r *http.Request) {
 	var respData struct {
 		Purchases []*purchase `json:"purchases"`
 	}
-	respData.Purchases, err = getPurchasesByAccount(r.Context(), accountID)
+	respData.Purchases, err =
+		getPurchasesByAccount(r.Context(), session.AccountID)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)

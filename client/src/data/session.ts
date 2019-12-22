@@ -1,14 +1,34 @@
-import { observable, runInAction, computed } from 'mobx';
+import { action, computed, observable, runInAction } from 'mobx';
 import React, { useContext } from 'react';
 
-import Api from './api';
 import { ensureOk } from '../util';
+import Api, { SessionToken } from './api';
+
+export type SessionState =
+  | 'logged-out'
+  | 'logged-in'
+  | 'expired';
 
 export class Session {
   @observable
   public currentEmail = '';
   @computed
-  public get isLoggedIn() { return this.currentEmail !== ''; }
+  public get isLoggedIn() { return this.state === 'logged-in'; }
+  @observable
+  private _state: SessionState = 'logged-out';
+  @computed
+  public get state() { return this._state; }
+
+  @action
+  private updateState() {
+    if (this.api.sessionToken === null) {
+      this._state = 'logged-out';
+    } else if (this.api.sessionToken.isValid) {
+      this._state = 'logged-in';
+    } else {
+      this._state = 'expired';
+    }
+  }
 
   public constructor(private api: Api) { }
 
@@ -17,9 +37,10 @@ export class Session {
     try {
       const storedString = localStorage.getItem('session');
       if (storedString !== null) {
-        const storedValues = JSON.parse(storedString);
-        session.currentEmail = storedValues.currentEmail ?? '';
-        api.sessionToken = storedValues.sessionToken ?? '';
+        const json = JSON.parse(storedString);
+        session.currentEmail = json.currentEmail ?? '';
+        api.sessionToken = SessionToken.fromJson(json.sessionToken);
+        session.updateState();
       }
     } catch (e) {
       console.error(e);
@@ -30,29 +51,26 @@ export class Session {
   public async login(email: string, password: string) {
     const r = await this.api.postJson('/login', { email, password });
     ensureOk(r);
-    const token = (await r.json()).token;
-    if (typeof token === 'string') {
-      this.api.sessionToken = token;
-      runInAction(() => {
-        this.currentEmail = email;
-        this.persistInLocalStorage();
-      });
-    } else {
-      throw new Error('Invalid response');
-    }
+    this.api.sessionToken = SessionToken.fromJson(await r.json());
+    runInAction(() => {
+      this.updateState();
+      this.currentEmail = email;
+      this.persistInLocalStorage();
+    });
   }
 
   public async logout() {
     const r = await this.api.postJson('/logout', {});
     ensureOk(r);
-    this.api.sessionToken = '';
+    this.api.sessionToken = null;
     runInAction(() => {
+      this.updateState();
       this.currentEmail = '';
       this.persistInLocalStorage();
     });
   }
 
-  public persistInLocalStorage() {
+  private persistInLocalStorage() {
     localStorage.setItem('session', JSON.stringify({
       currentEmail: this.currentEmail,
       sessionToken: this.api.sessionToken,
