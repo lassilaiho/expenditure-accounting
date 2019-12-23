@@ -2,24 +2,21 @@ import {
   AppBar,
   CircularProgress,
   Container,
-  IconButton,
   Paper,
   Toolbar,
   Typography
 } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 
+import BackButton from './BackButton';
 import { useStore } from './data/store';
 import ExpenditureByTags from './ExpenditureByTags';
 import { DateRange } from './util';
 
-
 const ExpenditureDetailsPage: React.FC = observer(() => {
   const location = useLocation();
-  const history = useHistory();
   const store = useStore();
 
   const dateScope = parseDateScope(location.pathname);
@@ -30,9 +27,7 @@ const ExpenditureDetailsPage: React.FC = observer(() => {
   return <>
     <AppBar position='sticky'>
       <Toolbar>
-        <IconButton color='inherit' onClick={() => history.goBack()}>
-          <ArrowBackIcon />
-        </IconButton>
+        <BackButton />
         <Typography variant='h6'>
           Expenditure on {dateScopeToString(dateScope)}
         </Typography>
