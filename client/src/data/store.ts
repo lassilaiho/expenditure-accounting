@@ -104,10 +104,115 @@ export class Product {
 export class Store {
   @observable public dataState: LoadState = 'not-started';
   @observable public purchases: Purchase[] = [];
+  @computed public get purchasesById() {
+    const map = new Map<number, Purchase>();
+    for (const p of this.purchases) {
+      map.set(p.id, p);
+    }
+    return map;
+  }
   @observable public tagsById = new Map<number, Tag>();
+  @computed public get tags() {
+    const tags: Tag[] = [];
+    for (const tag of this.tagsById.values()) {
+      tags.push(tag);
+    }
+    return tags;
+  }
+  @computed private get tagsByName() {
+    const map = new Map<string, Tag>();
+    for (const tag of this.tagsById.values()) {
+      map.set(tag.name.toLowerCase(), tag);
+    }
+    return map;
+  }
   @observable public productsById = new Map<number, Product>();
+  @computed public get products() {
+    const products: Product[] = [];
+    for (const product of this.productsById.values()) {
+      products.push(product);
+    }
+    return products;
+  }
+  @computed private get productsByName() {
+    const map = new Map<string, Product>();
+    for (const product of this.productsById.values()) {
+      map.set(product.name.toLowerCase(), product);
+    }
+    return map;
+  }
 
   public constructor(private api: Api) { }
+
+  public async updatePurchase(id: number) {
+    const purchase = this.purchasesById.get(id);
+    if (purchase) {
+      const date = new Date(Date.UTC(
+        purchase.date.getFullYear(),
+        purchase.date.getMonth(),
+        purchase.date.getDate(),
+      ));
+      ensureOk(await this.api.patchJson(
+        `/purchases/${purchase.id}`,
+        {
+          product: purchase.product.id,
+          date,
+          price: purchase.price,
+          quantity: purchase.quantity,
+          tags: purchase.tags.map(t => t.id),
+        },
+      ));
+    } else {
+      throw new Error(`No purchase with id: ${id}`);
+    }
+  }
+
+  @action
+  public async addTags(names: string[]) {
+    const newTags: string[] = [];
+    const result: Tag[] = [];
+    for (const name of names) {
+      const tag = this.getTagByName(name);
+      if (tag === undefined) {
+        newTags.push(name);
+      } else {
+        result.push(tag);
+      }
+    }
+    if (newTags.length > 0) {
+      const resp = await this.api.postJson('/tags', { tags: newTags });
+      ensureOk(resp);
+      const respJson = await resp.json();
+      runInAction(() => {
+        for (const tagJson of respJson.tags) {
+          const tag = Tag.fromJson(tagJson);
+          this.tagsById.set(tag.id, tag);
+          result.push(tag);
+        }
+      });
+    }
+    return result;
+  }
+
+  public async addProduct(name: string) {
+    const product = this.getProductByName(name);
+    if (product === undefined) {
+      const resp = await this.api.postJson('/products', { name });
+      ensureOk(resp);
+      const product = Product.fromJson(await resp.json());
+      runInAction(() => this.productsById.set(product.id, product));
+      return product;
+    }
+    return product;
+  }
+
+  private getTagByName(name: string) {
+    return this.tagsByName.get(name.toLowerCase());
+  }
+
+  private getProductByName(name: string) {
+    return this.productsByName.get(name.toLowerCase());
+  }
 
   @action
   public async reloadData() {

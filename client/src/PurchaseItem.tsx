@@ -1,7 +1,10 @@
 import {
   Box,
+  Button,
   Chip,
+  Divider,
   ExpansionPanel,
+  ExpansionPanelActions,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   Typography
@@ -16,6 +19,7 @@ export interface PurchaseListItemProps {
   purchase: Purchase;
   expanded: boolean;
   onToggle: () => void;
+  onEdit: (purchase: Purchase) => void;
 }
 
 const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
@@ -28,6 +32,12 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
       quantity = `${threeDecimals.format(p.quantity)} × `;
     }
   }
+
+  function onEdit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.stopPropagation();
+    props.onEdit(p);
+  }
+
   return (
     <ExpansionPanel
       expanded={expanded}
@@ -45,12 +55,18 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
       <ExpansionPanelDetails>
         <Box display='flex' flexWrap='wrap'>
           {p.tagsSortedByName.map(t => (
-            <Box mr={1} key={t.id}>
+            <Box m={1} key={t.id}>
               <Chip label={t.name} />
             </Box>
           ))}
         </Box>
       </ExpansionPanelDetails>
+      <Divider />
+      <ExpansionPanelActions>
+        <Button size='small' color='primary' onClick={onEdit}>
+          Edit
+        </Button>
+      </ExpansionPanelActions>
     </ExpansionPanel>
   );
 };

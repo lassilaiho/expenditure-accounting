@@ -67,4 +67,16 @@ export default class Api {
       body: JSON.stringify(body),
     });
   }
+
+  public async patchJson(url: string, body: any) {
+    return fetch(this.baseUrl + url, {
+      mode: 'cors',
+      method: 'PATCH',
+      headers: {
+        ...this.defaultHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+  }
 }

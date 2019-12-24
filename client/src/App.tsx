@@ -1,4 +1,6 @@
+import DateFnsUtil from "@date-io/date-fns";
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { observer } from 'mobx-react';
 import React, { useRef } from 'react';
 import {
@@ -15,6 +17,7 @@ import { Store, StoreContext } from './data/store';
 import ExpenditureDetailsPage from './ExpenditureDetailsPage';
 import LoginPage from './LoginPage';
 import MonthlyExpenditurePage from './MonthlyExpenditurePage';
+import PurchasePage from './PurchasePage';
 import PurchasesPage from './PurchasesPage';
 
 interface Stores {
@@ -36,31 +39,36 @@ const App: React.FC = observer(() => {
   return (
     <SessionContext.Provider value={session}>
       <StoreContext.Provider value={store}>
-        <CssBaseline />
-        <Router>
-          <Switch>
-            {session.isLoggedIn
-              ? null
-              : <Route path='/'>
-                <LoginPage />
-              </Route>}
-            <Route path='/purchases'>
-              <PurchasesPage />
-            </Route>
-            <Route path='/expenditure/daily'>
-              <DailyExpenditurePage />
-            </Route>
-            <Route path='/expenditure/monthly'>
-              <MonthlyExpenditurePage />
-            </Route>
-            <Route path='/expenditure/'>
-              <ExpenditureDetailsPage />
-            </Route>
-            <Route path='/'>
-              <Redirect to='/purchases' />
-            </Route>
-          </Switch>
-        </Router>
+        <MuiPickersUtilsProvider utils={DateFnsUtil}>
+          <CssBaseline />
+          <Router>
+            <Switch>
+              {session.isLoggedIn
+                ? null
+                : <Route path='/'>
+                  <LoginPage />
+                </Route>}
+              <Route path='/purchases/:id'>
+                <PurchasePage />
+              </Route>
+              <Route path='/purchases'>
+                <PurchasesPage />
+              </Route>
+              <Route path='/expenditure/daily'>
+                <DailyExpenditurePage />
+              </Route>
+              <Route path='/expenditure/monthly'>
+                <MonthlyExpenditurePage />
+              </Route>
+              <Route path='/expenditure/'>
+                <ExpenditureDetailsPage />
+              </Route>
+              <Route path='/'>
+                <Redirect to='/purchases' />
+              </Route>
+            </Switch>
+          </Router>
+        </MuiPickersUtilsProvider>
       </StoreContext.Provider>
     </SessionContext.Provider>
   );

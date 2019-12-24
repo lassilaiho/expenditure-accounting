@@ -8,6 +8,7 @@ import {
 import { observer } from "mobx-react";
 import React, { useState } from 'react';
 
+import { useHistory } from "react-router-dom";
 import { Purchase, useStore } from "./data/store";
 import MenuButton from './MenuButton';
 import NavigationDrawer from "./NavigationDrawer";
@@ -18,6 +19,8 @@ const PurchasesPage: React.FC = observer(() => {
   const store = useStore();
   const [expandedPurchase, setExpandedPurchase] =
     useState<Purchase | null>(null);
+  const history = useHistory();
+
   return <>
     <AppBar position='sticky'>
       <Toolbar>
@@ -41,7 +44,8 @@ const PurchasesPage: React.FC = observer(() => {
               key={p.id}
               purchase={p}
               expanded={expandedPurchase?.id === p.id}
-              onToggle={toggle} />
+              onToggle={toggle}
+              onEdit={p => history.push(`/purchases/${p.id}`)} />
           );
         })}
     </Container>
