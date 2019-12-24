@@ -59,7 +59,8 @@ const PurchasesPage: React.FC = observer(() => {
               purchase={p}
               expanded={expandedPurchase?.id === p.id}
               onToggle={toggle}
-              onEdit={p => history.push(`/purchases/${p.id}`)} />
+              onEdit={p => history.push(`/purchases/${p.id}`)}
+              onDelete={p => store.deletePurchase(p.id)} />
           );
         })}
     </Container>

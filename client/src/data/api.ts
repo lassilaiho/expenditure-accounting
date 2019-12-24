@@ -79,4 +79,12 @@ export default class Api {
       body: JSON.stringify(body),
     });
   }
+
+  public async delete(url: string) {
+    return fetch(this.baseUrl + url, {
+      mode: 'cors',
+      method: 'DELETE',
+      headers: { ...this.defaultHeaders },
+    });
+  }
 }

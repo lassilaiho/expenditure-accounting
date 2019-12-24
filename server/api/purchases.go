@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	errNoRowsUpdated = errors.New("no rows were updated")
+	errNoRowsAffected = errors.New("no rows were affected")
 )
 
 type purchase struct {
@@ -143,7 +143,7 @@ func updatePurchaseById(ctx context.Context, purchaseID, accountID int64, update
 		}
 		if count == 0 {
 			tx.Rollback()
-			return errNoRowsUpdated
+			return errNoRowsAffected
 		}
 	}
 	if update.Tags != nil && len(update.Tags) > 0 {
@@ -216,6 +216,22 @@ RETURNING id`
 	return purchaseID, nil
 }
 
+func deletePurchaseById(ctx context.Context, purchaseID, accountID int64) error {
+	query := "DELETE FROM purchases WHERE id = $1 AND account_id = $2"
+	result, err := Config.DB.ExecContext(ctx, query, purchaseID, accountID)
+	if err != nil {
+		return err
+	}
+	deleteCount, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if deleteCount == 0 {
+		return errNoRowsAffected
+	}
+	return nil
+}
+
 type purchaseUpdate struct {
 	Product  *int64     `json:"product"`
 	Date     *time.Time `json:"date"`
@@ -247,7 +263,7 @@ func UpdatePurchase(w http.ResponseWriter, r *http.Request) {
 	}
 	err = updatePurchaseById(r.Context(), id, session.AccountID, &values)
 	if err != nil {
-		if err == errNoRowsUpdated {
+		if err == errNoRowsAffected {
 			w.WriteHeader(http.StatusNotFound)
 		} else {
 			log.Print(err)
@@ -282,5 +298,29 @@ func AddPurchase(w http.ResponseWriter, r *http.Request) {
 	if err = json.NewEncoder(w).Encode(&respData); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+func DeletePurchase(w http.ResponseWriter, r *http.Request) {
+	session, err := validateSession(r)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	purchaseID, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	err = deletePurchaseById(r.Context(), purchaseID, session.AccountID)
+	if err != nil {
+		if err == errNoRowsAffected {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			log.Print(err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 }

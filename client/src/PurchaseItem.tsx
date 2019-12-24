@@ -20,6 +20,7 @@ export interface PurchaseListItemProps {
   expanded: boolean;
   onToggle: () => void;
   onEdit: (purchase: Purchase) => void;
+  onDelete: (purchase: Purchase) => void;
 }
 
 const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
@@ -36,6 +37,11 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
   function onEdit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
     props.onEdit(p);
+  }
+
+  function onDelete(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.stopPropagation();
+    props.onDelete(p);
   }
 
   return (
@@ -63,6 +69,9 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
       </ExpansionPanelDetails>
       <Divider />
       <ExpansionPanelActions>
+        <Button size='small' onClick={onDelete}>
+          Delete
+        </Button>
         <Button size='small' color='primary' onClick={onEdit}>
           Edit
         </Button>

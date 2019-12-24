@@ -236,6 +236,15 @@ export class Store {
     });
   }
 
+  public async deletePurchase(id: number) {
+    const i = this.purchases.findIndex(p => p.id === id);
+    if (i < 0) {
+      throw new Error(`Purchase with id ${id} does not exist`);
+    }
+    ensureOk(await this.api.delete(`/purchases/${id}`));
+    runInAction(() => this.purchases.splice(i, 1));
+  }
+
   private getTagByName(name: string) {
     return this.tagsByName.get(name.toLowerCase());
   }

@@ -82,6 +82,7 @@ func defineRoutes() http.Handler {
 	r.Path("/tags").Methods("POST").HandlerFunc(api.AddTags)
 	r.Path("/products").Methods("POST").HandlerFunc(api.AddProduct)
 	r.Path("/purchases").Methods("POST").HandlerFunc(api.AddPurchase)
+	r.Path("/purchases/{id}").Methods("DELETE").HandlerFunc(api.DeletePurchase)
 	return r
 }
 
@@ -112,7 +113,7 @@ func main() {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   config.AllowedOrigins,
 		AllowCredentials: true,
-		AllowedMethods:   []string{"GET", "POST", "PUT", "OPTIONS", "HEAD", "PATCH"},
+		AllowedMethods:   []string{"GET", "POST", "DELETE", "OPTIONS", "HEAD", "PATCH"},
 		AllowedHeaders:   []string{"Authorization", "Content-Type"},
 	})
 
