@@ -11,12 +11,25 @@ import React from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 
 import BackButton from './BackButton';
-import { useStore } from './data/store';
+import { useStore, Purchase, Product } from './data/store';
 import PurchaseEditor from './PurchaseEditor';
 
 const PurchasePage: React.FC = observer(() => {
   const store = useStore();
   const { id: idParam } = useParams();
+  if (idParam === 'new') {
+    const purchase = new Purchase(
+      -1,
+      new Product(-1, ''),
+      new Date(),
+      1,
+      1,
+      [],
+    );
+    return <PurchaseEditor
+      purchase={purchase}
+      onSave={() => store.addPurchase(purchase)} />;
+  }
   const id = parseInt(idParam ?? '');
   if (isNaN(id)) {
     return <Redirect to='/' />;

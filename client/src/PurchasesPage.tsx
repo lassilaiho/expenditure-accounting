@@ -2,17 +2,30 @@ import {
   AppBar,
   CircularProgress,
   Container,
+  createStyles,
+  Fab,
+  makeStyles,
+  Theme,
   Toolbar,
   Typography
 } from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
 import { observer } from "mobx-react";
 import React, { useState } from 'react';
-
 import { useHistory } from "react-router-dom";
+
 import { Purchase, useStore } from "./data/store";
 import MenuButton from './MenuButton';
 import NavigationDrawer from "./NavigationDrawer";
 import PurchaseItem from "./PurchaseItem";
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+}));
 
 const PurchasesPage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -20,6 +33,7 @@ const PurchasesPage: React.FC = observer(() => {
   const [expandedPurchase, setExpandedPurchase] =
     useState<Purchase | null>(null);
   const history = useHistory();
+  const classes = useStyles();
 
   return <>
     <AppBar position='sticky'>
@@ -52,6 +66,13 @@ const PurchasesPage: React.FC = observer(() => {
     <NavigationDrawer
       open={drawerOpen}
       onClose={() => setDrawerOpen(false)} />
+    <Fab
+      className={classes.fab}
+      color='secondary'
+      onClick={() => history.push('/purchases/new')}
+    >
+      <AddIcon />
+    </Fab>
   </>;
 });
 

@@ -81,6 +81,7 @@ func defineRoutes() http.Handler {
 	r.Path("/purchases/{id}").Methods("PATCH").HandlerFunc(api.UpdatePurchase)
 	r.Path("/tags").Methods("POST").HandlerFunc(api.AddTags)
 	r.Path("/products").Methods("POST").HandlerFunc(api.AddProduct)
+	r.Path("/purchases").Methods("POST").HandlerFunc(api.AddPurchase)
 	return r
 }
 

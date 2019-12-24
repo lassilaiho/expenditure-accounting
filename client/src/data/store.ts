@@ -206,6 +206,36 @@ export class Store {
     return product;
   }
 
+  public async addPurchase(purchase: Purchase) {
+    const date = new Date(Date.UTC(
+      purchase.date.getFullYear(),
+      purchase.date.getMonth(),
+      purchase.date.getDate(),
+    ));
+    const resp = await this.api.postJson('/purchases', {
+      product: purchase.product.id,
+      date,
+      price: purchase.price,
+      quantity: purchase.quantity,
+      tags: purchase.tags.map(t => t.id),
+    });
+    ensureOk(resp);
+    const id = parseInt((await resp.json()).id);
+    if (isNaN(id)) {
+      throw new Error('Invalid response json');
+    }
+    runInAction(() => {
+      purchase.id = id;
+      for (let i = 0; i < this.purchases.length; i++) {
+        if (purchase.date > this.purchases[i].date) {
+          this.purchases.splice(i, 0, purchase);
+          return;
+        }
+      }
+      this.purchases.splice(this.purchases.length, 0, purchase);
+    });
+  }
+
   private getTagByName(name: string) {
     return this.tagsByName.get(name.toLowerCase());
   }

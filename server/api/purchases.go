@@ -176,6 +176,46 @@ AND purchases.id = purchase_tag.purchase_id`
 	return nil
 }
 
+func insertPurchase(ctx context.Context, accountID int64, value *purchaseUpdate) (int64, error) {
+	tx, err := Config.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return -1, err
+	}
+	query := `
+INSERT INTO purchases (product_id, date, quantity, price, account_id)
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id`
+	row := tx.QueryRowContext(
+		ctx,
+		query,
+		value.Product,
+		value.Date,
+		value.Quantity,
+		value.Price,
+		accountID)
+	var purchaseID int64
+	if err := row.Scan(&purchaseID); err != nil {
+		tx.Rollback()
+		return -1, err
+	}
+	if len(value.Tags) > 0 {
+		builder := insertQuery("purchase_tag", "purchase_id", "tag_id")
+		for _, tagID := range value.Tags {
+			builder.Values(purchaseID, tagID)
+		}
+		query, params := builder.Build()
+		if _, err := tx.ExecContext(ctx, query, params...); err != nil {
+			tx.Rollback()
+			return -1, err
+		}
+	}
+	if err = tx.Commit(); err != nil {
+		tx.Rollback()
+		return -1, err
+	}
+	return purchaseID, nil
+}
+
 type purchaseUpdate struct {
 	Product  *int64     `json:"product"`
 	Date     *time.Time `json:"date"`
@@ -214,5 +254,33 @@ func UpdatePurchase(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 		return
+	}
+}
+
+func AddPurchase(w http.ResponseWriter, r *http.Request) {
+	session, err := validateSession(r)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	var values purchaseUpdate
+	if err = json.NewDecoder(r.Body).Decode(&values); err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	var respData struct {
+		ID int64 `json:"id"`
+	}
+	respData.ID, err = insertPurchase(r.Context(), session.AccountID, &values)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if err = json.NewEncoder(w).Encode(&respData); err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
