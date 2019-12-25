@@ -29,7 +29,10 @@ interface Stores {
 const App: React.FC = observer(() => {
   const stores = useRef<Stores | null>(null);
   if (stores.current === null) {
-    const api = new Api('http://localhost:8080/api');
+    const apiUrl = typeof process.env.REACT_APP_API_URL === 'string'
+      ? process.env.REACT_APP_API_URL
+      : 'http://localhost:8080/api';
+    const api = new Api(apiUrl);
     stores.current = {
       session: Session.fromLocalStorage(api),
       store: new Store(api),
