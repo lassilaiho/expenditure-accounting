@@ -4,6 +4,8 @@ import React, { useContext } from 'react';
 import { ensureOk } from '../util';
 import Api, { SessionToken } from './api';
 
+export class AuthError extends Error { }
+
 export type SessionState =
   | 'logged-out'
   | 'logged-in'
@@ -39,7 +41,9 @@ export class Session {
       if (storedString !== null) {
         const json = JSON.parse(storedString);
         session.currentEmail = json.currentEmail ?? '';
-        api.sessionToken = SessionToken.fromJson(json.sessionToken);
+        api.sessionToken = json.sessionToken
+          ? SessionToken.fromJson(json.sessionToken)
+          : null;
         session.updateState();
       }
     } catch (e) {
@@ -50,6 +54,9 @@ export class Session {
 
   public async login(email: string, password: string) {
     const r = await this.api.postJson('/login', { email, password });
+    if (r.status === 401) {
+      throw new AuthError();
+    }
     ensureOk(r);
     this.api.sessionToken = SessionToken.fromJson(await r.json());
     runInAction(() => {

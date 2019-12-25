@@ -1,18 +1,32 @@
 import {
+  Box,
   Button,
+  createStyles,
+  makeStyles,
+  Paper,
   TextField,
+  Theme,
   Typography
 } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Container from '@material-ui/core/Container';
-import FormGroup from '@material-ui/core/FormGroup';
 import Toolbar from '@material-ui/core/Toolbar';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
+import { useSession, AuthError } from './data/session';
 import MenuButton from './MenuButton';
 import NavigationDrawer from './NavigationDrawer';
-import { useSession } from './data/session';
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  formElement: {
+    marginTop: theme.spacing(1),
+  },
+}));
 
 const LoginPage: React.FC = observer(() => {
   const [email, setEmail] = useState('');
@@ -20,12 +34,24 @@ const LoginPage: React.FC = observer(() => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const session = useSession();
 
-  function login(e: React.FormEvent<HTMLFormElement>) {
+  const classes = useStyles();
+
+  async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!session.isLoggedIn) {
-      session.login(email, password);
+      try {
+        await session.login(email, password);
+      } catch (e) {
+        if (e instanceof AuthError) {
+          setErrorMessage('Wrong email or password');
+        } else {
+          throw e;
+        }
+      }
     }
   }
 
@@ -38,22 +64,34 @@ const LoginPage: React.FC = observer(() => {
         </Toolbar>
       </AppBar>
       <Container fixed>
-        <form onSubmit={login}>
-          <FormGroup>
-            <TextField
-              id='email'
-              label='Email'
-              onChange={e => setEmail(e.target.value)} />
-            <TextField
-              id='password'
-              label='Password'
-              type='password'
-              onChange={e => setPassword(e.target.value)} />
-            <Button variant='contained' color='primary' type='submit'>
-              Login
-            </Button>
-          </FormGroup>
-        </form>
+        <Paper>
+          <Box px={2} py={1}>
+            <form onSubmit={login} className={classes.form}>
+              <TextField
+                className={classes.formElement}
+                id='email'
+                label='Email'
+                onChange={e => setEmail(e.target.value)} />
+              <TextField
+                className={classes.formElement}
+                id='password'
+                label='Password'
+                type='password'
+                onChange={e => setPassword(e.target.value)} />
+              {errorMessage === ''
+                ? null
+                : <Typography color='error'>{errorMessage}</Typography>}
+              <Button
+                variant='contained'
+                color='primary'
+                type='submit'
+                className={classes.formElement}
+              >
+                Login
+              </Button>
+            </form>
+          </Box>
+        </Paper>
       </Container>
       <NavigationDrawer
         open={drawerOpen}
