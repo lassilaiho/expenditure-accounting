@@ -30,7 +30,7 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
         <Divider />
         {session.isLoggedIn
           ? <>
-            <ListItem>
+            <ListItem button onClick={linkOpener('/settings')}>
               <ListItemText>{session.currentEmail}</ListItemText>
             </ListItem>
             <ListItem button onClick={() => session.logout()}>

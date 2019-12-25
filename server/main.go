@@ -83,6 +83,7 @@ func defineRoutes() http.Handler {
 	r.Path("/products").Methods("POST").HandlerFunc(api.AddProduct)
 	r.Path("/purchases").Methods("POST").HandlerFunc(api.AddPurchase)
 	r.Path("/purchases/{id}").Methods("DELETE").HandlerFunc(api.DeletePurchase)
+	r.Path("/account/password").Methods("POST").HandlerFunc(api.ChangePassword)
 	return r
 }
 

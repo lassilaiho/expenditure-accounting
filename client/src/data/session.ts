@@ -70,6 +70,12 @@ export class Session {
     });
   }
 
+  public async changePassword(oldPassword: string, newPassword: string) {
+    ensureOk(await this.api.postJson('/account/password', {
+      oldPassword, newPassword,
+    }));
+  }
+
   private persistInLocalStorage() {
     localStorage.setItem('session', JSON.stringify({
       currentEmail: this.currentEmail,

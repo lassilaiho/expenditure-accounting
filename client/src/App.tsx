@@ -19,6 +19,7 @@ import LoginPage from './LoginPage';
 import MonthlyExpenditurePage from './MonthlyExpenditurePage';
 import PurchasePage from './PurchasePage';
 import PurchasesPage from './PurchasesPage';
+import SettingsPage from "./SettingsPage";
 
 interface Stores {
   session: Session;
@@ -62,6 +63,9 @@ const App: React.FC = observer(() => {
               </Route>
               <Route path='/expenditure/'>
                 <ExpenditureDetailsPage />
+              </Route>
+              <Route path='/settings'>
+                <SettingsPage />
               </Route>
               <Route path='/'>
                 <Redirect to='/purchases' />

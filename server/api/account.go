@@ -125,6 +125,36 @@ func validateSession(r *http.Request) (*session, error) {
 	return session, nil
 }
 
+func changePasswordForAccount(ctx context.Context, accountID int64, old, new string) error {
+	tx, err := Config.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	query := "SELECT password_hash FROM accounts WHERE id = $1"
+	var oldHash string
+	if err = tx.QueryRowContext(ctx, query, accountID).Scan(&oldHash); err != nil {
+		tx.Rollback()
+		return err
+	}
+	if err = comparePassword(old, oldHash); err != nil {
+		return errInvalidEmailOrPassword
+	}
+	newHash, err := hashPassword(new)
+	if err != nil {
+		return errInvalidEmailOrPassword
+	}
+	query = "UPDATE accounts SET password_hash = $1 WHERE id = $2"
+	if _, err = tx.ExecContext(ctx, query, newHash, accountID); err != nil {
+		tx.Rollback()
+		return err
+	}
+	if err = tx.Commit(); err != nil {
+		tx.Rollback()
+		return err
+	}
+	return nil
+}
+
 func Login(w http.ResponseWriter, r *http.Request) {
 	var creds struct {
 		Email    string `json:"email"`
@@ -169,5 +199,37 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	if err = deleteSession(r.Context(), session.ID); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+func ChangePassword(w http.ResponseWriter, r *http.Request) {
+	session, err := validateSession(r)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	var reqData struct {
+		OldPassword string `json:"oldPassword"`
+		NewPassword string `json:"newPassword"`
+	}
+	if err = json.NewDecoder(r.Body).Decode(&reqData); err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	err = changePasswordForAccount(
+		r.Context(),
+		session.AccountID,
+		reqData.OldPassword,
+		reqData.NewPassword)
+	if err != nil {
+		log.Print(err)
+		if err == errInvalidEmailOrPassword {
+			w.WriteHeader(http.StatusUnauthorized)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		return
 	}
 }
