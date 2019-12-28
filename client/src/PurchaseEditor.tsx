@@ -39,8 +39,8 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
   const [tags, setTags] = useState(purchase.tagsSortedByName.map(t => t.name));
   const tagSet = new Set(tags.map(t => t.toLowerCase()));
   const [date, setDate] = useState(purchase.date);
-  const [quantity, setQuantity] = useState(purchase.quantity.toLocaleString());
-  const [price, setPrice] = useState(purchase.price.toLocaleString());
+  const [quantity, setQuantity] = useState(purchase.quantity.toString());
+  const [price, setPrice] = useState(purchase.price.toString());
 
   const [newTag, setNewTag] = useState('');
   const [inputtedNewTag, setInputtedNewTag] = useState(newTag);
