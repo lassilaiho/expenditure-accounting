@@ -41,32 +41,53 @@ type session struct {
 }
 
 func createSession(ctx context.Context, email, password string) (*session, error) {
+	tx, err := Config.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
 	var (
 		accountID    int64
 		passwordHash string
 	)
-	err := Config.DB.QueryRowContext(
+	err = tx.QueryRowContext(
 		ctx,
 		"SELECT id, password_hash FROM accounts WHERE email = $1",
 		email).Scan(&accountID, &passwordHash)
 	if err != nil {
+		tx.Rollback()
 		if err == sql.ErrNoRows {
 			return nil, errInvalidEmailOrPassword
 		}
 		return nil, err
 	}
 	if err = comparePassword(password, passwordHash); err != nil {
+		tx.Rollback()
 		return nil, errInvalidEmailOrPassword
 	}
+	now := time.Now().UTC()
 	session := &session{
 		Token:      generateSessionToken(),
-		ExpiryTime: time.Now().UTC().Add(Config.SessionTimeout),
+		ExpiryTime: now.Add(Config.SessionTimeout),
 	}
-	_, err = Config.DB.ExecContext(
+	_, err = tx.ExecContext(
 		ctx,
 		"INSERT INTO sessions (token, expiry_time, account_id) VALUES ($1, $2, $3)",
 		session.Token, session.ExpiryTime, accountID)
 	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	_, err = tx.ExecContext(
+		ctx,
+		"DELETE FROM sessions WHERE account_id = $1 AND expiry_time < $2",
+		accountID,
+		now)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	if err = tx.Commit(); err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 	return session, nil
