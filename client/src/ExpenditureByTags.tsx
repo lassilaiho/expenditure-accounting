@@ -13,10 +13,14 @@ export interface ExpenditureByTagsProps {
 const ExpenditureByTags: React.FC<ExpenditureByTagsProps> = observer(props => {
   const { purchases, dateRange } = props;
   const indexOfTag = new Map<number, number>();
-  const result: [Tag, number][] = [];
+  const result: [Tag | null, number][] = [];
+  let untaggedResult = 0;
   for (const purchase of purchases) {
     if (!dateRange.isIn(purchase.date)) {
       continue;
+    }
+    if (purchase.tags.length === 0) {
+      untaggedResult += purchase.totalPrice;
     }
     for (const tag of purchase.tags) {
       let i = indexOfTag.get(tag.id);
@@ -28,14 +32,17 @@ const ExpenditureByTags: React.FC<ExpenditureByTagsProps> = observer(props => {
       result[i][1] += purchase.totalPrice;
     }
   }
+  if (untaggedResult !== 0) {
+    result.push([null, untaggedResult]);
+  }
   result.sort((a, b) => b[1] - a[1]);
   return (
     <List>
       {result.map(([tag, amount]) => (
-        <ListItem key={tag.id}>
+        <ListItem key={tag?.id ?? -1}>
           <ListItemText>
             <Box display='flex'>
-              <Box flexGrow={1}>{tag.name}</Box>
+              <Box flexGrow={1}>{tag?.name ?? 'untagged'}</Box>
               <Box>{currency.format(amount)}</Box>
             </Box>
           </ListItemText>
