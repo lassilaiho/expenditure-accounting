@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 
 import { Purchase } from './data/store';
-import { currency, formatDate, threeDecimals } from './util';
+import { currency, threeDecimals } from './util';
 
 export interface PurchaseListItemProps {
   purchase: Purchase;
@@ -54,7 +54,7 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
         <Box>
           <Typography>{quantity + p.product.name}</Typography>
           <Typography color='textSecondary'>
-            {`${formatDate(p.date)} • ${currency.format(p.totalPrice)}`}
+            {`${p.date.format('D.M.YYYY')} • ${currency.format(p.totalPrice)}`}
           </Typography>
         </Box>
       </ExpansionPanelSummary>

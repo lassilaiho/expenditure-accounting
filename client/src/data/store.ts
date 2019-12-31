@@ -1,4 +1,5 @@
 import { action, computed, observable, runInAction } from 'mobx';
+import moment from 'moment';
 import React, { useContext } from 'react';
 
 import { ensureOk } from '../util';
@@ -25,7 +26,7 @@ export class Tag {
 export class Purchase {
   @observable public id: number;
   @observable public product: Product;
-  @observable public date: Date;
+  @observable public date: moment.Moment;
   @observable public quantity: number;
   @observable public price: number;
   @computed public get totalPrice() { return this.quantity * this.price; }
@@ -43,7 +44,7 @@ export class Purchase {
   public constructor(
     id: number,
     product: Product,
-    date: Date,
+    date: moment.Moment,
     quantity: number,
     price: number,
     tags: Tag[],
@@ -65,11 +66,14 @@ export class Purchase {
       || !Array.isArray(json.tags)) {
       throw new Error('Invalid json object');
     }
-    const date = new Date(json.date);
+    const date = moment.utc(json.date, moment.ISO_8601);
+    if (!date.isValid()) {
+      throw new Error('Invalid json object');
+    }
     return new Purchase(
       json.id,
       Product.fromJson(json.product),
-      new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+      date,
       json.quantity,
       json.price,
       json.tags.map(Tag.fromJson),
@@ -147,16 +151,11 @@ export class Store {
   public async updatePurchase(id: number) {
     const purchase = this.purchasesById.get(id);
     if (purchase) {
-      const date = new Date(Date.UTC(
-        purchase.date.getFullYear(),
-        purchase.date.getMonth(),
-        purchase.date.getDate(),
-      ));
       ensureOk(await this.api.patchJson(
         `/purchases/${purchase.id}`,
         {
           product: purchase.product.id,
-          date,
+          date: purchase.date.format(),
           price: purchase.price,
           quantity: purchase.quantity,
           tags: purchase.tags.map(t => t.id),
@@ -207,14 +206,9 @@ export class Store {
   }
 
   public async addPurchase(purchase: Purchase) {
-    const date = new Date(Date.UTC(
-      purchase.date.getFullYear(),
-      purchase.date.getMonth(),
-      purchase.date.getDate(),
-    ));
     const resp = await this.api.postJson('/purchases', {
       product: purchase.product.id,
-      date,
+      date: purchase.date.format(),
       price: purchase.price,
       quantity: purchase.quantity,
       tags: purchase.tags.map(t => t.id),

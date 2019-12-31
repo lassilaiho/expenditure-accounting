@@ -7,11 +7,12 @@ import {
   Typography
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
+import moment from 'moment';
 import React from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 
 import BackButton from './BackButton';
-import { useStore, Purchase, Product } from './data/store';
+import { Product, Purchase, useStore } from './data/store';
 import PurchaseEditor from './PurchaseEditor';
 
 const PurchasePage: React.FC = observer(() => {
@@ -21,7 +22,7 @@ const PurchasePage: React.FC = observer(() => {
     const purchase = new Purchase(
       -1,
       new Product(-1, ''),
-      new Date(),
+      moment.utc(),
       1,
       1,
       [],

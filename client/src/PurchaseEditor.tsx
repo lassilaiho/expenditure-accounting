@@ -19,6 +19,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -38,7 +39,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
   const [inputtedName, setInputtedName] = useState(name);
   const [tags, setTags] = useState(purchase.tagsSortedByName.map(t => t.name));
   const tagSet = new Set(tags.map(t => t.toLowerCase()));
-  const [date, setDate] = useState(purchase.date);
+  const [date, setDate] = useState(purchase.date.toDate());
   const [quantity, setQuantity] = useState(purchase.quantity.toString());
   const [price, setPrice] = useState(purchase.price.toString());
 
@@ -59,7 +60,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
     runInAction(() => {
       purchase.product = product;
       purchase.tags = tagObjects;
-      purchase.date = date;
+      purchase.date = moment.utc(date).startOf('day');
       purchase.quantity = parseNumber(quantity);
       purchase.price = parseNumber(price);
     });
@@ -120,7 +121,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
               format='dd.MM.yyyy'
               margin='normal'
               value={date}
-              onChange={d => setDate(d ?? purchase.date)} />
+              onChange={d => setDate(d ?? purchase.date.toDate())} />
             <TextField
               label='Price'
               type='number'

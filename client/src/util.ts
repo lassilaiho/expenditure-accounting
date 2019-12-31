@@ -1,15 +1,9 @@
+import moment from "moment";
+
 export async function ensureOk(r: Response) {
   if (!r.ok) {
     throw new Error(`${r.status} ${r.statusText}: ${await r.text()}`);
   }
-}
-
-export function formatDate(d: Date) {
-  return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
-}
-
-export function formatMonth(d: Date) {
-  return `${d.getMonth() + 1}/${d.getFullYear()}`;
 }
 
 export const threeDecimals = new Intl.NumberFormat('fi-FI', {
@@ -29,11 +23,11 @@ export function reverse<A, B>(f: (a: A, b: B) => number): (a: A, b: B) => number
 
 export class DateRange {
   public constructor(
-    public readonly from: Date,
-    public readonly to: Date,
+    public readonly from: moment.Moment,
+    public readonly to: moment.Moment,
   ) { }
 
-  public isIn(x: Date) {
-    return this.from <= x && x <= this.to;
+  public isIn(x: moment.Moment) {
+    return x.isBetween(this.from, this.to);
   }
 }

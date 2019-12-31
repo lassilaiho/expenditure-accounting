@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export type LoadState =
   | 'not-started'
   | 'loading'
@@ -7,7 +9,7 @@ export type LoadState =
 export class SessionToken {
   public constructor(
     public readonly token: string,
-    public readonly expiryTime: Date,
+    public readonly expiryTime: moment.Moment,
   ) { }
 
   public static fromJson(json: any): SessionToken | null {
@@ -15,17 +17,20 @@ export class SessionToken {
       || typeof json.expiryTime !== 'string') {
       throw new Error('Invalid json object');
     }
-    return new SessionToken(json.token, new Date(json.expiryTime));
+    return new SessionToken(
+      json.token,
+      moment.utc(json.expiryTime, moment.ISO_8601),
+    );
   }
 
   public get isValid() {
-    return this.expiryTime.getTime() > Date.now();
+    return this.expiryTime.isAfter(moment.utc());
   }
 
   public toJSON(): unknown {
     return {
       token: this.token,
-      expiryTime: this.expiryTime.toUTCString(),
+      expiryTime: this.expiryTime.format(),
     };
   }
 }

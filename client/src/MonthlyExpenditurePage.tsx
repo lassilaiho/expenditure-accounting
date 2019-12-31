@@ -11,13 +11,14 @@ import {
 } from '@material-ui/core';
 import { History } from 'history';
 import { observer } from 'mobx-react';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { Purchase, Store, useStore } from './data/store';
 import MenuButton from './MenuButton';
 import NavigationDrawer from './NavigationDrawer';
-import { currency, formatMonth, reverse } from './util';
-import { useStore, Store, Purchase } from './data/store';
+import { currency, reverse } from './util';
 
 const MonthlyExpenditurePage: React.FC = observer(() => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -54,7 +55,7 @@ function renderMonthlyExpenditure(store: Store, history: History<any>) {
   let expenditure = prev.totalPrice;
   for (let i = 1; i < store.purchases.length; i++) {
     const current = store.purchases[i];
-    if (equalMonths(current.date, prev.date)) {
+    if (current.date.isSame(prev.date, 'month')) {
       expenditure += current.totalPrice;
     } else {
       result.push(makeItem(prev.date, expenditure, history));
@@ -66,12 +67,8 @@ function renderMonthlyExpenditure(store: Store, history: History<any>) {
   return <List>{result}</List>;
 }
 
-function equalMonths(a: Date, b: Date) {
-  return a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
-}
-
-function makeItem(monthAndYear: Date, expenditure: number, history: History<any>) {
-  const m = formatMonth(monthAndYear);
+function makeItem(date: moment.Moment, expenditure: number, history: History<any>) {
+  const m = date.format('D/M');
   return (
     <ListItem key={m} button onClick={() => history.push('/expenditure/' + m)}>
       <ListItemText primary={m} secondary={currency.format(expenditure)} />

@@ -7,6 +7,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
+import moment from 'moment';
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 
@@ -58,13 +59,13 @@ function dateScopeToString(s: DateScope) {
 
 function dateScopeToRange(s: DateScope) {
   switch (s.type) {
-    case 'day':
-      const date = new Date(s.year, s.month - 1, s.day);
-      return new DateRange(date, date);
-    case 'month':
-      const from = new Date(s.year, s.month - 1, 1);
-      const to = new Date(s.year, s.month, 0);
-      return new DateRange(from, to);
+    case 'day': {
+      const date = moment([s.year, s.month - 1, s.day]);
+      return new DateRange(date, date.clone().endOf('day'));
+    } case 'month': {
+      const date = moment([s.year, s.month - 1]);
+      return new DateRange(date, date.clone().endOf('month'));
+    }
   }
 }
 
