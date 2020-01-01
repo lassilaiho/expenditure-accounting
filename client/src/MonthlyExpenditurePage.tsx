@@ -68,7 +68,7 @@ function renderMonthlyExpenditure(store: Store, history: History<any>) {
 }
 
 function makeItem(date: moment.Moment, expenditure: number, history: History<any>) {
-  const m = date.format('D/M');
+  const m = date.format('M/YYYY');
   return (
     <ListItem key={m} button onClick={() => history.push('/expenditure/' + m)}>
       <ListItemText primary={m} secondary={currency.format(expenditure)} />
