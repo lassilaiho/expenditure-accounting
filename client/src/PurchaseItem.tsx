@@ -69,7 +69,7 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
       </ExpansionPanelDetails>
       <Divider />
       <ExpansionPanelActions>
-        <Button size='small' onClick={onDelete}>
+        <Button size='small' color='primary' onClick={onDelete}>
           Delete
         </Button>
         <Button size='small' color='primary' onClick={onEdit}>
