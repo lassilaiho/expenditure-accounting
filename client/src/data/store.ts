@@ -21,6 +21,10 @@ export class Tag {
     }
     return new Tag(json.id, json.name);
   }
+
+  public lowerCaseMatch(s: string) {
+    return this.name.toLocaleLowerCase().includes(s);
+  }
 }
 
 export class Purchase {
@@ -85,6 +89,11 @@ export class Purchase {
     if (a.date > b.date) { return 1; }
     return 0;
   }
+
+  public lowerCaseMatch(s: string) {
+    return this.product.lowerCaseMatch(s)
+      || this.tags.some(t => t.lowerCaseMatch(s));
+  }
 }
 
 export class Product {
@@ -102,6 +111,10 @@ export class Product {
       throw new Error('Invalid json object');
     }
     return new Product(json.id, json.name);
+  }
+
+  public lowerCaseMatch(s: string) {
+    return this.name.toLocaleLowerCase().includes(s);
   }
 }
 
