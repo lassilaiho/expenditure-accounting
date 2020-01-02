@@ -1,4 +1,4 @@
-\set CURRENT_VERSION 1
+\set CURRENT_VERSION 2
 
 CREATE TABLE IF NOT EXISTS accounts (
     id SERIAL PRIMARY KEY,
@@ -17,13 +17,15 @@ CREATE TABLE IF NOT EXISTS sessions (
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     name text NOT NULL,
-    account_id integer NOT NULL REFERENCES accounts ON DELETE CASCADE
+    account_id integer NOT NULL REFERENCES accounts ON DELETE CASCADE,
+    deleted boolean NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS tags (
     id SERIAL PRIMARY KEY,
     name text NOT NULL,
-    account_id integer NOT NULL REFERENCES accounts ON DELETE CASCADE
+    account_id integer NOT NULL REFERENCES accounts ON DELETE CASCADE,
+    deleted boolean NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS purchases (
@@ -33,13 +35,15 @@ CREATE TABLE IF NOT EXISTS purchases (
     quantity numeric NOT NULL CHECK (quantity > 0),
     price numeric NOT NULL CHECK (price > 0),
     total_price numeric GENERATED ALWAYS AS (quantity * price) STORED,
-    account_id integer NOT NULL REFERENCES accounts ON DELETE CASCADE
+    account_id integer NOT NULL REFERENCES accounts ON DELETE CASCADE,
+    deleted boolean NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS purchase_tag (
     id SERIAL PRIMARY KEY,
     purchase_id integer NOT NULL REFERENCES purchases ON DELETE CASCADE,
-    tag_id integer NOT NULL REFERENCES tags ON DELETE CASCADE
+    tag_id integer NOT NULL REFERENCES tags ON DELETE CASCADE,
+    deleted boolean NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS metadata (

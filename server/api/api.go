@@ -16,7 +16,7 @@ type Configuration struct {
 
 var Config *Configuration
 
-const ExpectedDBVersion = 1
+const ExpectedDBVersion = 2
 
 type DBVersionError struct {
 	Expected, Found int

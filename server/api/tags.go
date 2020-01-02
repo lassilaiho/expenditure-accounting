@@ -25,7 +25,10 @@ WHERE
 	tags.id = purchase_tag.tag_id
 	AND purchases.id = purchase_tag.purchase_id
 	AND tags.account_id = $1
-	AND purchases.account_id = $1`,
+	AND purchases.account_id = $1
+	AND NOT purchases.deleted
+	AND NOT tags.deleted
+	AND NOT purchase_tag.deleted`,
 		accountID)
 	if err != nil {
 		return nil, err

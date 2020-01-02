@@ -41,6 +41,8 @@ WHERE
 	purchases.account_id = $1
 	AND products.account_id = $1
 	AND purchases.product_id = products.id
+	AND NOT purchases.deleted
+	AND NOT products.deleted
 ORDER BY purchases.date DESC, products.name ASC`,
 		accountID)
 	if err != nil {
@@ -217,7 +219,7 @@ RETURNING id`
 }
 
 func deletePurchaseById(ctx context.Context, purchaseID, accountID int64) error {
-	query := "DELETE FROM purchases WHERE id = $1 AND account_id = $2"
+	query := "UPDATE purchases SET deleted = TRUE WHERE id = $1 AND account_id = $2"
 	result, err := Config.DB.ExecContext(ctx, query, purchaseID, accountID)
 	if err != nil {
 		return err
