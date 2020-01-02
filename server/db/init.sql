@@ -1,3 +1,5 @@
+\set CURRENT_VERSION 1
+
 CREATE TABLE IF NOT EXISTS accounts (
     id SERIAL PRIMARY KEY,
     email text NOT NULL,
@@ -39,3 +41,12 @@ CREATE TABLE IF NOT EXISTS purchase_tag (
     purchase_id integer NOT NULL REFERENCES purchases ON DELETE CASCADE,
     tag_id integer NOT NULL REFERENCES tags ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS metadata (
+    id SERIAL PRIMARY KEY,
+    version integer NOT NULL,
+    is_current boolean NOT NULL
+);
+
+INSERT INTO metadata (version, is_current)
+VALUES (:'CURRENT_VERSION', TRUE);

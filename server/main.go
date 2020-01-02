@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"flag"
@@ -87,24 +88,29 @@ func defineRoutes() http.Handler {
 	return r
 }
 
-func main() {
+func run() error {
 	configPath := flag.String("config", "", "path to configuration file")
 	flag.Parse()
 
 	config, err := loadConfig(*configPath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	db, err := connectDB(&config.DB)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	defer db.Close()
 
 	api.Config = &api.Configuration{
 		DB:             db,
 		BcryptCost:     config.BcryptCost,
 		SessionTimeout: config.SessionTimeout,
+	}
+
+	if err = api.CheckDBVersion(context.Background()); err != nil {
+		return err
 	}
 
 	r := mux.NewRouter()
@@ -119,10 +125,13 @@ func main() {
 	})
 
 	log.Print("Listening to port ", config.Port)
-	err = http.ListenAndServe(
+	return http.ListenAndServe(
 		":"+strconv.Itoa(config.Port),
 		c.Handler(r))
-	if err != nil {
+}
+
+func main() {
+	if err := run(); err != nil {
 		log.Fatal(err)
 	}
 }
