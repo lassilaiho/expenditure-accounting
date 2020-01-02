@@ -12,22 +12,24 @@ import {
 import { History } from 'history';
 import { observer } from 'mobx-react';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Purchase, Store, useStore } from './data/store';
 import MenuButton from './MenuButton';
-import NavigationDrawer from './NavigationDrawer';
 import { currency, reverse } from './util';
 
-const DailyExpenditurePage: React.FC = observer(() => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+export interface DailyExpenditurePageProps {
+  openNavigation: () => void;
+}
+
+const DailyExpenditurePage: React.FC<DailyExpenditurePageProps> = observer(props => {
   const store = useStore();
   const history = useHistory();
   return <>
     <AppBar position='sticky'>
       <Toolbar>
-        <MenuButton onClick={() => setDrawerOpen(true)} />
+        <MenuButton onClick={props.openNavigation} />
         <Typography variant='h6'>Daily Expenditure</Typography>
       </Toolbar>
     </AppBar>
@@ -38,9 +40,6 @@ const DailyExpenditurePage: React.FC = observer(() => {
           : renderDailyExpenditure(store, history)}
       </Paper>
     </Container>
-    <NavigationDrawer
-      open={drawerOpen}
-      onClose={() => setDrawerOpen(false)} />
   </>;
 });
 

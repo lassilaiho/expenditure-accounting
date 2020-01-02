@@ -14,9 +14,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
-import { useSession, AuthError } from './data/session';
+import { AuthError, useSession } from './data/session';
 import MenuButton from './MenuButton';
-import NavigationDrawer from './NavigationDrawer';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   form: {
@@ -28,11 +27,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-const LoginPage: React.FC = observer(() => {
+export interface LoginPageProps {
+  openNavigation: () => void;
+}
+
+const LoginPage: React.FC<LoginPageProps> = observer(props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -59,7 +60,7 @@ const LoginPage: React.FC = observer(() => {
     <>
       <AppBar position='sticky'>
         <Toolbar>
-          <MenuButton onClick={() => setDrawerOpen(true)} />
+          <MenuButton onClick={props.openNavigation} />
           <Typography variant='h6'>Login</Typography>
         </Toolbar>
       </AppBar>
@@ -93,9 +94,6 @@ const LoginPage: React.FC = observer(() => {
           </Box>
         </Paper>
       </Container>
-      <NavigationDrawer
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)} />
     </>
   );
 });

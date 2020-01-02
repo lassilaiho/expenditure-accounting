@@ -20,7 +20,6 @@ import { Virtuoso } from "react-virtuoso";
 
 import { Purchase, useStore } from "./data/store";
 import MenuButton from './MenuButton';
-import NavigationDrawer from "./NavigationDrawer";
 import PurchaseItem from "./PurchaseItem";
 import SearchPage from "./SearchPage";
 
@@ -54,8 +53,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-const PurchasesPage: React.FC = observer(() => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+export interface PurchasesPageProps {
+  openNavigation: () => void;
+}
+
+const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
   const store = useStore();
   const [expandedPurchase, setExpandedPurchase] =
     useState<Purchase | null>(null);
@@ -121,7 +123,7 @@ const PurchasesPage: React.FC = observer(() => {
     <div className={classes.root}>
       <AppBar position='static'>
         <Toolbar>
-          <MenuButton onClick={() => setDrawerOpen(true)} />
+          <MenuButton onClick={props.openNavigation} />
           <Typography variant='h6' className={classes.title}>
             Purchases
           </Typography>
@@ -144,9 +146,6 @@ const PurchasesPage: React.FC = observer(() => {
           </AutoSizer>
         }
       </Container>
-      <NavigationDrawer
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)} />
       <Fab
         className={classes.fab}
         color='secondary'

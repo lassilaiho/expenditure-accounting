@@ -14,13 +14,15 @@ import React, { useState } from 'react';
 
 import { useSession } from './data/session';
 import MenuButton from './MenuButton';
-import NavigationDrawer from './NavigationDrawer';
 import PasswordChangeDialog from './PasswordChangeDialog';
 
-const SettingsPage: React.FC = observer(() => {
+export interface SettingsProps {
+  openNavigation: () => void;
+}
+
+const SettingsPage: React.FC<SettingsProps> = observer(props => {
   const session = useSession();
 
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   async function changePassword(oldPassword: string, newPassword: string) {
@@ -31,7 +33,7 @@ const SettingsPage: React.FC = observer(() => {
   return <>
     <AppBar position='sticky'>
       <Toolbar>
-        <MenuButton onClick={() => setDrawerOpen(true)} />
+        <MenuButton onClick={props.openNavigation} />
         <Typography variant='h6'>Settings</Typography>
       </Toolbar>
     </AppBar>
@@ -47,9 +49,6 @@ const SettingsPage: React.FC = observer(() => {
         </List>
       </Paper>
     </Container>
-    <NavigationDrawer
-      open={drawerOpen}
-      onClose={() => setDrawerOpen(false)} />
     <PasswordChangeDialog
       open={dialogOpen}
       onSubmit={changePassword}
