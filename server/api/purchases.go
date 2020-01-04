@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"log"
@@ -218,18 +219,143 @@ RETURNING id`
 	return purchaseID, nil
 }
 
-func deletePurchaseById(ctx context.Context, purchaseID, accountID int64) error {
-	query := "UPDATE purchases SET deleted = TRUE WHERE id = $1 AND account_id = $2"
-	result, err := Config.DB.ExecContext(ctx, query, purchaseID, accountID)
+type purchaseRelatedIDs struct {
+	ProductID int64
+	TagIDs    []int64
+}
+
+func getProductAndTagsForPurchase(
+	ctx context.Context, tx *sql.Tx, purchaseID, accountID int64,
+) (*purchaseRelatedIDs, error) {
+	query := `
+SELECT products.id
+FROM purchases, products
+WHERE
+	purchases.account_id = $1
+	AND products.account_id = $1
+	AND purchases.product_id = products.id
+	AND purchases.id = $2
+	AND NOT purchases.deleted
+	AND NOT products.deleted`
+	result := &purchaseRelatedIDs{-1, []int64{}}
+	err := tx.QueryRow(query, accountID, purchaseID).Scan(&result.ProductID)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+	query = `
+SELECT tags.id
+FROM purchases, tags, purchase_tag
+WHERE
+	purchases.account_id = $1
+	AND tags.account_id = $1
+	AND purchases.id = purchase_tag.purchase_id
+	AND tags.id = purchase_tag.tag_id
+	AND purchases.id = $2
+	AND NOT purchases.deleted
+	AND NOT tags.deleted
+	AND NOT purchase_tag.deleted`
+	rows, err := tx.QueryContext(ctx, query, accountID, purchaseID)
 	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var tagID int64
+		if err = rows.Scan(&tagID); err != nil {
+			return nil, err
+		}
+		result.TagIDs = append(result.TagIDs, tagID)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func deletePurchaseById(ctx context.Context, purchaseID, accountID int64) error {
+	tx, err := Config.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	ids, err := getProductAndTagsForPurchase(ctx, tx, purchaseID, accountID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	query := "UPDATE purchases SET deleted = TRUE WHERE id = $1 AND account_id = $2"
+	result, err := tx.ExecContext(ctx, query, purchaseID, accountID)
+	if err != nil {
+		tx.Rollback()
 		return err
 	}
 	deleteCount, err := result.RowsAffected()
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 	if deleteCount == 0 {
+		tx.Rollback()
 		return errNoRowsAffected
+	}
+	query = `
+UPDATE products
+SET deleted = TRUE
+FROM purchases
+WHERE
+	products.account_id = $1
+	AND purchases.account_id = $1
+	AND purchases.product_id = products.id
+	AND purchases.id = $2
+	AND (
+		SELECT COUNT(*) FROM products, purchases
+		WHERE
+			purchases.product_id = products.id
+			AND NOT purchases.deleted
+			AND products.id = $3
+	) = 0`
+	log.Printf("%d, %#v\n", purchaseID, ids)
+	_, err = tx.ExecContext(ctx, query, accountID, purchaseID, ids.ProductID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	query = `
+UPDATE tags
+SET deleted = true
+FROM purchase_tag
+WHERE
+	tags.account_id = $1
+	AND tags.id = $2
+	AND (
+		SELECT count(*) FROM tags, purchase_tag
+		WHERE
+			purchase_tag.tag_id = tags.id
+			AND NOT purchase_tag.deleted
+			AND tags.id = $2
+	) <= 1`
+	for _, tagID := range ids.TagIDs {
+		_, err = tx.ExecContext(ctx, query, accountID, tagID)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+	query = `
+UPDATE purchase_tag
+SET deleted = TRUE
+FROM purchases
+WHERE
+	purchases.id = purchase_tag.purchase_id
+	AND purchases.account_id = $1
+	AND purchases.id = $2`
+	_, err = tx.ExecContext(ctx, query, accountID, purchaseID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	if err = tx.Commit(); err != nil {
+		tx.Rollback()
+		return err
 	}
 	return nil
 }
