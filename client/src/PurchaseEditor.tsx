@@ -17,6 +17,7 @@ import {
 import DoneIcon from '@material-ui/icons/Done';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import Big from 'big.js';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import moment from 'moment';
@@ -61,8 +62,8 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
       purchase.product = product;
       purchase.tags = tagObjects;
       purchase.date = moment.utc(date).startOf('day');
-      purchase.quantity = parseNumber(quantity);
-      purchase.price = parseNumber(price);
+      purchase.quantity = new Big(quantity);
+      purchase.price = new Big(price);
     });
     props.onSave();
     history.goBack();
@@ -167,13 +168,5 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
     </Container>
   </>;
 });
-
-function parseNumber(s: string) {
-  const n = parseFloat(s);
-  if (isNaN(n)) {
-    throw new Error(`Invalid number: ${s}`);
-  }
-  return n;
-}
 
 export default PurchaseEditor;

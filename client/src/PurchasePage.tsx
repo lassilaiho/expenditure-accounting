@@ -6,6 +6,7 @@ import {
   Toolbar,
   Typography
 } from '@material-ui/core';
+import Big from 'big.js';
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
@@ -23,8 +24,8 @@ const PurchasePage: React.FC = observer(() => {
       -1,
       new Product(-1, ''),
       moment.utc(),
-      1,
-      1,
+      new Big(1),
+      new Big(1),
       [],
     );
     return <PurchaseEditor

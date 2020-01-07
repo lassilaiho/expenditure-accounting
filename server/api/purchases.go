@@ -21,8 +21,8 @@ type purchase struct {
 	ID       int64     `json:"id"`
 	Product  product   `json:"product"`
 	Date     time.Time `json:"date"`
-	Quantity float64   `json:"quantity"`
-	Price    float64   `json:"price"`
+	Quantity string    `json:"quantity"`
+	Price    string    `json:"price"`
 	Tags     []*tag    `json:"tags"`
 }
 
@@ -363,8 +363,8 @@ WHERE
 type purchaseUpdate struct {
 	Product  *int64     `json:"product"`
 	Date     *time.Time `json:"date"`
-	Quantity *float64   `json:"quantity"`
-	Price    *float64   `json:"price"`
+	Quantity *string    `json:"quantity"`
+	Price    *string    `json:"price"`
 	Tags     []int64    `json:"tags"`
 }
 

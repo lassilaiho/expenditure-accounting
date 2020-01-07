@@ -1,3 +1,4 @@
+import Big from 'big.js';
 import moment from "moment";
 
 export async function ensureOk(r: Response) {
@@ -30,4 +31,8 @@ export class DateRange {
   public isIn(x: moment.Moment) {
     return x.isBetween(this.from, this.to);
   }
+}
+
+export function numOfBig(x: Big) {
+  return parseFloat(x.valueOf());
 }

@@ -1,3 +1,4 @@
+import Big from 'big.js';
 import { action, computed, observable, runInAction } from 'mobx';
 import moment from 'moment';
 import React, { useContext } from 'react';
@@ -31,9 +32,9 @@ export class Purchase {
   @observable public id: number;
   @observable public product: Product;
   @observable public date: moment.Moment;
-  @observable public quantity: number;
-  @observable public price: number;
-  @computed public get totalPrice() { return this.quantity * this.price; }
+  @observable public quantity: Big;
+  @observable public price: Big;
+  @computed public get totalPrice() { return this.quantity.mul(this.price); }
   @observable public tags: Tag[];
   @computed public get tagsSortedByName() {
     return this.tags.slice().sort((a, b) => {
@@ -49,8 +50,8 @@ export class Purchase {
     id: number,
     product: Product,
     date: moment.Moment,
-    quantity: number,
-    price: number,
+    quantity: Big,
+    price: Big,
     tags: Tag[],
   ) {
     this.id = id;
@@ -65,8 +66,8 @@ export class Purchase {
     if (typeof json.id !== 'number'
       || typeof json.product !== 'object'
       || typeof json.date !== 'string'
-      || typeof json.quantity !== 'number'
-      || typeof json.price !== 'number'
+      || typeof json.quantity !== 'string'
+      || typeof json.price !== 'string'
       || !Array.isArray(json.tags)) {
       throw new Error('Invalid json object');
     }
@@ -78,8 +79,8 @@ export class Purchase {
       json.id,
       Product.fromJson(json.product),
       date,
-      json.quantity,
-      json.price,
+      new Big(json.quantity),
+      new Big(json.price),
       json.tags.map(Tag.fromJson),
     );
   }

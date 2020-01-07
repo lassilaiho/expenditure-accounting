@@ -9,6 +9,7 @@ import {
   Toolbar,
   Typography
 } from '@material-ui/core';
+import Big from 'big.js';
 import { History } from 'history';
 import { observer } from 'mobx-react';
 import moment from 'moment';
@@ -17,7 +18,7 @@ import { useHistory } from 'react-router-dom';
 
 import { Purchase, Store, useStore } from './data/store';
 import MenuButton from './MenuButton';
-import { currency, reverse } from './util';
+import { currency, numOfBig, reverse } from './util';
 
 export interface DailyExpenditurePageProps {
   openNavigation: () => void;
@@ -55,7 +56,7 @@ function renderDailyExpenditure(store: Store, history: History<any>) {
   for (let i = 1; i < store.purchases.length; i++) {
     const current = store.purchases[i];
     if (current.date.isSame(prev.date, 'day')) {
-      expenditure += current.totalPrice;
+      expenditure = expenditure.add(current.totalPrice);
     } else {
       result.push(makeItem(prev.date, expenditure, history));
       expenditure = current.totalPrice;
@@ -66,7 +67,7 @@ function renderDailyExpenditure(store: Store, history: History<any>) {
   return <List>{result}</List>;
 }
 
-function makeItem(date: moment.Moment, expenditure: number, history: History<any>) {
+function makeItem(date: moment.Moment, expenditure: Big, history: History<any>) {
   const d = date.clone().local().format('D.M.YYYY');
   return (
     <ListItem
@@ -76,7 +77,7 @@ function makeItem(date: moment.Moment, expenditure: number, history: History<any
     >
       <ListItemText
         primary={d}
-        secondary={currency.format(expenditure)} />
+        secondary={currency.format(numOfBig(expenditure))} />
     </ListItem>
   );
 }

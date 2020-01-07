@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 
 import { Purchase } from './data/store';
-import { currency, threeDecimals } from './util';
+import { currency, numOfBig, threeDecimals } from './util';
 
 export interface PurchaseListItemProps {
   purchase: Purchase;
@@ -26,11 +26,11 @@ export interface PurchaseListItemProps {
 const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
   const { purchase: p, expanded, onToggle } = props;
   let quantity = '';
-  if (p.quantity !== 1) {
-    if (Number.isInteger(p.quantity)) {
+  if (!p.quantity.eq(1)) {
+    if (p.quantity.round(0).eq(p.quantity)) {
       quantity = `${p.quantity.toFixed(0)} × `;
     } else {
-      quantity = `${threeDecimals.format(p.quantity)} × `;
+      quantity = `${threeDecimals.format(numOfBig(p.quantity))} × `;
     }
   }
 
@@ -44,6 +44,8 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
     props.onDelete(p);
   }
 
+  const formattedPrice = currency.format(numOfBig(p.totalPrice));
+
   return (
     <ExpansionPanel
       expanded={expanded}
@@ -54,7 +56,7 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
         <Box>
           <Typography>{quantity + p.product.name}</Typography>
           <Typography color='textSecondary'>
-            {`${p.date.format('D.M.YYYY')} • ${currency.format(p.totalPrice)}`}
+            {`${p.date.format('D.M.YYYY')} • ${formattedPrice}`}
           </Typography>
         </Box>
       </ExpansionPanelSummary>
