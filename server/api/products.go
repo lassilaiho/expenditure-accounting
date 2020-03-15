@@ -1,33 +1,13 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"net/http"
 )
 
-type product struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
-func insertProduct(ctx context.Context, accountID int64, name string) (*product, error) {
-	query := `
-INSERT INTO products (name, account_id)
-VALUES ($1, $2)
-RETURNING id`
-	product := &product{Name: name}
-	err := Config.DB.QueryRowContext(ctx, query, name, accountID).
-		Scan(&product.ID)
-	if err != nil {
-		return nil, err
-	}
-	return product, nil
-}
-
 func AddProduct(w http.ResponseWriter, r *http.Request) {
-	session, err := validateSession(r)
+	session, err := Config.DB.ValidateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -41,7 +21,7 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	product, err := insertProduct(r.Context(), session.AccountID, requestData.Name)
+	product, err := Config.DB.InsertProduct(r.Context(), session.AccountID, requestData.Name)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)

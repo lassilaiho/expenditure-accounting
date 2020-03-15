@@ -14,6 +14,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/lassilaiho/expenditure-accounting/server/api"
+	dbapi "github.com/lassilaiho/expenditure-accounting/server/db"
 	_ "github.com/lib/pq"
 	"github.com/rs/cors"
 )
@@ -104,12 +105,15 @@ func run() error {
 	defer db.Close()
 
 	api.Config = &api.Configuration{
-		DB:             db,
-		BcryptCost:     config.BcryptCost,
-		SessionTimeout: config.SessionTimeout,
+		DB: &dbapi.API{
+			DB:             db,
+			BcryptCost:     config.BcryptCost,
+			SessionTimeout: config.SessionTimeout,
+			RefreshTime:    config.RefreshTime,
+		},
 	}
 
-	if err = api.CheckDBVersion(context.Background()); err != nil {
+	if err = api.Config.DB.CheckDBVersion(context.Background()); err != nil {
 		return err
 	}
 
