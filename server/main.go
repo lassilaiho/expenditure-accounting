@@ -75,20 +75,6 @@ func connectDB(config *dbConfiguration) (*sql.DB, error) {
 	return sql.Open("postgres", connStr)
 }
 
-func defineRoutes() http.Handler {
-	r := mux.NewRouter()
-	r.Path("/login").Methods("POST").HandlerFunc(api.Login)
-	r.Path("/logout").Methods("POST").HandlerFunc(api.Logout)
-	r.Path("/purchases").Methods("GET").HandlerFunc(api.GetPurchases)
-	r.Path("/purchases/{id}").Methods("PATCH").HandlerFunc(api.UpdatePurchase)
-	r.Path("/tags").Methods("POST").HandlerFunc(api.AddTags)
-	r.Path("/products").Methods("POST").HandlerFunc(api.AddProduct)
-	r.Path("/purchases").Methods("POST").HandlerFunc(api.AddPurchase)
-	r.Path("/purchases/{id}").Methods("DELETE").HandlerFunc(api.DeletePurchase)
-	r.Path("/account/password").Methods("POST").HandlerFunc(api.ChangePassword)
-	return r
-}
-
 func run() error {
 	configPath := flag.String("config", "", "path to configuration file")
 	flag.Parse()
@@ -104,22 +90,22 @@ func run() error {
 	}
 	defer db.Close()
 
-	api.Config = &api.Configuration{
-		DB: &dbapi.API{
-			DB:             db,
-			BcryptCost:     config.BcryptCost,
-			SessionTimeout: config.SessionTimeout,
-			RefreshTime:    config.RefreshTime,
-		},
+	dbapi := &dbapi.API{
+		DB:             db,
+		BcryptCost:     config.BcryptCost,
+		SessionTimeout: config.SessionTimeout,
+		RefreshTime:    config.RefreshTime,
 	}
 
-	if err = api.Config.DB.CheckDBVersion(context.Background()); err != nil {
+	if err = dbapi.CheckDBVersion(context.Background()); err != nil {
 		return err
 	}
 
+	apiHandler := api.NewHandler(&api.API{DB: dbapi})
+
 	r := mux.NewRouter()
 	r.PathPrefix(config.RootURL).Handler(
-		http.StripPrefix(config.RootURL, defineRoutes()))
+		http.StripPrefix(config.RootURL, apiHandler))
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   config.AllowedOrigins,

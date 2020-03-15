@@ -8,8 +8,8 @@ import (
 	"github.com/lassilaiho/expenditure-accounting/server/db"
 )
 
-func AddTags(w http.ResponseWriter, r *http.Request) {
-	session, err := Config.DB.ValidateSession(r)
+func (api *API) AddTags(w http.ResponseWriter, r *http.Request) {
+	session, err := api.DB.ValidateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -26,7 +26,7 @@ func AddTags(w http.ResponseWriter, r *http.Request) {
 	var responseData struct {
 		Tags []*db.Tag `json:"tags"`
 	}
-	responseData.Tags, err = Config.DB.InsertTags(
+	responseData.Tags, err = api.DB.InsertTags(
 		r.Context(), session.AccountID, requestData.Tags)
 	if err != nil {
 		log.Print(err)

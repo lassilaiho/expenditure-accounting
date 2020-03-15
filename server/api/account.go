@@ -9,7 +9,7 @@ import (
 	"github.com/lassilaiho/expenditure-accounting/server/db"
 )
 
-func Login(w http.ResponseWriter, r *http.Request) {
+func (api *API) Login(w http.ResponseWriter, r *http.Request) {
 	var creds struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -20,7 +20,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	session, err := Config.DB.CreateSession(r.Context(), creds.Email, creds.Password)
+	session, err := api.DB.CreateSession(r.Context(), creds.Email, creds.Password)
 	if err != nil {
 		log.Print(err)
 		if err == db.ErrInvalidEmailOrPassword {
@@ -43,21 +43,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Logout(w http.ResponseWriter, r *http.Request) {
-	session, err := Config.DB.ValidateSession(r)
+func (api *API) Logout(w http.ResponseWriter, r *http.Request) {
+	session, err := api.DB.ValidateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	if err = Config.DB.DeleteSession(r.Context(), session.ID); err != nil {
+	if err = api.DB.DeleteSession(r.Context(), session.ID); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
-func ChangePassword(w http.ResponseWriter, r *http.Request) {
-	session, err := Config.DB.ValidateSession(r)
+func (api *API) ChangePassword(w http.ResponseWriter, r *http.Request) {
+	session, err := api.DB.ValidateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -72,7 +72,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	err = Config.DB.ChangePasswordForAccount(
+	err = api.DB.ChangePasswordForAccount(
 		r.Context(),
 		session.AccountID,
 		reqData.OldPassword,

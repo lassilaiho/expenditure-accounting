@@ -10,8 +10,8 @@ import (
 	"github.com/lassilaiho/expenditure-accounting/server/db"
 )
 
-func GetPurchases(w http.ResponseWriter, r *http.Request) {
-	session, err := Config.DB.ValidateSession(r)
+func (api *API) GetPurchases(w http.ResponseWriter, r *http.Request) {
+	session, err := api.DB.ValidateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -21,14 +21,14 @@ func GetPurchases(w http.ResponseWriter, r *http.Request) {
 		Purchases []*db.Purchase `json:"purchases"`
 	}
 	respData.Purchases, err =
-		Config.DB.GetPurchasesByAccount(r.Context(), session.AccountID)
+		api.DB.GetPurchasesByAccount(r.Context(), session.AccountID)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	tagsByPurchase, err :=
-		Config.DB.GetTagsByPurchaseForAccount(r.Context(), session.AccountID)
+		api.DB.GetTagsByPurchaseForAccount(r.Context(), session.AccountID)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -49,8 +49,8 @@ func GetPurchases(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func UpdatePurchase(w http.ResponseWriter, r *http.Request) {
-	session, err := Config.DB.ValidateSession(r)
+func (api *API) UpdatePurchase(w http.ResponseWriter, r *http.Request) {
+	session, err := api.DB.ValidateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -70,7 +70,7 @@ func UpdatePurchase(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	err = Config.DB.UpdatePurchaseById(r.Context(), id, session.AccountID, &values)
+	err = api.DB.UpdatePurchaseById(r.Context(), id, session.AccountID, &values)
 	if err != nil {
 		if err == db.ErrNoRowsAffected {
 			w.WriteHeader(http.StatusNotFound)
@@ -82,8 +82,8 @@ func UpdatePurchase(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func AddPurchase(w http.ResponseWriter, r *http.Request) {
-	session, err := Config.DB.ValidateSession(r)
+func (api *API) AddPurchase(w http.ResponseWriter, r *http.Request) {
+	session, err := api.DB.ValidateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -98,7 +98,7 @@ func AddPurchase(w http.ResponseWriter, r *http.Request) {
 	var respData struct {
 		ID int64 `json:"id"`
 	}
-	respData.ID, err = Config.DB.InsertPurchase(r.Context(), session.AccountID, &values)
+	respData.ID, err = api.DB.InsertPurchase(r.Context(), session.AccountID, &values)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -110,8 +110,8 @@ func AddPurchase(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func DeletePurchase(w http.ResponseWriter, r *http.Request) {
-	session, err := Config.DB.ValidateSession(r)
+func (api *API) DeletePurchase(w http.ResponseWriter, r *http.Request) {
+	session, err := api.DB.ValidateSession(r)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -123,7 +123,7 @@ func DeletePurchase(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	err = Config.DB.DeletePurchaseById(r.Context(), purchaseID, session.AccountID)
+	err = api.DB.DeletePurchaseById(r.Context(), purchaseID, session.AccountID)
 	if err != nil {
 		if err == db.ErrNoRowsAffected {
 			w.WriteHeader(http.StatusNotFound)
