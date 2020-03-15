@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -19,20 +18,14 @@ import (
 	"github.com/rs/cors"
 )
 
-type dbConfiguration struct {
-	User     string `json:"user"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
-}
-
 type configuration struct {
-	Port           int             `json:"port"`
-	BcryptCost     int             `json:"bcryptCost"`
-	SessionTimeout time.Duration   `json:"sessionTimeout"`
-	RefreshTime    time.Duration   `json:"refreshTime"`
-	RootURL        string          `json:"rootUrl"`
-	AllowedOrigins []string        `json:"allowedOrigins"`
-	DB             dbConfiguration `json:"db"`
+	Port               int           `json:"port"`
+	BcryptCost         int           `json:"bcryptCost"`
+	SessionTimeout     time.Duration `json:"sessionTimeout"`
+	RefreshTime        time.Duration `json:"refreshTime"`
+	RootURL            string        `json:"rootUrl"`
+	AllowedOrigins     []string      `json:"allowedOrigins"`
+	DBConnectionString string        `json:"dbConnectionString"`
 }
 
 func loadConfig(file string) (*configuration, error) {
@@ -66,15 +59,6 @@ func loadConfig(file string) (*configuration, error) {
 	return &config, nil
 }
 
-func connectDB(config *dbConfiguration) (*sql.DB, error) {
-	connStr := fmt.Sprint(
-		"user=", config.User,
-		" dbname=", config.Name,
-		" password=", config.Password,
-		" sslmode=disable")
-	return sql.Open("postgres", connStr)
-}
-
 func run() error {
 	configPath := flag.String("config", "", "path to configuration file")
 	flag.Parse()
@@ -84,7 +68,7 @@ func run() error {
 		return err
 	}
 
-	db, err := connectDB(&config.DB)
+	db, err := sql.Open("postgres", config.DBConnectionString)
 	if err != nil {
 		return err
 	}
