@@ -13,7 +13,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/lassilaiho/expenditure-accounting/server/api"
-	dbapi "github.com/lassilaiho/expenditure-accounting/server/db"
+	"github.com/lassilaiho/expenditure-accounting/server/db"
 	_ "github.com/lib/pq"
 	"github.com/rs/cors"
 )
@@ -68,20 +68,20 @@ func run() error {
 		return err
 	}
 
-	db, err := sql.Open("postgres", config.DBConnectionString)
+	sqldb, err := sql.Open("postgres", config.DBConnectionString)
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer sqldb.Close()
 
-	dbapi := &dbapi.API{
-		DB:             db,
+	dbapi := &db.API{
+		DB:             sqldb,
 		BcryptCost:     config.BcryptCost,
 		SessionTimeout: config.SessionTimeout,
 		RefreshTime:    config.RefreshTime,
 	}
-
-	if err = dbapi.CheckDBVersion(context.Background()); err != nil {
+	err = dbapi.AutoMigrate(context.Background(), db.SchemaVersion)
+	if err != nil {
 		return err
 	}
 
