@@ -105,6 +105,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
         <Box p={2}>
           <FormGroup>
             <Autocomplete
+              id='product-autocomplete'
               freeSolo
               options={store.products.map(p => p.name)}
               value={name}

@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+import * as jsonConv from './jsonConvert';
+
 export type LoadState =
   | 'not-started'
   | 'loading'
@@ -12,14 +14,11 @@ export class SessionToken {
     public readonly expiryTime: moment.Moment,
   ) { }
 
-  public static fromJson(json: any): SessionToken | null {
-    if (typeof json.token !== 'string'
-      || typeof json.expiryTime !== 'string') {
-      throw new Error('Invalid json object');
-    }
+  public static fromJson(json: any): SessionToken {
+    jsonConv.toObject(json);
     return new SessionToken(
-      json.token,
-      moment.utc(json.expiryTime, moment.ISO_8601),
+      jsonConv.toString(json.token),
+      jsonConv.toMomentUtc(json.expiryTime),
     );
   }
 

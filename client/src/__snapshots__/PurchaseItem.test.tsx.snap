@@ -1,0 +1,336 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly when expanded 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiPaper-root MuiExpansionPanel-root Mui-expanded MuiExpansionPanel-rounded MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <div
+      aria-disabled="false"
+      aria-expanded="true"
+      class="MuiButtonBase-root MuiExpansionPanelSummary-root Mui-expanded"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="MuiExpansionPanelSummary-content Mui-expanded"
+      >
+        <div
+          class="MuiBox-root MuiBox-root-361"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1"
+          >
+            0,800 × product 2
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-colorTextSecondary"
+          >
+            14.3.2020 • 0,16 €
+          </p>
+        </div>
+      </div>
+      <div
+        aria-disabled="false"
+        aria-hidden="true"
+        class="MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon Mui-expanded MuiIconButton-edgeEnd"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            />
+          </svg>
+        </span>
+        <span
+          class="MuiTouchRipple-root"
+        />
+      </div>
+    </div>
+    <div
+      class="MuiCollapse-container MuiCollapse-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="MuiCollapse-wrapper"
+      >
+        <div
+          class="MuiCollapse-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="MuiExpansionPanelDetails-root"
+            >
+              <div
+                class="MuiBox-root MuiBox-root-416"
+              >
+                <div
+                  class="MuiBox-root MuiBox-root-417"
+                >
+                  <div
+                    class="MuiChip-root"
+                  >
+                    <span
+                      class="MuiChip-label"
+                    >
+                      tag 1
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="MuiBox-root MuiBox-root-448"
+                >
+                  <div
+                    class="MuiChip-root"
+                  >
+                    <span
+                      class="MuiChip-label"
+                    >
+                      tag 2
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="MuiBox-root MuiBox-root-449"
+                >
+                  <div
+                    class="MuiChip-root"
+                  >
+                    <span
+                      class="MuiChip-label"
+                    >
+                      tag 3
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr
+              class="MuiDivider-root"
+            />
+            <div
+              class="MuiExpansionPanelActions-root MuiExpansionPanelActions-spacing"
+            >
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-textSizeSmall MuiButton-sizeSmall"
+                tabindex="0"
+                type="button"
+              >
+                <span
+                  class="MuiButton-label"
+                >
+                  Delete
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-textSizeSmall MuiButton-sizeSmall"
+                tabindex="0"
+                type="button"
+              >
+                <span
+                  class="MuiButton-label"
+                >
+                  Edit
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`renders correctly with purchase with decimal quantity not 1 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiPaper-root MuiExpansionPanel-root MuiExpansionPanel-rounded MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <div
+      aria-disabled="false"
+      aria-expanded="false"
+      class="MuiButtonBase-root MuiExpansionPanelSummary-root"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="MuiExpansionPanelSummary-content"
+      >
+        <div
+          class="MuiBox-root MuiBox-root-255"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1"
+          >
+            0,800 × product 2
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-colorTextSecondary"
+          >
+            14.3.2020 • 0,16 €
+          </p>
+        </div>
+      </div>
+      <div
+        aria-disabled="false"
+        aria-hidden="true"
+        class="MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            />
+          </svg>
+        </span>
+        <span
+          class="MuiTouchRipple-root"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`renders correctly with purchase with integer quantity not 1 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiPaper-root MuiExpansionPanel-root MuiExpansionPanel-rounded MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <div
+      aria-disabled="false"
+      aria-expanded="false"
+      class="MuiButtonBase-root MuiExpansionPanelSummary-root"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="MuiExpansionPanelSummary-content"
+      >
+        <div
+          class="MuiBox-root MuiBox-root-149"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1"
+          >
+            10 × product 1
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-colorTextSecondary"
+          >
+            14.1.2020 • 132,00 €
+          </p>
+        </div>
+      </div>
+      <div
+        aria-disabled="false"
+        aria-hidden="true"
+        class="MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            />
+          </svg>
+        </span>
+        <span
+          class="MuiTouchRipple-root"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`renders correctly with purchase with quantity 1 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiPaper-root MuiExpansionPanel-root MuiExpansionPanel-rounded MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <div
+      aria-disabled="false"
+      aria-expanded="false"
+      class="MuiButtonBase-root MuiExpansionPanelSummary-root"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="MuiExpansionPanelSummary-content"
+      >
+        <div
+          class="MuiBox-root MuiBox-root-43"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1"
+          >
+            product 1
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-colorTextSecondary"
+          >
+            14.3.2020 • 2,00 €
+          </p>
+        </div>
+      </div>
+      <div
+        aria-disabled="false"
+        aria-hidden="true"
+        class="MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            />
+          </svg>
+        </span>
+        <span
+          class="MuiTouchRipple-root"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

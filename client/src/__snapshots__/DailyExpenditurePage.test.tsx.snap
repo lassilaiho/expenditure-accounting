@@ -1,0 +1,196 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly with data 1`] = `
+<DocumentFragment>
+  <header
+    class="MuiPaper-root MuiAppBar-root MuiAppBar-positionSticky MuiAppBar-colorPrimary MuiPaper-elevation4"
+  >
+    <div
+      class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+    >
+      <button
+        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+            />
+          </svg>
+        </span>
+        <span
+          class="MuiTouchRipple-root"
+        />
+      </button>
+      <h6
+        class="MuiTypography-root MuiTypography-h6"
+      >
+        Daily Expenditure
+      </h6>
+    </div>
+  </header>
+  <div
+    class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+    >
+      <ul
+        class="MuiList-root MuiList-padding"
+      >
+        <div
+          aria-disabled="false"
+          class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="MuiListItemText-root MuiListItemText-multiline"
+          >
+            <span
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+            >
+              14.3.2020
+            </span>
+            <p
+              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary"
+            >
+              2,00 €
+            </p>
+          </div>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </div>
+        <div
+          aria-disabled="false"
+          class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="MuiListItemText-root MuiListItemText-multiline"
+          >
+            <span
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+            >
+              14.1.2020
+            </span>
+            <p
+              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary"
+            >
+              132,00 €
+            </p>
+          </div>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </div>
+        <div
+          aria-disabled="false"
+          class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="MuiListItemText-root MuiListItemText-multiline"
+          >
+            <span
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+            >
+              14.3.2020
+            </span>
+            <p
+              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary"
+            >
+              0,16 €
+            </p>
+          </div>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </div>
+      </ul>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`renders correctly without data 1`] = `
+<DocumentFragment>
+  <header
+    class="MuiPaper-root MuiAppBar-root MuiAppBar-positionSticky MuiAppBar-colorPrimary MuiPaper-elevation4"
+  >
+    <div
+      class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+    >
+      <button
+        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+            />
+          </svg>
+        </span>
+        <span
+          class="MuiTouchRipple-root"
+        />
+      </button>
+      <h6
+        class="MuiTypography-root MuiTypography-h6"
+      >
+        Daily Expenditure
+      </h6>
+    </div>
+  </header>
+  <div
+    class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+    >
+      <div
+        class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
+        role="progressbar"
+        style="width: 40px; height: 40px;"
+      >
+        <svg
+          class="MuiCircularProgress-svg"
+          viewBox="22 22 44 44"
+        >
+          <circle
+            class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+            cx="44"
+            cy="44"
+            fill="none"
+            r="20.2"
+            stroke-width="3.6"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

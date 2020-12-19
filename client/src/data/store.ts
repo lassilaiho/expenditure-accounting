@@ -5,6 +5,7 @@ import React, { useContext } from 'react';
 
 import { ensureOk } from '../util';
 import Api, { LoadState } from './api';
+import * as jsonConv from './jsonConvert';
 
 export class Tag {
   @observable public id: number;
@@ -16,11 +17,11 @@ export class Tag {
   }
 
   public static fromJson(json: any) {
-    if (typeof json.id !== 'number'
-      || typeof json.name !== 'string') {
-      throw new Error('Invalid json object');
-    }
-    return new Tag(json.id, json.name);
+    jsonConv.toObject(json);
+    return new Tag(
+      jsonConv.toNumber(json.id),
+      jsonConv.toString(json.name),
+    );
   }
 
   public lowerCaseMatch(s: string) {
@@ -63,25 +64,14 @@ export class Purchase {
   }
 
   public static fromJson(json: any) {
-    if (typeof json.id !== 'number'
-      || typeof json.product !== 'object'
-      || typeof json.date !== 'string'
-      || typeof json.quantity !== 'string'
-      || typeof json.price !== 'string'
-      || !Array.isArray(json.tags)) {
-      throw new Error('Invalid json object');
-    }
-    const date = moment.utc(json.date, moment.ISO_8601);
-    if (!date.isValid()) {
-      throw new Error('Invalid json object');
-    }
+    jsonConv.toObject(json);
     return new Purchase(
-      json.id,
+      jsonConv.toNumber(json.id),
       Product.fromJson(json.product),
-      date,
-      new Big(json.quantity),
-      new Big(json.price),
-      json.tags.map(Tag.fromJson),
+      jsonConv.toMomentUtc(json.date),
+      jsonConv.toBig(json.quantity),
+      jsonConv.toBig(json.price),
+      jsonConv.toArray(Tag.fromJson, json.tags),
     );
   }
 
@@ -107,11 +97,11 @@ export class Product {
   }
 
   public static fromJson(json: any) {
-    if (typeof json.id !== 'number'
-      || typeof json.name !== 'string') {
-      throw new Error('Invalid json object');
-    }
-    return new Product(json.id, json.name);
+    jsonConv.toObject(json);
+    return new Product(
+      jsonConv.toNumber(json.id),
+      jsonConv.toString(json.name),
+    );
   }
 
   public lowerCaseMatch(s: string) {
@@ -228,10 +218,8 @@ export class Store {
       tags: purchase.tags.map(t => t.id),
     });
     ensureOk(resp);
-    const id = parseInt((await resp.json()).id);
-    if (isNaN(id)) {
-      throw new Error('Invalid response json');
-    }
+    const respJson = jsonConv.toObject(await resp.json());
+    const id = jsonConv.toNumber(respJson.id);
     runInAction(() => {
       purchase.id = id;
       for (let i = 0; i < this.purchases.length; i++) {
