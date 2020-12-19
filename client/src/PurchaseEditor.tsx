@@ -140,6 +140,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
             <Box display='flex'>
               <Box flexGrow={1}>
                 <Autocomplete
+                  id='tag-autocomplete'
                   freeSolo
                   options={store.tags.map(t => t.name)}
                   value={newTag}

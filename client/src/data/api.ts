@@ -35,7 +35,7 @@ export class SessionToken {
 }
 
 export default class Api {
-  public baseUrl: string = '';
+  public baseUrl = '';
 
   public defaultHeaders: Record<string, string> = {
     'Authorization': ''

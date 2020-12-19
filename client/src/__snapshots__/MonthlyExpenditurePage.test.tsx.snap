@@ -20,7 +20,6 @@ exports[`renders correctly with data 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -58,12 +57,12 @@ exports[`renders correctly with data 1`] = `
             class="MuiListItemText-root MuiListItemText-multiline"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               3/2020
             </span>
             <p
-              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary"
+              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
             >
               2,00 €
             </p>
@@ -82,12 +81,12 @@ exports[`renders correctly with data 1`] = `
             class="MuiListItemText-root MuiListItemText-multiline"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               1/2020
             </span>
             <p
-              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary"
+              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
             >
               132,00 €
             </p>
@@ -106,12 +105,12 @@ exports[`renders correctly with data 1`] = `
             class="MuiListItemText-root MuiListItemText-multiline"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               3/2020
             </span>
             <p
-              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary"
+              class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
             >
               0,16 €
             </p>
@@ -146,7 +145,6 @@ exports[`renders correctly without data 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path

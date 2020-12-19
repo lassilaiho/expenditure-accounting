@@ -16,9 +16,13 @@ import BackButton from './BackButton';
 import { Product, Purchase, useStore } from './data/store';
 import PurchaseEditor from './PurchaseEditor';
 
+interface PurchasePageParams {
+  id: string;
+}
+
 const PurchasePage: React.FC = observer(() => {
   const store = useStore();
-  const { id: idParam } = useParams();
+  const { id: idParam } = useParams<PurchasePageParams>();
   if (idParam === 'new') {
     const purchase = new Purchase(
       -1,

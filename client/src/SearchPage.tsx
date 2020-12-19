@@ -69,7 +69,7 @@ const SearchPage: React.FC<SearchPageProps> = observer(props => {
         </Toolbar>
       </AppBar>
       <Container fixed className={classes.container}>
-        {props.children}
+        {props.children as any}
       </Container>
     </div>
   );

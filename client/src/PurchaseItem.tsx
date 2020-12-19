@@ -3,10 +3,10 @@ import {
   Button,
   Chip,
   Divider,
-  ExpansionPanel,
-  ExpansionPanelActions,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionSummary,
   Typography
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -47,20 +47,20 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
   const formattedPrice = currency.format(numOfBig(p.totalPrice));
 
   return (
-    <ExpansionPanel
+    <Accordion
       expanded={expanded}
       onClick={onToggle}
       TransitionProps={{ unmountOnExit: true }}
     >
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box>
           <Typography>{quantity + p.product.name}</Typography>
           <Typography color='textSecondary'>
             {`${p.date.format('D.M.YYYY')} • ${formattedPrice}`}
           </Typography>
         </Box>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      </AccordionSummary>
+      <AccordionDetails>
         <Box display='flex' flexWrap='wrap'>
           {p.tagsSortedByName.map(t => (
             <Box m={1} key={t.id}>
@@ -68,17 +68,17 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
             </Box>
           ))}
         </Box>
-      </ExpansionPanelDetails>
+      </AccordionDetails>
       <Divider />
-      <ExpansionPanelActions>
+      <AccordionActions>
         <Button size='small' color='primary' onClick={onDelete}>
           Delete
         </Button>
         <Button size='small' color='primary' onClick={onEdit}>
           Edit
         </Button>
-      </ExpansionPanelActions>
-    </ExpansionPanel>
+      </AccordionActions>
+    </Accordion>
   );
 };
 

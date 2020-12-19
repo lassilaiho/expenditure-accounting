@@ -12,18 +12,18 @@ exports[`renders correctly with all data 1`] = `
         class="MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
         >
           <div
-            class="MuiBox-root MuiBox-root-108"
+            class="MuiBox-root MuiBox-root-4"
           >
             <div
-              class="MuiBox-root MuiBox-root-109"
+              class="MuiBox-root MuiBox-root-5"
             >
               tag 3
             </div>
             <div
-              class="MuiBox-root MuiBox-root-110"
+              class="MuiBox-root MuiBox-root-6"
             >
               134,16 €
             </div>
@@ -38,18 +38,18 @@ exports[`renders correctly with all data 1`] = `
         class="MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
         >
           <div
-            class="MuiBox-root MuiBox-root-111"
+            class="MuiBox-root MuiBox-root-7"
           >
             <div
-              class="MuiBox-root MuiBox-root-112"
+              class="MuiBox-root MuiBox-root-8"
             >
               tag 1
             </div>
             <div
-              class="MuiBox-root MuiBox-root-113"
+              class="MuiBox-root MuiBox-root-9"
             >
               2,16 €
             </div>
@@ -64,18 +64,18 @@ exports[`renders correctly with all data 1`] = `
         class="MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
         >
           <div
-            class="MuiBox-root MuiBox-root-114"
+            class="MuiBox-root MuiBox-root-10"
           >
             <div
-              class="MuiBox-root MuiBox-root-115"
+              class="MuiBox-root MuiBox-root-11"
             >
               tag 2
             </div>
             <div
-              class="MuiBox-root MuiBox-root-116"
+              class="MuiBox-root MuiBox-root-12"
             >
               0,16 €
             </div>
@@ -90,18 +90,18 @@ exports[`renders correctly with all data 1`] = `
         class="MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
         >
           <div
-            class="MuiBox-root MuiBox-root-117"
+            class="MuiBox-root MuiBox-root-13"
           >
             <div
-              class="MuiBox-root MuiBox-root-118"
+              class="MuiBox-root MuiBox-root-14"
             >
               untagged
             </div>
             <div
-              class="MuiBox-root MuiBox-root-119"
+              class="MuiBox-root MuiBox-root-15"
             >
               0,00 €
             </div>
@@ -125,18 +125,18 @@ exports[`renders correctly with filtered data 1`] = `
         class="MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
         >
           <div
-            class="MuiBox-root MuiBox-root-172"
+            class="MuiBox-root MuiBox-root-16"
           >
             <div
-              class="MuiBox-root MuiBox-root-173"
+              class="MuiBox-root MuiBox-root-17"
             >
               tag 3
             </div>
             <div
-              class="MuiBox-root MuiBox-root-174"
+              class="MuiBox-root MuiBox-root-18"
             >
               132,00 €
             </div>
@@ -151,18 +151,18 @@ exports[`renders correctly with filtered data 1`] = `
         class="MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
         >
           <div
-            class="MuiBox-root MuiBox-root-175"
+            class="MuiBox-root MuiBox-root-19"
           >
             <div
-              class="MuiBox-root MuiBox-root-176"
+              class="MuiBox-root MuiBox-root-20"
             >
               untagged
             </div>
             <div
-              class="MuiBox-root MuiBox-root-177"
+              class="MuiBox-root MuiBox-root-21"
             >
               0,00 €
             </div>
@@ -186,18 +186,18 @@ exports[`renders correctly without data 1`] = `
         class="MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+          class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
         >
           <div
-            class="MuiBox-root MuiBox-root-53"
+            class="MuiBox-root MuiBox-root-1"
           >
             <div
-              class="MuiBox-root MuiBox-root-54"
+              class="MuiBox-root MuiBox-root-2"
             >
               untagged
             </div>
             <div
-              class="MuiBox-root MuiBox-root-55"
+              class="MuiBox-root MuiBox-root-3"
             >
               0,00 €
             </div>

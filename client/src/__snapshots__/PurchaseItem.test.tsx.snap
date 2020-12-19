@@ -3,20 +3,20 @@
 exports[`renders correctly when expanded 1`] = `
 <DocumentFragment>
   <div
-    class="MuiPaper-root MuiExpansionPanel-root Mui-expanded MuiExpansionPanel-rounded MuiPaper-elevation1 MuiPaper-rounded"
+    class="MuiPaper-root MuiAccordion-root Mui-expanded MuiAccordion-rounded MuiPaper-elevation1 MuiPaper-rounded"
   >
     <div
       aria-disabled="false"
       aria-expanded="true"
-      class="MuiButtonBase-root MuiExpansionPanelSummary-root Mui-expanded"
+      class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded"
       role="button"
       tabindex="0"
     >
       <div
-        class="MuiExpansionPanelSummary-content Mui-expanded"
+        class="MuiAccordionSummary-content Mui-expanded"
       >
         <div
-          class="MuiBox-root MuiBox-root-361"
+          class="MuiBox-root MuiBox-root-4"
         >
           <p
             class="MuiTypography-root MuiTypography-body1"
@@ -33,7 +33,7 @@ exports[`renders correctly when expanded 1`] = `
       <div
         aria-disabled="false"
         aria-hidden="true"
-        class="MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon Mui-expanded MuiIconButton-edgeEnd"
+        class="MuiButtonBase-root MuiIconButton-root MuiAccordionSummary-expandIcon Mui-expanded MuiIconButton-edgeEnd"
       >
         <span
           class="MuiIconButton-label"
@@ -42,7 +42,6 @@ exports[`renders correctly when expanded 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -69,13 +68,13 @@ exports[`renders correctly when expanded 1`] = `
             role="region"
           >
             <div
-              class="MuiExpansionPanelDetails-root"
+              class="MuiAccordionDetails-root"
             >
               <div
-                class="MuiBox-root MuiBox-root-416"
+                class="MuiBox-root MuiBox-root-5"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-417"
+                  class="MuiBox-root MuiBox-root-6"
                 >
                   <div
                     class="MuiChip-root"
@@ -88,7 +87,7 @@ exports[`renders correctly when expanded 1`] = `
                   </div>
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-448"
+                  class="MuiBox-root MuiBox-root-7"
                 >
                   <div
                     class="MuiChip-root"
@@ -101,7 +100,7 @@ exports[`renders correctly when expanded 1`] = `
                   </div>
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-449"
+                  class="MuiBox-root MuiBox-root-8"
                 >
                   <div
                     class="MuiChip-root"
@@ -119,7 +118,7 @@ exports[`renders correctly when expanded 1`] = `
               class="MuiDivider-root"
             />
             <div
-              class="MuiExpansionPanelActions-root MuiExpansionPanelActions-spacing"
+              class="MuiAccordionActions-root MuiAccordionActions-spacing"
             >
               <button
                 class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-textSizeSmall MuiButton-sizeSmall"
@@ -161,20 +160,20 @@ exports[`renders correctly when expanded 1`] = `
 exports[`renders correctly with purchase with decimal quantity not 1 1`] = `
 <DocumentFragment>
   <div
-    class="MuiPaper-root MuiExpansionPanel-root MuiExpansionPanel-rounded MuiPaper-elevation1 MuiPaper-rounded"
+    class="MuiPaper-root MuiAccordion-root MuiAccordion-rounded MuiPaper-elevation1 MuiPaper-rounded"
   >
     <div
       aria-disabled="false"
       aria-expanded="false"
-      class="MuiButtonBase-root MuiExpansionPanelSummary-root"
+      class="MuiButtonBase-root MuiAccordionSummary-root"
       role="button"
       tabindex="0"
     >
       <div
-        class="MuiExpansionPanelSummary-content"
+        class="MuiAccordionSummary-content"
       >
         <div
-          class="MuiBox-root MuiBox-root-255"
+          class="MuiBox-root MuiBox-root-3"
         >
           <p
             class="MuiTypography-root MuiTypography-body1"
@@ -191,7 +190,7 @@ exports[`renders correctly with purchase with decimal quantity not 1 1`] = `
       <div
         aria-disabled="false"
         aria-hidden="true"
-        class="MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd"
+        class="MuiButtonBase-root MuiIconButton-root MuiAccordionSummary-expandIcon MuiIconButton-edgeEnd"
       >
         <span
           class="MuiIconButton-label"
@@ -200,7 +199,6 @@ exports[`renders correctly with purchase with decimal quantity not 1 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -220,20 +218,20 @@ exports[`renders correctly with purchase with decimal quantity not 1 1`] = `
 exports[`renders correctly with purchase with integer quantity not 1 1`] = `
 <DocumentFragment>
   <div
-    class="MuiPaper-root MuiExpansionPanel-root MuiExpansionPanel-rounded MuiPaper-elevation1 MuiPaper-rounded"
+    class="MuiPaper-root MuiAccordion-root MuiAccordion-rounded MuiPaper-elevation1 MuiPaper-rounded"
   >
     <div
       aria-disabled="false"
       aria-expanded="false"
-      class="MuiButtonBase-root MuiExpansionPanelSummary-root"
+      class="MuiButtonBase-root MuiAccordionSummary-root"
       role="button"
       tabindex="0"
     >
       <div
-        class="MuiExpansionPanelSummary-content"
+        class="MuiAccordionSummary-content"
       >
         <div
-          class="MuiBox-root MuiBox-root-149"
+          class="MuiBox-root MuiBox-root-2"
         >
           <p
             class="MuiTypography-root MuiTypography-body1"
@@ -250,7 +248,7 @@ exports[`renders correctly with purchase with integer quantity not 1 1`] = `
       <div
         aria-disabled="false"
         aria-hidden="true"
-        class="MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd"
+        class="MuiButtonBase-root MuiIconButton-root MuiAccordionSummary-expandIcon MuiIconButton-edgeEnd"
       >
         <span
           class="MuiIconButton-label"
@@ -259,7 +257,6 @@ exports[`renders correctly with purchase with integer quantity not 1 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -279,20 +276,20 @@ exports[`renders correctly with purchase with integer quantity not 1 1`] = `
 exports[`renders correctly with purchase with quantity 1 1`] = `
 <DocumentFragment>
   <div
-    class="MuiPaper-root MuiExpansionPanel-root MuiExpansionPanel-rounded MuiPaper-elevation1 MuiPaper-rounded"
+    class="MuiPaper-root MuiAccordion-root MuiAccordion-rounded MuiPaper-elevation1 MuiPaper-rounded"
   >
     <div
       aria-disabled="false"
       aria-expanded="false"
-      class="MuiButtonBase-root MuiExpansionPanelSummary-root"
+      class="MuiButtonBase-root MuiAccordionSummary-root"
       role="button"
       tabindex="0"
     >
       <div
-        class="MuiExpansionPanelSummary-content"
+        class="MuiAccordionSummary-content"
       >
         <div
-          class="MuiBox-root MuiBox-root-43"
+          class="MuiBox-root MuiBox-root-1"
         >
           <p
             class="MuiTypography-root MuiTypography-body1"
@@ -309,7 +306,7 @@ exports[`renders correctly with purchase with quantity 1 1`] = `
       <div
         aria-disabled="false"
         aria-hidden="true"
-        class="MuiButtonBase-root MuiIconButton-root MuiExpansionPanelSummary-expandIcon MuiIconButton-edgeEnd"
+        class="MuiButtonBase-root MuiIconButton-root MuiAccordionSummary-expandIcon MuiIconButton-edgeEnd"
       >
         <span
           class="MuiIconButton-label"
@@ -318,7 +315,6 @@ exports[`renders correctly with purchase with quantity 1 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path

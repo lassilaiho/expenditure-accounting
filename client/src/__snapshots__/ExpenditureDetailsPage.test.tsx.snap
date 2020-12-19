@@ -20,7 +20,6 @@ exports[`renders correctly with day scope with data 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -55,18 +54,18 @@ exports[`renders correctly with day scope with data 1`] = `
             class="MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-123"
+                class="MuiBox-root MuiBox-root-1"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-124"
+                  class="MuiBox-root MuiBox-root-2"
                 >
                   tag 3
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-125"
+                  class="MuiBox-root MuiBox-root-3"
                 >
                   132,00 €
                 </div>
@@ -81,18 +80,18 @@ exports[`renders correctly with day scope with data 1`] = `
             class="MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-126"
+                class="MuiBox-root MuiBox-root-4"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-127"
+                  class="MuiBox-root MuiBox-root-5"
                 >
                   untagged
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-128"
+                  class="MuiBox-root MuiBox-root-6"
                 >
                   0,00 €
                 </div>
@@ -126,7 +125,6 @@ exports[`renders correctly with day scope without data 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -197,7 +195,6 @@ exports[`renders correctly with month scope with data 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -232,18 +229,18 @@ exports[`renders correctly with month scope with data 1`] = `
             class="MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-408"
+                class="MuiBox-root MuiBox-root-10"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-409"
+                  class="MuiBox-root MuiBox-root-11"
                 >
                   tag 1
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-410"
+                  class="MuiBox-root MuiBox-root-12"
                 >
                   2,16 €
                 </div>
@@ -258,18 +255,18 @@ exports[`renders correctly with month scope with data 1`] = `
             class="MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-411"
+                class="MuiBox-root MuiBox-root-13"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-412"
+                  class="MuiBox-root MuiBox-root-14"
                 >
                   tag 3
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-413"
+                  class="MuiBox-root MuiBox-root-15"
                 >
                   2,16 €
                 </div>
@@ -284,18 +281,18 @@ exports[`renders correctly with month scope with data 1`] = `
             class="MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-414"
+                class="MuiBox-root MuiBox-root-16"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-415"
+                  class="MuiBox-root MuiBox-root-17"
                 >
                   tag 2
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-416"
+                  class="MuiBox-root MuiBox-root-18"
                 >
                   0,16 €
                 </div>
@@ -310,18 +307,18 @@ exports[`renders correctly with month scope with data 1`] = `
             class="MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1"
+              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-417"
+                class="MuiBox-root MuiBox-root-19"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-418"
+                  class="MuiBox-root MuiBox-root-20"
                 >
                   untagged
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-419"
+                  class="MuiBox-root MuiBox-root-21"
                 >
                   0,00 €
                 </div>
@@ -355,7 +352,6 @@ exports[`renders correctly with month scope without data 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path

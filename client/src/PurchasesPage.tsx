@@ -113,7 +113,7 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
             <Virtuoso
               style={{ width, height }}
               totalCount={shownPurchases.length}
-              item={renderPurchaseItem} />
+              itemContent={renderPurchaseItem} />
           )}
         </AutoSizer>
       </SearchPage>
@@ -141,7 +141,7 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
               <Virtuoso
                 style={{ width, height }}
                 totalCount={shownPurchases.length}
-                item={renderPurchaseItem} />
+                itemContent={renderPurchaseItem} />
             )}
           </AutoSizer>
         }

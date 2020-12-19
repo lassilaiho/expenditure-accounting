@@ -47,8 +47,8 @@ const ExpenditureDetailsPage: React.FC = observer(() => {
 });
 
 type DateScope =
-  | { type: 'day', day: number, month: number, year: number }
-  | { type: 'month', month: number, year: number };
+  | { type: 'day'; day: number; month: number; year: number }
+  | { type: 'month'; month: number; year: number };
 
 function dateScopeToString(s: DateScope) {
   switch (s.type) {

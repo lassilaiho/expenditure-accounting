@@ -20,7 +20,6 @@ exports[`renders correctly with existing purchase 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -33,7 +32,7 @@ exports[`renders correctly with existing purchase 1`] = `
         />
       </button>
       <div
-        class="MuiBox-root MuiBox-root-186"
+        class="MuiBox-root MuiBox-root-1"
       >
         <h6
           class="MuiTypography-root MuiTypography-h6"
@@ -53,7 +52,6 @@ exports[`renders correctly with existing purchase 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -74,14 +72,14 @@ exports[`renders correctly with existing purchase 1`] = `
       class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
     >
       <div
-        class="MuiBox-root MuiBox-root-225"
+        class="MuiBox-root MuiBox-root-2"
       >
         <div
           class="MuiFormGroup-root"
         >
           <div
             aria-expanded="false"
-            class="MuiAutocomplete-root"
+            class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon"
             role="combobox"
           >
             <div
@@ -126,7 +124,6 @@ exports[`renders correctly with existing purchase 1`] = `
                         aria-hidden="true"
                         class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
                         focusable="false"
-                        role="presentation"
                         viewBox="0 0 24 24"
                       >
                         <path
@@ -175,7 +172,6 @@ exports[`renders correctly with existing purchase 1`] = `
                       aria-hidden="true"
                       class="MuiSvgIcon-root"
                       focusable="false"
-                      role="presentation"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -244,14 +240,14 @@ exports[`renders correctly with existing purchase 1`] = `
             </div>
           </div>
           <div
-            class="MuiBox-root MuiBox-root-334"
+            class="MuiBox-root MuiBox-root-3"
           >
             <div
-              class="MuiBox-root MuiBox-root-335"
+              class="MuiBox-root MuiBox-root-4"
             >
               <div
                 aria-expanded="false"
-                class="MuiAutocomplete-root"
+                class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon"
                 role="combobox"
               >
                 <div
@@ -260,8 +256,8 @@ exports[`renders correctly with existing purchase 1`] = `
                   <label
                     class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
                     data-shrink="false"
-                    for="mui-autocomplete-43386"
-                    id="mui-autocomplete-43386-label"
+                    for="tag-autocomplete"
+                    id="tag-autocomplete-label"
                   >
                     Add Tag
                   </label>
@@ -274,7 +270,7 @@ exports[`renders correctly with existing purchase 1`] = `
                       autocapitalize="none"
                       autocomplete="off"
                       class="MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd"
-                      id="mui-autocomplete-43386"
+                      id="tag-autocomplete"
                       spellcheck="false"
                       type="text"
                       value=""
@@ -296,7 +292,6 @@ exports[`renders correctly with existing purchase 1`] = `
                             aria-hidden="true"
                             class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
                             focusable="false"
-                            role="presentation"
                             viewBox="0 0 24 24"
                           >
                             <path
@@ -329,10 +324,10 @@ exports[`renders correctly with existing purchase 1`] = `
             </button>
           </div>
           <div
-            class="MuiBox-root MuiBox-root-365"
+            class="MuiBox-root MuiBox-root-5"
           >
             <div
-              class="MuiBox-root MuiBox-root-366"
+              class="MuiBox-root MuiBox-root-6"
             >
               <div
                 class="MuiChip-root MuiChip-deletable"
@@ -348,7 +343,6 @@ exports[`renders correctly with existing purchase 1`] = `
                   aria-hidden="true"
                   class="MuiSvgIcon-root MuiChip-deleteIcon"
                   focusable="false"
-                  role="presentation"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -358,7 +352,7 @@ exports[`renders correctly with existing purchase 1`] = `
               </div>
             </div>
             <div
-              class="MuiBox-root MuiBox-root-397"
+              class="MuiBox-root MuiBox-root-7"
             >
               <div
                 class="MuiChip-root MuiChip-deletable"
@@ -374,7 +368,6 @@ exports[`renders correctly with existing purchase 1`] = `
                   aria-hidden="true"
                   class="MuiSvgIcon-root MuiChip-deleteIcon"
                   focusable="false"
-                  role="presentation"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -384,7 +377,7 @@ exports[`renders correctly with existing purchase 1`] = `
               </div>
             </div>
             <div
-              class="MuiBox-root MuiBox-root-398"
+              class="MuiBox-root MuiBox-root-8"
             >
               <div
                 class="MuiChip-root MuiChip-deletable"
@@ -400,7 +393,6 @@ exports[`renders correctly with existing purchase 1`] = `
                   aria-hidden="true"
                   class="MuiSvgIcon-root MuiChip-deleteIcon"
                   focusable="false"
-                  role="presentation"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -439,7 +431,6 @@ exports[`renders correctly with new purchase 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -452,7 +443,7 @@ exports[`renders correctly with new purchase 1`] = `
         />
       </button>
       <div
-        class="MuiBox-root MuiBox-root-472"
+        class="MuiBox-root MuiBox-root-9"
       >
         <h6
           class="MuiTypography-root MuiTypography-h6"
@@ -472,7 +463,6 @@ exports[`renders correctly with new purchase 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -493,14 +483,14 @@ exports[`renders correctly with new purchase 1`] = `
       class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
     >
       <div
-        class="MuiBox-root MuiBox-root-511"
+        class="MuiBox-root MuiBox-root-10"
       >
         <div
           class="MuiFormGroup-root"
         >
           <div
             aria-expanded="false"
-            class="MuiAutocomplete-root"
+            class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon"
             role="combobox"
           >
             <div
@@ -545,7 +535,6 @@ exports[`renders correctly with new purchase 1`] = `
                         aria-hidden="true"
                         class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
                         focusable="false"
-                        role="presentation"
                         viewBox="0 0 24 24"
                       >
                         <path
@@ -594,7 +583,6 @@ exports[`renders correctly with new purchase 1`] = `
                       aria-hidden="true"
                       class="MuiSvgIcon-root"
                       focusable="false"
-                      role="presentation"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -663,14 +651,14 @@ exports[`renders correctly with new purchase 1`] = `
             </div>
           </div>
           <div
-            class="MuiBox-root MuiBox-root-620"
+            class="MuiBox-root MuiBox-root-11"
           >
             <div
-              class="MuiBox-root MuiBox-root-621"
+              class="MuiBox-root MuiBox-root-12"
             >
               <div
                 aria-expanded="false"
-                class="MuiAutocomplete-root"
+                class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon"
                 role="combobox"
               >
                 <div
@@ -679,8 +667,8 @@ exports[`renders correctly with new purchase 1`] = `
                   <label
                     class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
                     data-shrink="false"
-                    for="mui-autocomplete-39229"
-                    id="mui-autocomplete-39229-label"
+                    for="tag-autocomplete"
+                    id="tag-autocomplete-label"
                   >
                     Add Tag
                   </label>
@@ -693,7 +681,7 @@ exports[`renders correctly with new purchase 1`] = `
                       autocapitalize="none"
                       autocomplete="off"
                       class="MuiInputBase-input MuiInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd"
-                      id="mui-autocomplete-39229"
+                      id="tag-autocomplete"
                       spellcheck="false"
                       type="text"
                       value=""
@@ -715,7 +703,6 @@ exports[`renders correctly with new purchase 1`] = `
                             aria-hidden="true"
                             class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
                             focusable="false"
-                            role="presentation"
                             viewBox="0 0 24 24"
                           >
                             <path
@@ -748,7 +735,7 @@ exports[`renders correctly with new purchase 1`] = `
             </button>
           </div>
           <div
-            class="MuiBox-root MuiBox-root-651"
+            class="MuiBox-root MuiBox-root-13"
           />
         </div>
       </div>
@@ -777,7 +764,6 @@ exports[`renders correctly with nonexistent purchase 1`] = `
             aria-hidden="true"
             class="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
