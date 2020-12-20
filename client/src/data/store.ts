@@ -1,5 +1,5 @@
 import Big from 'big.js';
-import { action, computed, observable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import moment from 'moment';
 import React, { useContext } from 'react';
 
@@ -8,10 +8,14 @@ import Api, { LoadState } from './api';
 import * as jsonConv from './jsonConvert';
 
 export class Tag {
-  @observable public id: number;
-  @observable public name: string;
+  public id: number;
+  public name: string;
 
   public constructor(id: number, name: string) {
+    makeObservable(this, {
+      id: observable,
+      name: observable,
+    });
     this.id = id;
     this.name = name;
   }
@@ -30,14 +34,14 @@ export class Tag {
 }
 
 export class Purchase {
-  @observable public id: number;
-  @observable public product: Product;
-  @observable public date: moment.Moment;
-  @observable public quantity: Big;
-  @observable public price: Big;
-  @computed public get totalPrice() { return this.quantity.mul(this.price); }
-  @observable public tags: Tag[];
-  @computed public get tagsSortedByName() {
+  public id: number;
+  public product: Product;
+  public date: moment.Moment;
+  public quantity: Big;
+  public price: Big;
+  public get totalPrice() { return this.quantity.mul(this.price); }
+  public tags: Tag[];
+  public get tagsSortedByName() {
     return this.tags.slice().sort((a, b) => {
       const aName = a.name.toLocaleLowerCase();
       const bName = b.name.toLocaleLowerCase();
@@ -55,6 +59,16 @@ export class Purchase {
     price: Big,
     tags: Tag[],
   ) {
+    makeObservable(this, {
+      id: observable,
+      product: observable,
+      date: observable.ref,
+      quantity: observable.ref,
+      price: observable.ref,
+      totalPrice: computed,
+      tags: observable,
+      tagsSortedByName: computed,
+    });
     this.id = id;
     this.product = product;
     this.date = date;
@@ -88,10 +102,14 @@ export class Purchase {
 }
 
 export class Product {
-  @observable public id: number;
-  @observable public name: string;
+  public id: number;
+  public name: string;
 
   public constructor(id: number, name: string) {
+    makeObservable(this, {
+      id: observable,
+      name: observable,
+    });
     this.id = id;
     this.name = name;
   }
@@ -110,39 +128,39 @@ export class Product {
 }
 
 export class Store {
-  @observable public dataState: LoadState = 'not-started';
-  @observable public purchases: Purchase[] = [];
-  @computed public get purchasesById() {
+  public dataState: LoadState = 'not-started';
+  public purchases: Purchase[] = [];
+  public get purchasesById() {
     const map = new Map<number, Purchase>();
     for (const p of this.purchases) {
       map.set(p.id, p);
     }
     return map;
   }
-  @observable public tagsById = new Map<number, Tag>();
-  @computed public get tags() {
+  public tagsById = new Map<number, Tag>();
+  public get tags() {
     const tags: Tag[] = [];
     for (const tag of this.tagsById.values()) {
       tags.push(tag);
     }
     return tags;
   }
-  @computed private get tagsByName() {
+  private get tagsByName() {
     const map = new Map<string, Tag>();
     for (const tag of this.tagsById.values()) {
       map.set(tag.name.toLowerCase(), tag);
     }
     return map;
   }
-  @observable public productsById = new Map<number, Product>();
-  @computed public get products() {
+  public productsById = new Map<number, Product>();
+  public get products() {
     const products: Product[] = [];
     for (const product of this.productsById.values()) {
       products.push(product);
     }
     return products;
   }
-  @computed private get productsByName() {
+  private get productsByName() {
     const map = new Map<string, Product>();
     for (const product of this.productsById.values()) {
       map.set(product.name.toLowerCase(), product);
@@ -150,7 +168,22 @@ export class Store {
     return map;
   }
 
-  public constructor(private api: Api) { }
+  public constructor(private api: Api) {
+    makeObservable<Store, 'tagsByName' | 'productsByName' | 'parsePurchaseJson'>(this, {
+      dataState: observable,
+      purchases: observable,
+      purchasesById: computed,
+      tagsById: observable,
+      tags: computed,
+      tagsByName: computed,
+      productsById: observable,
+      products: computed,
+      productsByName: computed,
+      addTags: action,
+      reloadData: action,
+      parsePurchaseJson: action,
+    });
+  }
 
   public async updatePurchase(id: number) {
     const purchase = this.purchasesById.get(id);
@@ -170,7 +203,6 @@ export class Store {
     }
   }
 
-  @action
   public async addTags(names: string[]) {
     const newTags: string[] = [];
     const result: Tag[] = [];
@@ -249,7 +281,6 @@ export class Store {
     return this.productsByName.get(name.toLowerCase());
   }
 
-  @action
   public async reloadData() {
     try {
       this.dataState = 'loading';
@@ -271,7 +302,6 @@ export class Store {
     }
   }
 
-  @action
   private parsePurchaseJson(data: any) {
     const purchases = data.purchases;
     if (!Array.isArray(purchases)) {

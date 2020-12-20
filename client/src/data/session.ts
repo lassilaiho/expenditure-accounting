@@ -1,4 +1,4 @@
-import { action, computed, observable, runInAction } from 'mobx';
+import { action, computed, observable, runInAction, makeObservable } from 'mobx';
 import React, { useContext } from 'react';
 
 import { ensureOk } from '../util';
@@ -12,16 +12,11 @@ export type SessionState =
   | 'expired';
 
 export class Session {
-  @observable
   public currentEmail = '';
-  @computed
   public get isLoggedIn() { return this.state === 'logged-in'; }
-  @observable
   private _state: SessionState = 'logged-out';
-  @computed
   public get state() { return this._state; }
 
-  @action
   private updateState() {
     if (this.api.sessionToken === null) {
       this._state = 'logged-out';
@@ -32,7 +27,15 @@ export class Session {
     }
   }
 
-  public constructor(private api: Api) { }
+  public constructor(private api: Api) {
+    makeObservable<Session, '_state' | 'updateState'>(this, {
+      currentEmail: observable,
+      isLoggedIn: computed,
+      _state: observable,
+      state: computed,
+      updateState: action,
+    });
+  }
 
   public static fromLocalStorage(api: Api) {
     const session = new Session(api);
