@@ -1,6 +1,5 @@
 import {
   AppBar,
-  CircularProgress,
   Container,
   Paper,
   Toolbar,
@@ -13,6 +12,7 @@ import React from 'react';
 import { Purchase, useStore } from './data/store';
 import MenuButton from './MenuButton';
 import GroupedExpenditureView from './GroupedExpenditureView';
+import CenteredLoader from './CenteredLoader';
 
 export interface DailyExpenditurePageProps {
   openNavigation: () => void;
@@ -30,7 +30,7 @@ const DailyExpenditurePage: React.FC<DailyExpenditurePageProps> = observer(props
     <Container fixed>
       <Paper>
         {store.dataState === 'loading'
-          ? <CircularProgress color='secondary' />
+          ? <CenteredLoader />
           : <GroupedExpenditureView
             purchases={store.purchases}
             splitHere={splitFunc}

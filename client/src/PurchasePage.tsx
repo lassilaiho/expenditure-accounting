@@ -1,6 +1,5 @@
 import {
   AppBar,
-  CircularProgress,
   Container,
   Paper,
   Toolbar,
@@ -14,6 +13,7 @@ import { Redirect, useParams } from 'react-router-dom';
 
 import BackButton from './BackButton';
 import { Product, Purchase, useStore } from './data/store';
+import CenteredLoader from './CenteredLoader';
 import PurchaseEditor from './PurchaseEditor';
 
 interface PurchasePageParams {
@@ -55,7 +55,7 @@ const PurchasePage: React.FC = observer(() => {
     </AppBar>
     <Container fixed>
       <Paper>
-        <CircularProgress color='secondary' />
+        <CenteredLoader />
       </Paper>
     </Container>
   </>;

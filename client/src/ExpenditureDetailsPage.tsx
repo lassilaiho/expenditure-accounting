@@ -1,6 +1,5 @@
 import {
   AppBar,
-  CircularProgress,
   Container,
   Paper,
   Toolbar,
@@ -11,6 +10,7 @@ import moment from 'moment';
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 
+import CenteredLoader from './CenteredLoader';
 import BackButton from './BackButton';
 import { useStore } from './data/store';
 import ExpenditureByTags from './ExpenditureByTags';
@@ -37,7 +37,7 @@ const ExpenditureDetailsPage: React.FC = observer(() => {
     <Container fixed>
       <Paper>
         {store.dataState === 'loading'
-          ? <CircularProgress color='secondary' />
+          ? <CenteredLoader />
           : <ExpenditureByTags
             purchases={store.purchases}
             dateRange={dateScopeToRange(dateScope)} />}

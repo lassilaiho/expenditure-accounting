@@ -1,6 +1,5 @@
 import {
   AppBar,
-  CircularProgress,
   Container,
   Paper,
   Toolbar,
@@ -12,6 +11,7 @@ import moment from 'moment';
 import React from 'react';
 
 import { Purchase, useStore } from './data/store';
+import CenteredLoader from './CenteredLoader';
 import MenuButton from './MenuButton';
 
 export interface MonthlyExpenditurePageProps {
@@ -30,7 +30,7 @@ const MonthlyExpenditurePage: React.FC<MonthlyExpenditurePageProps> = observer(p
     <Container fixed>
       <Paper>
         {store.dataState === 'loading'
-          ? <CircularProgress color='secondary' />
+          ? <CenteredLoader />
           : <GroupedExpneditureView
             purchases={store.purchases}
             splitHere={splitFunc}

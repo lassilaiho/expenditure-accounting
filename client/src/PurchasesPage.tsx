@@ -1,6 +1,5 @@
 import {
   AppBar,
-  CircularProgress,
   Container,
   createStyles,
   Fab,
@@ -22,6 +21,7 @@ import { Purchase, useStore } from "./data/store";
 import MenuButton from './MenuButton';
 import PurchaseItem from "./PurchaseItem";
 import SearchPage from "./SearchPage";
+import CenteredLoader from './CenteredLoader';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   fab: {
@@ -134,9 +134,8 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
       </AppBar>
       <Container fixed className={classes.container}>
         {store.dataState === 'loading'
-          ? <CircularProgress color='secondary' />
-          :
-          <AutoSizer>
+          ? <CenteredLoader />
+          : <AutoSizer>
             {({ width, height }) => (
               <Virtuoso
                 style={{ width, height }}

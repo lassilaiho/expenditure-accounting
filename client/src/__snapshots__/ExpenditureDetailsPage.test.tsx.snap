@@ -150,23 +150,27 @@ exports[`renders correctly with day scope without data 1`] = `
       class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
     >
       <div
-        class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
-        role="progressbar"
-        style="width: 40px; height: 40px;"
+        class="makeStyles-centeredContainer-7"
       >
-        <svg
-          class="MuiCircularProgress-svg"
-          viewBox="22 22 44 44"
+        <div
+          class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
+          role="progressbar"
+          style="width: 40px; height: 40px;"
         >
-          <circle
-            class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-            cx="44"
-            cy="44"
-            fill="none"
-            r="20.2"
-            stroke-width="3.6"
-          />
-        </svg>
+          <svg
+            class="MuiCircularProgress-svg"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -232,15 +236,15 @@ exports[`renders correctly with month scope with data 1`] = `
               class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-10"
+                class="MuiBox-root MuiBox-root-11"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-11"
+                  class="MuiBox-root MuiBox-root-12"
                 >
                   tag 1
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-12"
+                  class="MuiBox-root MuiBox-root-13"
                 >
                   2,16 €
                 </div>
@@ -258,15 +262,15 @@ exports[`renders correctly with month scope with data 1`] = `
               class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-13"
+                class="MuiBox-root MuiBox-root-14"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-14"
+                  class="MuiBox-root MuiBox-root-15"
                 >
                   tag 3
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-15"
+                  class="MuiBox-root MuiBox-root-16"
                 >
                   2,16 €
                 </div>
@@ -284,15 +288,15 @@ exports[`renders correctly with month scope with data 1`] = `
               class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-16"
+                class="MuiBox-root MuiBox-root-17"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-17"
+                  class="MuiBox-root MuiBox-root-18"
                 >
                   tag 2
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-18"
+                  class="MuiBox-root MuiBox-root-19"
                 >
                   0,16 €
                 </div>
@@ -310,15 +314,15 @@ exports[`renders correctly with month scope with data 1`] = `
               class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
             >
               <div
-                class="MuiBox-root MuiBox-root-19"
+                class="MuiBox-root MuiBox-root-20"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-20"
+                  class="MuiBox-root MuiBox-root-21"
                 >
                   untagged
                 </div>
                 <div
-                  class="MuiBox-root MuiBox-root-21"
+                  class="MuiBox-root MuiBox-root-22"
                 >
                   0,00 €
                 </div>
@@ -377,23 +381,27 @@ exports[`renders correctly with month scope without data 1`] = `
       class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
     >
       <div
-        class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
-        role="progressbar"
-        style="width: 40px; height: 40px;"
+        class="makeStyles-centeredContainer-23"
       >
-        <svg
-          class="MuiCircularProgress-svg"
-          viewBox="22 22 44 44"
+        <div
+          class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
+          role="progressbar"
+          style="width: 40px; height: 40px;"
         >
-          <circle
-            class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-            cx="44"
-            cy="44"
-            fill="none"
-            r="20.2"
-            stroke-width="3.6"
-          />
-        </svg>
+          <svg
+            class="MuiCircularProgress-svg"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   </div>

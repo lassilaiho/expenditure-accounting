@@ -32,7 +32,7 @@ exports[`renders correctly with existing purchase 1`] = `
         />
       </button>
       <div
-        class="MuiBox-root MuiBox-root-1"
+        class="MuiBox-root MuiBox-root-2"
       >
         <h6
           class="MuiTypography-root MuiTypography-h6"
@@ -72,7 +72,7 @@ exports[`renders correctly with existing purchase 1`] = `
       class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
     >
       <div
-        class="MuiBox-root MuiBox-root-2"
+        class="MuiBox-root MuiBox-root-3"
       >
         <div
           class="MuiFormGroup-root"
@@ -240,10 +240,10 @@ exports[`renders correctly with existing purchase 1`] = `
             </div>
           </div>
           <div
-            class="MuiBox-root MuiBox-root-3"
+            class="MuiBox-root MuiBox-root-4"
           >
             <div
-              class="MuiBox-root MuiBox-root-4"
+              class="MuiBox-root MuiBox-root-5"
             >
               <div
                 aria-expanded="false"
@@ -324,10 +324,10 @@ exports[`renders correctly with existing purchase 1`] = `
             </button>
           </div>
           <div
-            class="MuiBox-root MuiBox-root-5"
+            class="MuiBox-root MuiBox-root-6"
           >
             <div
-              class="MuiBox-root MuiBox-root-6"
+              class="MuiBox-root MuiBox-root-7"
             >
               <div
                 class="MuiChip-root MuiChip-deletable"
@@ -352,7 +352,7 @@ exports[`renders correctly with existing purchase 1`] = `
               </div>
             </div>
             <div
-              class="MuiBox-root MuiBox-root-7"
+              class="MuiBox-root MuiBox-root-8"
             >
               <div
                 class="MuiChip-root MuiChip-deletable"
@@ -377,7 +377,7 @@ exports[`renders correctly with existing purchase 1`] = `
               </div>
             </div>
             <div
-              class="MuiBox-root MuiBox-root-8"
+              class="MuiBox-root MuiBox-root-9"
             >
               <div
                 class="MuiChip-root MuiChip-deletable"
@@ -443,7 +443,7 @@ exports[`renders correctly with new purchase 1`] = `
         />
       </button>
       <div
-        class="MuiBox-root MuiBox-root-9"
+        class="MuiBox-root MuiBox-root-10"
       >
         <h6
           class="MuiTypography-root MuiTypography-h6"
@@ -483,7 +483,7 @@ exports[`renders correctly with new purchase 1`] = `
       class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
     >
       <div
-        class="MuiBox-root MuiBox-root-10"
+        class="MuiBox-root MuiBox-root-11"
       >
         <div
           class="MuiFormGroup-root"
@@ -651,10 +651,10 @@ exports[`renders correctly with new purchase 1`] = `
             </div>
           </div>
           <div
-            class="MuiBox-root MuiBox-root-11"
+            class="MuiBox-root MuiBox-root-12"
           >
             <div
-              class="MuiBox-root MuiBox-root-12"
+              class="MuiBox-root MuiBox-root-13"
             >
               <div
                 aria-expanded="false"
@@ -735,7 +735,7 @@ exports[`renders correctly with new purchase 1`] = `
             </button>
           </div>
           <div
-            class="MuiBox-root MuiBox-root-13"
+            class="MuiBox-root MuiBox-root-14"
           />
         </div>
       </div>
@@ -789,23 +789,27 @@ exports[`renders correctly with nonexistent purchase 1`] = `
       class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
     >
       <div
-        class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
-        role="progressbar"
-        style="width: 40px; height: 40px;"
+        class="makeStyles-centeredContainer-1"
       >
-        <svg
-          class="MuiCircularProgress-svg"
-          viewBox="22 22 44 44"
+        <div
+          class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
+          role="progressbar"
+          style="width: 40px; height: 40px;"
         >
-          <circle
-            class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-            cx="44"
-            cy="44"
-            fill="none"
-            r="20.2"
-            stroke-width="3.6"
-          />
-        </svg>
+          <svg
+            class="MuiCircularProgress-svg"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   </div>
