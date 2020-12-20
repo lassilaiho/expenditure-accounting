@@ -89,12 +89,6 @@ export class Purchase {
     );
   }
 
-  public static orderByDate(a: Purchase, b: Purchase) {
-    if (a.date < b.date) { return -1; }
-    if (a.date > b.date) { return 1; }
-    return 0;
-  }
-
   public lowerCaseMatch(s: string) {
     return this.product.lowerCaseMatch(s)
       || this.tags.some(t => t.lowerCaseMatch(s));

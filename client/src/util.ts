@@ -18,10 +18,6 @@ export const currency = new Intl.NumberFormat('fi-FI', {
   currency: 'EUR',
 });
 
-export function reverse<A, B>(f: (a: A, b: B) => number): (a: A, b: B) => number {
-  return (a, b) => -f(a, b);
-}
-
 export class DateRange {
   public constructor(
     public readonly from: moment.Moment,

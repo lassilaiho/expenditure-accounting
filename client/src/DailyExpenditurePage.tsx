@@ -2,23 +2,17 @@ import {
   AppBar,
   CircularProgress,
   Container,
-  List,
-  ListItem,
-  ListItemText,
   Paper,
   Toolbar,
   Typography
 } from '@material-ui/core';
-import Big from 'big.js';
-import { History } from 'history';
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
-import { Purchase, Store, useStore } from './data/store';
+import { Purchase, useStore } from './data/store';
 import MenuButton from './MenuButton';
-import { currency, numOfBig, reverse } from './util';
+import GroupedExpenditureView from './GroupedExpenditureView';
 
 export interface DailyExpenditurePageProps {
   openNavigation: () => void;
@@ -26,7 +20,6 @@ export interface DailyExpenditurePageProps {
 
 const DailyExpenditurePage: React.FC<DailyExpenditurePageProps> = observer(props => {
   const store = useStore();
-  const history = useHistory();
   return <>
     <AppBar position='sticky'>
       <Toolbar>
@@ -38,48 +31,21 @@ const DailyExpenditurePage: React.FC<DailyExpenditurePageProps> = observer(props
       <Paper>
         {store.dataState === 'loading'
           ? <CircularProgress color='secondary' />
-          : renderDailyExpenditure(store, history)}
+          : <GroupedExpenditureView
+            purchases={store.purchases}
+            splitHere={splitFunc}
+            format={formatFunc} />}
       </Paper>
     </Container>
   </>;
 });
 
-function renderDailyExpenditure(store: Store, history: History<any>) {
-  if (store.purchases.length === 0) {
-    return <List></List>;
-  }
-  const dailyPurchases = store.purchases.slice();
-  dailyPurchases.sort(reverse(Purchase.orderByDate));
-  const result: JSX.Element[] = [];
-  let prev = dailyPurchases[0];
-  let expenditure = prev.totalPrice;
-  for (let i = 1; i < store.purchases.length; i++) {
-    const current = store.purchases[i];
-    if (current.date.isSame(prev.date, 'day')) {
-      expenditure = expenditure.add(current.totalPrice);
-    } else {
-      result.push(makeItem(prev.date, expenditure, history));
-      expenditure = current.totalPrice;
-    }
-    prev = current;
-  }
-  result.push(makeItem(prev.date, expenditure, history));
-  return <List>{result}</List>;
+function splitFunc(prev: Purchase, current: Purchase) {
+  return current.date.isSame(prev.date, 'day');
 }
 
-function makeItem(date: moment.Moment, expenditure: Big, history: History<any>) {
-  const d = date.clone().local().format('D.M.YYYY');
-  return (
-    <ListItem
-      key={date.valueOf()}
-      button
-      onClick={() => history.push('/expenditure/' + d)}
-    >
-      <ListItemText
-        primary={d}
-        secondary={currency.format(numOfBig(expenditure))} />
-    </ListItem>
-  );
+function formatFunc(x: moment.Moment) {
+  return x.clone().local().format('D.M.YYYY');
 }
 
 export default DailyExpenditurePage;
