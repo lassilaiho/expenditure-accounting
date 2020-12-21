@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -21,12 +22,7 @@ var dbAPI = API{
 }
 var bgctx = context.Background()
 
-func TestMain(m *testing.M) {
-	// Add test migration script
-	migrationScripts[migration{From: 2, To: 3}] =
-		"ALTER TABLE metadata ADD COLUMN test_col TEXT DEFAULT 'test'"
-
-	// Start and connect to database container
+func connectDockertestDB() func() {
 	pool, err := dockertest.NewPool("")
 	if err != nil {
 		log.Fatalf("Could not connect to docker: %s", err)
@@ -45,10 +41,50 @@ func TestMain(m *testing.M) {
 	}); err != nil {
 		log.Fatalf("Could not connect to docker: %s", err)
 	}
-	code := m.Run()
-	if err := pool.Purge(resource); err != nil {
-		log.Fatalf("Could not purge resource: %s", err)
+	return func() {
+		if err := pool.Purge(resource); err != nil {
+			log.Fatalf("Could not purge resource: %s", err)
+		}
 	}
+}
+
+func connectExistingDB() func() {
+	var err error
+	dbAPI.DB, err = sql.Open(
+		"postgres",
+		fmt.Sprintf(
+			"host=%s user=postgres password=postgres port=%s sslmode=disable",
+			os.Getenv("POSTGRES_HOST"),
+			os.Getenv(("POSTGRES_PORT"))))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return func() {
+		dbAPI.DB.Close()
+	}
+}
+
+func isCI() bool {
+	for _, arg := range os.Args {
+		if strings.ToLower(arg) == "ci" {
+			return true
+		}
+	}
+	return false
+}
+
+func TestMain(m *testing.M) {
+	migrationScripts[migration{From: 2, To: 3}] =
+		"ALTER TABLE metadata ADD COLUMN test_col TEXT DEFAULT 'test'"
+
+	var cleanup func()
+	if isCI() {
+		cleanup = connectExistingDB()
+	} else {
+		cleanup = connectDockertestDB()
+	}
+	code := m.Run()
+	cleanup()
 	os.Exit(code)
 }
 
