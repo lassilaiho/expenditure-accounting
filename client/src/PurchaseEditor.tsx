@@ -58,12 +58,24 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
     runInAction(() => {
       purchase.product = product;
       purchase.tags = tagObjects;
-      purchase.date = moment.utc(date).startOf('day');
+      purchase.date = moment.utc(date);
       purchase.quantity = new Big(quantity);
       purchase.price = new Big(price);
     });
     props.onSave();
     history.goBack();
+  }
+
+  function updateDate(d: Date | null) {
+    if (d) {
+      setDate(moment.utc([
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate(),
+      ]).toDate());
+    } else {
+      setDate(purchase.date.toDate());
+    }
   }
 
   function addTag() {
@@ -114,7 +126,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
               format='dd.MM.yyyy'
               margin='normal'
               value={date}
-              onChange={d => setDate(d ?? purchase.date.toDate())} />
+              onChange={updateDate} />
             <TextField
               label='Price'
               type='number'
