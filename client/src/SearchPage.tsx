@@ -10,7 +10,7 @@ import {
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import CloseIcon from '@material-ui/icons/Close';
 import { observer } from 'mobx-react';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import Scaffold from './Scaffold';
 
@@ -38,6 +38,17 @@ const SearchPage: React.FC<SearchPageProps> = observer(props => {
   const [searchString, setSearchString] = useState('');
   const inputRef = useRef<HTMLInputElement | undefined>();
 
+  const onEsc = useCallback(e => {
+    if (!e.defaultPrevented && e.key === 'Escape') {
+      props.onCancel();
+    }
+  }, [props.onCancel]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', onEsc, false);
+    return () => document.removeEventListener('keydown', onEsc, false);
+  }, [onEsc]);
+
   function onChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     const s = e.target.value ?? '';
     setSearchString(s);
@@ -52,9 +63,7 @@ const SearchPage: React.FC<SearchPageProps> = observer(props => {
 
   return <Scaffold
     appBar={
-      <AppBar
-        position='static'
-        className={classes.appBar}>
+      <AppBar position='static' className={classes.appBar}>
         <Toolbar>
           <IconButton onClick={props.onCancel}>
             <ArrowBackIcon />
