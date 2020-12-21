@@ -1,10 +1,4 @@
-import {
-  AppBar,
-  Container,
-  Paper,
-  Toolbar,
-  Typography
-} from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
@@ -14,6 +8,7 @@ import CenteredLoader from './CenteredLoader';
 import BackButton from './BackButton';
 import { useStore } from './data/store';
 import ExpenditureByTags from './ExpenditureByTags';
+import Scaffold from './Scaffold';
 import { DateRange } from './util';
 
 const ExpenditureDetailsPage: React.FC = observer(() => {
@@ -25,16 +20,10 @@ const ExpenditureDetailsPage: React.FC = observer(() => {
     return <Redirect to='/' />;
   }
 
-  return <>
-    <AppBar position='sticky'>
-      <Toolbar>
-        <BackButton />
-        <Typography variant='h6'>
-          Expenditure on {dateScopeToString(dateScope)}
-        </Typography>
-      </Toolbar>
-    </AppBar>
-    <Container fixed>
+  return <Scaffold
+    nav={<BackButton />}
+    title={'Expenditure on ' + dateScopeToString(dateScope)}
+    content={
       <Paper>
         {store.dataState === 'loading'
           ? <CenteredLoader />
@@ -42,8 +31,8 @@ const ExpenditureDetailsPage: React.FC = observer(() => {
             purchases={store.purchases}
             dateRange={dateScopeToRange(dateScope)} />}
       </Paper>
-    </Container>
-  </>;
+    }
+  />;
 });
 
 type DateScope =

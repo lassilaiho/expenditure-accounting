@@ -8,14 +8,12 @@ import {
   Theme,
   Typography
 } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Container from '@material-ui/core/Container';
-import Toolbar from '@material-ui/core/Toolbar';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
 import { AuthError, useSession } from './data/session';
 import MenuButton from './MenuButton';
+import Scaffold from './Scaffold';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   form: {
@@ -56,46 +54,40 @@ const LoginPage: React.FC<LoginPageProps> = observer(props => {
     }
   }
 
-  return (
-    <>
-      <AppBar position='sticky'>
-        <Toolbar>
-          <MenuButton onClick={props.openNavigation} />
-          <Typography variant='h6'>Login</Typography>
-        </Toolbar>
-      </AppBar>
-      <Container fixed>
-        <Paper>
-          <Box px={2} py={1}>
-            <form onSubmit={login} className={classes.form}>
-              <TextField
-                className={classes.formElement}
-                id='email'
-                label='Email'
-                onChange={e => setEmail(e.target.value)} />
-              <TextField
-                className={classes.formElement}
-                id='password'
-                label='Password'
-                type='password'
-                onChange={e => setPassword(e.target.value)} />
-              {errorMessage === ''
-                ? null
-                : <Typography color='error'>{errorMessage}</Typography>}
-              <Button
-                variant='contained'
-                color='primary'
-                type='submit'
-                className={classes.formElement}
-              >
-                Login
+  return <Scaffold
+    nav={<MenuButton onClick={props.openNavigation} />}
+    title='Login'
+    content={
+      <Paper>
+        <Box px={2} py={1}>
+          <form onSubmit={login} className={classes.form}>
+            <TextField
+              className={classes.formElement}
+              id='email'
+              label='Email'
+              onChange={e => setEmail(e.target.value)} />
+            <TextField
+              className={classes.formElement}
+              id='password'
+              label='Password'
+              type='password'
+              onChange={e => setPassword(e.target.value)} />
+            {errorMessage === ''
+              ? null
+              : <Typography color='error'>{errorMessage}</Typography>}
+            <Button
+              variant='contained'
+              color='primary'
+              type='submit'
+              className={classes.formElement}
+            >
+              Login
               </Button>
-            </form>
-          </Box>
-        </Paper>
-      </Container>
-    </>
-  );
+          </form>
+        </Box>
+      </Paper>
+    }
+  />;
 });
 
 export default LoginPage;

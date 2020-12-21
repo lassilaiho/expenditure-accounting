@@ -1,13 +1,9 @@
 import {
-  AppBar,
-  Container,
   createStyles,
   Fab,
   IconButton,
   makeStyles,
-  Theme,
-  Toolbar,
-  Typography
+  Theme
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
@@ -21,14 +17,10 @@ import { Purchase, useStore } from "./data/store";
 import MenuButton from './MenuButton';
 import PurchaseItem from "./PurchaseItem";
 import SearchPage from "./SearchPage";
+import Scaffold from "./Scaffold";
 import CenteredLoader from './CenteredLoader';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
   purchaseItem: {
     backgroundColor: theme.palette.background.default,
     transition: theme.transitions.create(
@@ -39,17 +31,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   expanded: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-  },
-  root: {
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  container: {
-    flexGrow: 1,
-  },
-  title: {
-    flexGrow: 1,
   },
 }));
 
@@ -119,41 +100,34 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
       </SearchPage>
     );
   }
-  return (
-    <div className={classes.root}>
-      <AppBar position='static'>
-        <Toolbar>
-          <MenuButton onClick={props.openNavigation} />
-          <Typography variant='h6' className={classes.title}>
-            Purchases
-          </Typography>
-          <IconButton color='inherit' onClick={() => setIsSearching(true)}>
-            <SearchIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Container fixed className={classes.container}>
-        {store.dataState === 'loading'
-          ? <CenteredLoader />
-          : <AutoSizer>
-            {({ width, height }) => (
-              <Virtuoso
-                style={{ width, height }}
-                totalCount={shownPurchases.length}
-                itemContent={renderPurchaseItem} />
-            )}
-          </AutoSizer>
-        }
-      </Container>
+  return <Scaffold
+    nav={<MenuButton onClick={props.openNavigation} />}
+    title='Purchases'
+    actions={
+      <IconButton color='inherit' onClick={() => setIsSearching(true)}>
+        <SearchIcon />
+      </IconButton>
+    }
+    content={store.dataState === 'loading'
+      ? <CenteredLoader />
+      : <AutoSizer>
+        {({ width, height }) => (
+          <Virtuoso
+            style={{ width, height }}
+            totalCount={shownPurchases.length}
+            itemContent={renderPurchaseItem} />
+        )}
+      </AutoSizer>
+    }
+    fab={
       <Fab
-        className={classes.fab}
         color='secondary'
         onClick={() => history.push('/purchases/new')}
       >
         <AddIcon />
       </Fab>
-    </div>
-  );
+    }
+  />;
 });
 
 export default PurchasesPage;

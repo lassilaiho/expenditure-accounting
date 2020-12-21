@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Container,
   createStyles,
   IconButton,
   InputBase,
@@ -12,6 +11,8 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import CloseIcon from '@material-ui/icons/Close';
 import { observer } from 'mobx-react';
 import React, { useRef, useState } from 'react';
+
+import Scaffold from './Scaffold';
 
 export interface SearchPageProps {
   onCancel: () => void;
@@ -49,9 +50,11 @@ const SearchPage: React.FC<SearchPageProps> = observer(props => {
     props.onSearch('');
   }
 
-  return (
-    <div className={classes.root}>
-      <AppBar position='static' className={classes.appBar}>
+  return <Scaffold
+    appBar={
+      <AppBar
+        position='static'
+        className={classes.appBar}>
         <Toolbar>
           <IconButton onClick={props.onCancel}>
             <ArrowBackIcon />
@@ -68,11 +71,9 @@ const SearchPage: React.FC<SearchPageProps> = observer(props => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Container fixed className={classes.container}>
-        {props.children as any}
-      </Container>
-    </div>
-  );
+    }
+    content={props.children as any}
+  />;
 });
 
 export default SearchPage;

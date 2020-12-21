@@ -1,10 +1,4 @@
-import {
-  AppBar,
-  Container,
-  Paper,
-  Toolbar,
-  Typography
-} from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
@@ -13,6 +7,7 @@ import { Purchase, useStore } from './data/store';
 import MenuButton from './MenuButton';
 import GroupedExpenditureView from './GroupedExpenditureView';
 import CenteredLoader from './CenteredLoader';
+import Scaffold from './Scaffold';
 
 export interface DailyExpenditurePageProps {
   openNavigation: () => void;
@@ -20,14 +15,10 @@ export interface DailyExpenditurePageProps {
 
 const DailyExpenditurePage: React.FC<DailyExpenditurePageProps> = observer(props => {
   const store = useStore();
-  return <>
-    <AppBar position='sticky'>
-      <Toolbar>
-        <MenuButton onClick={props.openNavigation} />
-        <Typography variant='h6'>Daily Expenditure</Typography>
-      </Toolbar>
-    </AppBar>
-    <Container fixed>
+  return <Scaffold
+    nav={<MenuButton onClick={props.openNavigation} />}
+    title='Daily Expenditure'
+    content={
       <Paper>
         {store.dataState === 'loading'
           ? <CenteredLoader />
@@ -36,8 +27,8 @@ const DailyExpenditurePage: React.FC<DailyExpenditurePageProps> = observer(props
             splitHere={splitFunc}
             format={formatFunc} />}
       </Paper>
-    </Container>
-  </>;
+    }
+  />;
 });
 
 function splitFunc(prev: Purchase, current: Purchase) {

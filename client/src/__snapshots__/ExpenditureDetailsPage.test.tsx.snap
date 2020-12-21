@@ -2,104 +2,113 @@
 
 exports[`renders correctly with day scope with data 1`] = `
 <DocumentFragment>
-  <header
-    class="MuiPaper-root MuiAppBar-root MuiAppBar-positionSticky MuiAppBar-colorPrimary MuiPaper-elevation4"
-  >
-    <div
-      class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
-    >
-      <button
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="MuiIconButton-label"
-        >
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-            />
-          </svg>
-        </span>
-        <span
-          class="MuiTouchRipple-root"
-        />
-      </button>
-      <h6
-        class="MuiTypography-root MuiTypography-h6"
-      >
-        Expenditure on 14.1.2020
-      </h6>
-    </div>
-  </header>
   <div
-    class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+    class="makeStyles-root-2"
   >
-    <div
-      class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+    <header
+      class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
     >
-      <ul
-        class="MuiList-root MuiList-padding"
+      <div
+        class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
       >
-        <li
-          class="MuiListItem-root MuiListItem-gutters"
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+          tabindex="0"
+          type="button"
         >
-          <div
-            class="MuiListItemText-root"
+          <span
+            class="MuiIconButton-label"
           >
-            <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+        <h6
+          class="MuiTypography-root makeStyles-title-4 MuiTypography-h6"
+        >
+          Expenditure on 14.1.2020
+        </h6>
+      </div>
+    </header>
+    <div
+      class="makeStyles-contentRoot-3"
+    >
+      <div
+        class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+        style="width: 100%; height: 100%;"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <ul
+            class="MuiList-root MuiList-padding"
+          >
+            <li
+              class="MuiListItem-root MuiListItem-gutters"
             >
               <div
-                class="MuiBox-root MuiBox-root-1"
+                class="MuiListItemText-root"
               >
-                <div
-                  class="MuiBox-root MuiBox-root-2"
+                <span
+                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
                 >
-                  tag 3
-                </div>
-                <div
-                  class="MuiBox-root MuiBox-root-3"
-                >
-                  132,00 €
-                </div>
+                  <div
+                    class="MuiBox-root MuiBox-root-5"
+                  >
+                    <div
+                      class="MuiBox-root MuiBox-root-6"
+                    >
+                      tag 3
+                    </div>
+                    <div
+                      class="MuiBox-root MuiBox-root-7"
+                    >
+                      132,00 €
+                    </div>
+                  </div>
+                </span>
               </div>
-            </span>
-          </div>
-        </li>
-        <li
-          class="MuiListItem-root MuiListItem-gutters"
-        >
-          <div
-            class="MuiListItemText-root"
-          >
-            <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters"
             >
               <div
-                class="MuiBox-root MuiBox-root-4"
+                class="MuiListItemText-root"
               >
-                <div
-                  class="MuiBox-root MuiBox-root-5"
+                <span
+                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
                 >
-                  untagged
-                </div>
-                <div
-                  class="MuiBox-root MuiBox-root-6"
-                >
-                  0,00 €
-                </div>
+                  <div
+                    class="MuiBox-root MuiBox-root-8"
+                  >
+                    <div
+                      class="MuiBox-root MuiBox-root-9"
+                    >
+                      untagged
+                    </div>
+                    <div
+                      class="MuiBox-root MuiBox-root-10"
+                    >
+                      0,00 €
+                    </div>
+                  </div>
+                </span>
               </div>
-            </span>
-          </div>
-        </li>
-      </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </DocumentFragment>
@@ -107,69 +116,78 @@ exports[`renders correctly with day scope with data 1`] = `
 
 exports[`renders correctly with day scope without data 1`] = `
 <DocumentFragment>
-  <header
-    class="MuiPaper-root MuiAppBar-root MuiAppBar-positionSticky MuiAppBar-colorPrimary MuiPaper-elevation4"
-  >
-    <div
-      class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
-    >
-      <button
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="MuiIconButton-label"
-        >
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-            />
-          </svg>
-        </span>
-        <span
-          class="MuiTouchRipple-root"
-        />
-      </button>
-      <h6
-        class="MuiTypography-root MuiTypography-h6"
-      >
-        Expenditure on 15.1.2020
-      </h6>
-    </div>
-  </header>
   <div
-    class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+    class="makeStyles-root-12"
   >
-    <div
-      class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+    <header
+      class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
     >
       <div
-        class="makeStyles-centeredContainer-7"
+        class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiIconButton-label"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+        <h6
+          class="MuiTypography-root makeStyles-title-14 MuiTypography-h6"
+        >
+          Expenditure on 15.1.2020
+        </h6>
+      </div>
+    </header>
+    <div
+      class="makeStyles-contentRoot-13"
+    >
+      <div
+        class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+        style="width: 100%; height: 100%;"
       >
         <div
-          class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
-          role="progressbar"
-          style="width: 40px; height: 40px;"
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
         >
-          <svg
-            class="MuiCircularProgress-svg"
-            viewBox="22 22 44 44"
+          <div
+            class="makeStyles-centeredContainer-15"
           >
-            <circle
-              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-              cx="44"
-              cy="44"
-              fill="none"
-              r="20.2"
-              stroke-width="3.6"
-            />
-          </svg>
+            <div
+              class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
+              role="progressbar"
+              style="width: 40px; height: 40px;"
+            >
+              <svg
+                class="MuiCircularProgress-svg"
+                viewBox="22 22 44 44"
+              >
+                <circle
+                  class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+                  cx="44"
+                  cy="44"
+                  fill="none"
+                  r="20.2"
+                  stroke-width="3.6"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -181,156 +199,165 @@ exports[`renders correctly with invalid scope 1`] = `<DocumentFragment />`;
 
 exports[`renders correctly with month scope with data 1`] = `
 <DocumentFragment>
-  <header
-    class="MuiPaper-root MuiAppBar-root MuiAppBar-positionSticky MuiAppBar-colorPrimary MuiPaper-elevation4"
-  >
-    <div
-      class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
-    >
-      <button
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="MuiIconButton-label"
-        >
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-            />
-          </svg>
-        </span>
-        <span
-          class="MuiTouchRipple-root"
-        />
-      </button>
-      <h6
-        class="MuiTypography-root MuiTypography-h6"
-      >
-        Expenditure on 3/2020
-      </h6>
-    </div>
-  </header>
   <div
-    class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+    class="makeStyles-root-20"
   >
-    <div
-      class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+    <header
+      class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
     >
-      <ul
-        class="MuiList-root MuiList-padding"
+      <div
+        class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
       >
-        <li
-          class="MuiListItem-root MuiListItem-gutters"
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+          tabindex="0"
+          type="button"
         >
-          <div
-            class="MuiListItemText-root"
+          <span
+            class="MuiIconButton-label"
           >
-            <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+        <h6
+          class="MuiTypography-root makeStyles-title-22 MuiTypography-h6"
+        >
+          Expenditure on 3/2020
+        </h6>
+      </div>
+    </header>
+    <div
+      class="makeStyles-contentRoot-21"
+    >
+      <div
+        class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+        style="width: 100%; height: 100%;"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <ul
+            class="MuiList-root MuiList-padding"
+          >
+            <li
+              class="MuiListItem-root MuiListItem-gutters"
             >
               <div
-                class="MuiBox-root MuiBox-root-11"
+                class="MuiListItemText-root"
               >
-                <div
-                  class="MuiBox-root MuiBox-root-12"
+                <span
+                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
                 >
-                  tag 1
-                </div>
-                <div
-                  class="MuiBox-root MuiBox-root-13"
-                >
-                  2,16 €
-                </div>
+                  <div
+                    class="MuiBox-root MuiBox-root-23"
+                  >
+                    <div
+                      class="MuiBox-root MuiBox-root-24"
+                    >
+                      tag 1
+                    </div>
+                    <div
+                      class="MuiBox-root MuiBox-root-25"
+                    >
+                      2,16 €
+                    </div>
+                  </div>
+                </span>
               </div>
-            </span>
-          </div>
-        </li>
-        <li
-          class="MuiListItem-root MuiListItem-gutters"
-        >
-          <div
-            class="MuiListItemText-root"
-          >
-            <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters"
             >
               <div
-                class="MuiBox-root MuiBox-root-14"
+                class="MuiListItemText-root"
               >
-                <div
-                  class="MuiBox-root MuiBox-root-15"
+                <span
+                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
                 >
-                  tag 3
-                </div>
-                <div
-                  class="MuiBox-root MuiBox-root-16"
-                >
-                  2,16 €
-                </div>
+                  <div
+                    class="MuiBox-root MuiBox-root-26"
+                  >
+                    <div
+                      class="MuiBox-root MuiBox-root-27"
+                    >
+                      tag 3
+                    </div>
+                    <div
+                      class="MuiBox-root MuiBox-root-28"
+                    >
+                      2,16 €
+                    </div>
+                  </div>
+                </span>
               </div>
-            </span>
-          </div>
-        </li>
-        <li
-          class="MuiListItem-root MuiListItem-gutters"
-        >
-          <div
-            class="MuiListItemText-root"
-          >
-            <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters"
             >
               <div
-                class="MuiBox-root MuiBox-root-17"
+                class="MuiListItemText-root"
               >
-                <div
-                  class="MuiBox-root MuiBox-root-18"
+                <span
+                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
                 >
-                  tag 2
-                </div>
-                <div
-                  class="MuiBox-root MuiBox-root-19"
-                >
-                  0,16 €
-                </div>
+                  <div
+                    class="MuiBox-root MuiBox-root-29"
+                  >
+                    <div
+                      class="MuiBox-root MuiBox-root-30"
+                    >
+                      tag 2
+                    </div>
+                    <div
+                      class="MuiBox-root MuiBox-root-31"
+                    >
+                      0,16 €
+                    </div>
+                  </div>
+                </span>
               </div>
-            </span>
-          </div>
-        </li>
-        <li
-          class="MuiListItem-root MuiListItem-gutters"
-        >
-          <div
-            class="MuiListItemText-root"
-          >
-            <span
-              class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters"
             >
               <div
-                class="MuiBox-root MuiBox-root-20"
+                class="MuiListItemText-root"
               >
-                <div
-                  class="MuiBox-root MuiBox-root-21"
+                <span
+                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
                 >
-                  untagged
-                </div>
-                <div
-                  class="MuiBox-root MuiBox-root-22"
-                >
-                  0,00 €
-                </div>
+                  <div
+                    class="MuiBox-root MuiBox-root-32"
+                  >
+                    <div
+                      class="MuiBox-root MuiBox-root-33"
+                    >
+                      untagged
+                    </div>
+                    <div
+                      class="MuiBox-root MuiBox-root-34"
+                    >
+                      0,00 €
+                    </div>
+                  </div>
+                </span>
               </div>
-            </span>
-          </div>
-        </li>
-      </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </DocumentFragment>
@@ -338,69 +365,78 @@ exports[`renders correctly with month scope with data 1`] = `
 
 exports[`renders correctly with month scope without data 1`] = `
 <DocumentFragment>
-  <header
-    class="MuiPaper-root MuiAppBar-root MuiAppBar-positionSticky MuiAppBar-colorPrimary MuiPaper-elevation4"
-  >
-    <div
-      class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
-    >
-      <button
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="MuiIconButton-label"
-        >
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-            />
-          </svg>
-        </span>
-        <span
-          class="MuiTouchRipple-root"
-        />
-      </button>
-      <h6
-        class="MuiTypography-root MuiTypography-h6"
-      >
-        Expenditure on 4/2020
-      </h6>
-    </div>
-  </header>
   <div
-    class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+    class="makeStyles-root-36"
   >
-    <div
-      class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+    <header
+      class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
     >
       <div
-        class="makeStyles-centeredContainer-23"
+        class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiIconButton-label"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+        <h6
+          class="MuiTypography-root makeStyles-title-38 MuiTypography-h6"
+        >
+          Expenditure on 4/2020
+        </h6>
+      </div>
+    </header>
+    <div
+      class="makeStyles-contentRoot-37"
+    >
+      <div
+        class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+        style="width: 100%; height: 100%;"
       >
         <div
-          class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
-          role="progressbar"
-          style="width: 40px; height: 40px;"
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
         >
-          <svg
-            class="MuiCircularProgress-svg"
-            viewBox="22 22 44 44"
+          <div
+            class="makeStyles-centeredContainer-39"
           >
-            <circle
-              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-              cx="44"
-              cy="44"
-              fill="none"
-              r="20.2"
-              stroke-width="3.6"
-            />
-          </svg>
+            <div
+              class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
+              role="progressbar"
+              style="width: 40px; height: 40px;"
+            >
+              <svg
+                class="MuiCircularProgress-svg"
+                viewBox="22 22 44 44"
+              >
+                <circle
+                  class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+                  cx="44"
+                  cy="44"
+                  fill="none"
+                  r="20.2"
+                  stroke-width="3.6"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>

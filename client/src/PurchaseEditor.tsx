@@ -1,16 +1,12 @@
 import {
-  AppBar,
   Box,
   Button,
   Chip,
-  Container,
   FormGroup,
   IconButton,
   InputAdornment,
   Paper,
   TextField,
-  Toolbar,
-  Typography,
   useMediaQuery,
   useTheme
 } from '@material-ui/core';
@@ -24,6 +20,7 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import Scaffold from './Scaffold';
 import BackButton from './BackButton';
 import { Purchase, useStore } from './data/store';
 
@@ -86,21 +83,15 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
     setTags(tags.filter(t => t.toLowerCase() !== lowerCase));
   }
 
-  return <>
-    <AppBar position='sticky'>
-      <Toolbar>
-        <BackButton />
-        <Box flexGrow={1}>
-          <Typography variant='h6'>
-            {props.title ?? 'Edit Purchase'}
-          </Typography>
-        </Box>
-        <IconButton color='inherit' onClick={save}>
-          <DoneIcon />
-        </IconButton>
-      </Toolbar>
-    </AppBar>
-    <Container fixed>
+  return <Scaffold
+    nav={<BackButton />}
+    title={props.title ?? 'Edit Purchase'}
+    actions={
+      <IconButton color='inherit' onClick={save}>
+        <DoneIcon />
+      </IconButton>
+    }
+    content={
       <Paper>
         <Box p={2}>
           <FormGroup>
@@ -167,8 +158,8 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
           </FormGroup>
         </Box>
       </Paper>
-    </Container>
-  </>;
+    }
+  />;
 });
 
 export default PurchaseEditor;
