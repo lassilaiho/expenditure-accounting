@@ -49,10 +49,10 @@ function dateScopeToString(s: DateScope) {
 function dateScopeToRange(s: DateScope) {
   switch (s.type) {
     case 'day': {
-      const date = moment([s.year, s.month - 1, s.day]);
+      const date = moment.utc([s.year, s.month - 1, s.day]);
       return new DateRange(date, date.clone().endOf('day'));
     } case 'month': {
-      const date = moment([s.year, s.month - 1]);
+      const date = moment.utc([s.year, s.month - 1]);
       return new DateRange(date, date.clone().endOf('month'));
     }
   }

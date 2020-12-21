@@ -25,7 +25,7 @@ export class DateRange {
   ) { }
 
   public isIn(x: moment.Moment) {
-    return x.isBetween(this.from, this.to);
+    return x.isBetween(this.from, this.to, undefined, "[]");
   }
 }
 
