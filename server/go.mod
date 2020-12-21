@@ -1,6 +1,6 @@
 module github.com/lassilaiho/expenditure-accounting/server
 
-go 1.13
+go 1.15
 
 require (
 	github.com/google/uuid v1.1.2
