@@ -37,7 +37,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
   const [inputtedName, setInputtedName] = useState(name);
   const [tags, setTags] = useState(purchase.tagsSortedByName.map(t => t.name));
   const tagSet = new Set(tags.map(t => t.toLowerCase()));
-  const [date, setDate] = useState(purchase.date.toDate());
+  const [date, setDate] = useState(purchase.date);
   const [quantity, setQuantity] = useState(purchase.quantity.toString());
   const [price, setPrice] = useState(purchase.price.toString());
 
@@ -64,16 +64,6 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
     });
     props.onSave();
     history.goBack();
-  }
-
-  function updateDate(d: Date | null) {
-    if (d) {
-      setDate(
-        moment.utc([d.getFullYear(), d.getMonth(), d.getDate()]).toDate(),
-      );
-    } else {
-      setDate(purchase.date.toDate());
-    }
   }
 
   function addTag() {
@@ -120,10 +110,10 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
               <KeyboardDatePicker
                 label='Purchase Date'
                 variant={atLeastMedium ? 'inline' : 'dialog'}
-                format='dd.MM.yyyy'
+                format='DD.MM.YYYY'
                 margin='normal'
                 value={date}
-                onChange={updateDate}
+                onChange={d => setDate(d ?? purchase.date)}
               />
               <TextField
                 label='Price'

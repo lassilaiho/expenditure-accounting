@@ -1,4 +1,4 @@
-import DateFnsUtil from '@date-io/date-fns';
+import MomentUtil from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { render } from '@testing-library/react';
 import React, { useRef } from 'react';
@@ -20,7 +20,7 @@ const TestProviders = (defaultStore?: Store, history?: string[]) => (
   }
   return (
     <StoreContext.Provider value={store.current}>
-      <MuiPickersUtilsProvider utils={DateFnsUtil}>
+      <MuiPickersUtilsProvider utils={MomentUtil}>
         <MemoryRouter initialEntries={history}>{props.children}</MemoryRouter>
       </MuiPickersUtilsProvider>
     </StoreContext.Provider>

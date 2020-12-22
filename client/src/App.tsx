@@ -1,4 +1,4 @@
-import DateFnsUtil from '@date-io/date-fns';
+import MomentUtil from '@date-io/moment';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { observer } from 'mobx-react';
@@ -50,7 +50,7 @@ const App: React.FC = observer(() => {
   return (
     <SessionContext.Provider value={session}>
       <StoreContext.Provider value={store}>
-        <MuiPickersUtilsProvider utils={DateFnsUtil}>
+        <MuiPickersUtilsProvider utils={MomentUtil}>
           <CssBaseline />
           <Router>
             <NavigationDrawer
