@@ -4,8 +4,8 @@ import Big from 'big.js';
 import { History } from 'history';
 import { useHistory } from 'react-router-dom';
 
-import { currency, numOfBig } from './util';
-import { Purchase } from './data/store';
+import { currency, numOfBig } from '../util';
+import { Purchase } from '../data/store';
 
 export interface GroupedExpenditureViewProps {
   purchases: Purchase[];

@@ -4,12 +4,12 @@ import moment from 'moment';
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 
-import CenteredLoader from './CenteredLoader';
-import BackButton from './BackButton';
-import { useStore } from './data/store';
+import CenteredLoader from '../common/CenteredLoader';
+import BackButton from '../common/BackButton';
+import { useStore } from '../data/store';
+import Scaffold from '../common/Scaffold';
+import { DateRange } from '../util';
 import ExpenditureByTags from './ExpenditureByTags';
-import Scaffold from './Scaffold';
-import { DateRange } from './util';
 
 const ExpenditureDetailsPage: React.FC = observer(() => {
   const location = useLocation();

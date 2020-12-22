@@ -2,10 +2,10 @@ import moment from 'moment';
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import { fakeApi } from './data/fakeApi';
-import { Store } from './data/store';
+import { fakeApi } from '../data/fakeApi';
+import { Store } from '../data/store';
+import { render as testUtilRender } from '../testUtil';
 import PurchasePage from './PurchasePage';
-import { render as testUtilRender } from './testUtil';
 
 const render = (id: string, store?: Store) =>
   testUtilRender(

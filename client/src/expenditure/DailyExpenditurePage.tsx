@@ -3,11 +3,11 @@ import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
 
-import { Purchase, useStore } from './data/store';
-import MenuButton from './MenuButton';
+import { Purchase, useStore } from '../data/store';
+import MenuButton from '../common/MenuButton';
+import CenteredLoader from '../common/CenteredLoader';
+import Scaffold from '../common/Scaffold';
 import GroupedExpenditureView from './GroupedExpenditureView';
-import CenteredLoader from './CenteredLoader';
-import Scaffold from './Scaffold';
 
 export interface DailyExpenditurePageProps {
   openNavigation: () => void;

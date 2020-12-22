@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from './testUtil';
+import { render } from '../testUtil';
 import CenteredLoader from './CenteredLoader';
 
 test('renders correctly', () => {

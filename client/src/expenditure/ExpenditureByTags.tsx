@@ -3,8 +3,8 @@ import Big from 'big.js';
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Purchase, Tag } from './data/store';
-import { currency, DateRange, numOfBig } from './util';
+import { Purchase, Tag } from '../data/store';
+import { currency, DateRange, numOfBig } from '../util';
 
 export interface ExpenditureByTagsProps {
   purchases: Purchase[];

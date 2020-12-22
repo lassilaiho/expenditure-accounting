@@ -11,9 +11,9 @@ import {
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
-import { AuthError, useSession } from './data/session';
-import MenuButton from './MenuButton';
-import Scaffold from './Scaffold';
+import { AuthError, useSession } from '../data/session';
+import MenuButton from '../common/MenuButton';
+import Scaffold from '../common/Scaffold';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

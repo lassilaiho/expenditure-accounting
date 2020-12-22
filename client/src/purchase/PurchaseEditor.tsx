@@ -20,9 +20,9 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import Scaffold from './Scaffold';
-import BackButton from './BackButton';
-import { Purchase, useStore } from './data/store';
+import Scaffold from '../common/Scaffold';
+import BackButton from '../common/BackButton';
+import { Purchase, useStore } from '../data/store';
 
 export interface PurchaseEditorProps {
   title?: string;

@@ -8,9 +8,9 @@ import {
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
-import { useSession } from './data/session';
-import MenuButton from './MenuButton';
-import Scaffold from './Scaffold';
+import { useSession } from '../data/session';
+import MenuButton from '../common/MenuButton';
+import Scaffold from '../common/Scaffold';
 import PasswordChangeDialog from './PasswordChangeDialog';
 
 export interface SettingsProps {

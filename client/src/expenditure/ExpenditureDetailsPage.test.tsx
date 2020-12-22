@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { fakeApi } from './data/fakeApi';
-import { Store } from './data/store';
+import { fakeApi } from '../data/fakeApi';
+import { Store } from '../data/store';
+import { render } from '../testUtil';
 import ExpenditureDetailsPage from './ExpenditureDetailsPage';
-import { render } from './testUtil';
 
 test('renders correctly with invalid scope', () => {
   const { asFragment } = render(<ExpenditureDetailsPage />);

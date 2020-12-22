@@ -1,13 +1,13 @@
 import { Paper } from '@material-ui/core';
-import GroupedExpneditureView from 'GroupedExpenditureView';
+import GroupedExpneditureView from 'expenditure/GroupedExpenditureView';
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
 
-import { Purchase, useStore } from './data/store';
-import CenteredLoader from './CenteredLoader';
-import MenuButton from './MenuButton';
-import Scaffold from './Scaffold';
+import { Purchase, useStore } from '../data/store';
+import CenteredLoader from '../common/CenteredLoader';
+import MenuButton from '../common/MenuButton';
+import Scaffold from '../common/Scaffold';
 
 export interface MonthlyExpenditurePageProps {
   openNavigation: () => void;

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { fakeApi } from './data/fakeApi';
-import { Purchase, Store } from './data/store';
+import { fakeApi } from '../data/fakeApi';
+import { Purchase, Store } from '../data/store';
+import { render } from '../testUtil';
 import PurchaseItem from './PurchaseItem';
-import { render } from './testUtil';
 
 let store: Store;
 let quantity1: Purchase, quantityIntNot1: Purchase, quantityDecNot1: Purchase;

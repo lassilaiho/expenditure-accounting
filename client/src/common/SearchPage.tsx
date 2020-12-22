@@ -12,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { observer } from 'mobx-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import Scaffold from './Scaffold';
+import Scaffold from '../common/Scaffold';
 
 export interface SearchPageProps {
   onCancel: () => void;

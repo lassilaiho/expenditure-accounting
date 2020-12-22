@@ -13,12 +13,12 @@ import { useHistory } from 'react-router-dom';
 import { AutoSizer } from 'react-virtualized';
 import { Virtuoso } from 'react-virtuoso';
 
-import { Purchase, useStore } from './data/store';
-import MenuButton from './MenuButton';
+import { Purchase, useStore } from '../data/store';
+import MenuButton from '../common/MenuButton';
+import SearchPage from '../common/SearchPage';
+import Scaffold from '../common/Scaffold';
+import CenteredLoader from '../common/CenteredLoader';
 import PurchaseItem from './PurchaseItem';
-import SearchPage from './SearchPage';
-import Scaffold from './Scaffold';
-import CenteredLoader from './CenteredLoader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

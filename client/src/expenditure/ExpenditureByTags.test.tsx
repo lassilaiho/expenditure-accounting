@@ -1,11 +1,11 @@
 import moment from 'moment';
 import React from 'react';
 
-import { fakeApi } from './data/fakeApi';
-import { Store } from './data/store';
+import { fakeApi } from '../data/fakeApi';
+import { Store } from '../data/store';
+import { render } from '../testUtil';
+import { DateRange } from '../util';
 import ExpenditureByTags from './ExpenditureByTags';
-import { render } from './testUtil';
-import { DateRange } from './util';
 
 test('renders correctly without data', () => {
   const { asFragment } = render(

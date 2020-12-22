@@ -5,10 +5,10 @@ import moment from 'moment';
 import React from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 
-import BackButton from './BackButton';
-import Scaffold from './Scaffold';
-import { Product, Purchase, useStore } from './data/store';
-import CenteredLoader from './CenteredLoader';
+import BackButton from '../common/BackButton';
+import Scaffold from '../common/Scaffold';
+import { Product, Purchase, useStore } from '../data/store';
+import CenteredLoader from '../common/CenteredLoader';
 import PurchaseEditor from './PurchaseEditor';
 
 interface PurchasePageParams {

@@ -10,17 +10,17 @@ import {
   Switch,
 } from 'react-router-dom';
 
-import DailyExpenditurePage from './DailyExpenditurePage';
+import DailyExpenditurePage from './expenditure/DailyExpenditurePage';
 import Api from './data/api';
 import { Session, SessionContext } from './data/session';
 import { Store, StoreContext } from './data/store';
-import ExpenditureDetailsPage from './ExpenditureDetailsPage';
-import LoginPage from './LoginPage';
-import MonthlyExpenditurePage from './MonthlyExpenditurePage';
+import ExpenditureDetailsPage from './expenditure/ExpenditureDetailsPage';
+import LoginPage from './account/LoginPage';
+import MonthlyExpenditurePage from './expenditure/MonthlyExpenditurePage';
 import NavigationDrawer from './NavigationDrawer';
-import PurchasePage from './PurchasePage';
-import PurchasesPage from './PurchasesPage';
-import SettingsPage from './SettingsPage';
+import PurchasePage from './purchase/PurchasePage';
+import PurchasesPage from './purchase/PurchasesPage';
+import SettingsPage from './account/SettingsPage';
 
 interface Stores {
   session: Session;

@@ -12,8 +12,8 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 
-import { Purchase } from './data/store';
-import { currency, numOfBig, threeDecimals } from './util';
+import { Purchase } from '../data/store';
+import { currency, numOfBig, threeDecimals } from '../util';
 
 export interface PurchaseListItemProps {
   purchase: Purchase;
