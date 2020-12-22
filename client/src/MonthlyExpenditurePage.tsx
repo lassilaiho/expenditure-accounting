@@ -13,23 +13,30 @@ export interface MonthlyExpenditurePageProps {
   openNavigation: () => void;
 }
 
-const MonthlyExpenditurePage: React.FC<MonthlyExpenditurePageProps> = observer(props => {
-  const store = useStore();
-  return <Scaffold
-    nav={<MenuButton onClick={props.openNavigation} />}
-    title='Monthly Expenditure'
-    content={
-      <Paper>
-        {store.dataState === 'loading'
-          ? <CenteredLoader />
-          : <GroupedExpneditureView
-            purchases={store.purchases}
-            splitHere={splitFunc}
-            format={formatFunc} />}
-      </Paper>
-    }
-  />;
-});
+const MonthlyExpenditurePage: React.FC<MonthlyExpenditurePageProps> = observer(
+  props => {
+    const store = useStore();
+    return (
+      <Scaffold
+        nav={<MenuButton onClick={props.openNavigation} />}
+        title='Monthly Expenditure'
+        content={
+          <Paper>
+            {store.dataState === 'loading' ? (
+              <CenteredLoader />
+            ) : (
+              <GroupedExpneditureView
+                purchases={store.purchases}
+                splitHere={splitFunc}
+                format={formatFunc}
+              />
+            )}
+          </Paper>
+        }
+      />
+    );
+  },
+);
 
 function splitFunc(prev: Purchase, current: Purchase) {
   return current.date.isSame(prev.date, 'month');

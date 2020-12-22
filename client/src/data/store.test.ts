@@ -2,7 +2,7 @@ import { fakeApi, fakeData } from './fakeApi';
 import { Store } from './store';
 
 let store: Store;
-beforeEach(() => store = new Store(fakeApi));
+beforeEach(() => (store = new Store(fakeApi)));
 
 test('initial values are correct', () => {
   expect(store.dataState).toBe('not-started');

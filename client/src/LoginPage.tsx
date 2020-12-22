@@ -6,7 +6,7 @@ import {
   Paper,
   TextField,
   Theme,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
@@ -15,15 +15,17 @@ import { AuthError, useSession } from './data/session';
 import MenuButton from './MenuButton';
 import Scaffold from './Scaffold';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  formElement: {
-    marginTop: theme.spacing(1),
-  },
-}));
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    form: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    formElement: {
+      marginTop: theme.spacing(1),
+    },
+  }),
+);
 
 export interface LoginPageProps {
   openNavigation: () => void;
@@ -54,40 +56,44 @@ const LoginPage: React.FC<LoginPageProps> = observer(props => {
     }
   }
 
-  return <Scaffold
-    nav={<MenuButton onClick={props.openNavigation} />}
-    title='Login'
-    content={
-      <Paper>
-        <Box px={2} py={1}>
-          <form onSubmit={login} className={classes.form}>
-            <TextField
-              className={classes.formElement}
-              id='email'
-              label='Email'
-              onChange={e => setEmail(e.target.value)} />
-            <TextField
-              className={classes.formElement}
-              id='password'
-              label='Password'
-              type='password'
-              onChange={e => setPassword(e.target.value)} />
-            {errorMessage === ''
-              ? null
-              : <Typography color='error'>{errorMessage}</Typography>}
-            <Button
-              variant='contained'
-              color='primary'
-              type='submit'
-              className={classes.formElement}
-            >
-              Login
+  return (
+    <Scaffold
+      nav={<MenuButton onClick={props.openNavigation} />}
+      title='Login'
+      content={
+        <Paper>
+          <Box px={2} py={1}>
+            <form onSubmit={login} className={classes.form}>
+              <TextField
+                className={classes.formElement}
+                id='email'
+                label='Email'
+                onChange={e => setEmail(e.target.value)}
+              />
+              <TextField
+                className={classes.formElement}
+                id='password'
+                label='Password'
+                type='password'
+                onChange={e => setPassword(e.target.value)}
+              />
+              {errorMessage === '' ? null : (
+                <Typography color='error'>{errorMessage}</Typography>
+              )}
+              <Button
+                variant='contained'
+                color='primary'
+                type='submit'
+                className={classes.formElement}
+              >
+                Login
               </Button>
-          </form>
-        </Box>
-      </Paper>
-    }
-  />;
+            </form>
+          </Box>
+        </Paper>
+      }
+    />
+  );
 });
 
 export default LoginPage;

@@ -2,17 +2,13 @@ import moment from 'moment';
 
 import * as jsonConv from './jsonConvert';
 
-export type LoadState =
-  | 'not-started'
-  | 'loading'
-  | 'finished'
-  | 'failed';
+export type LoadState = 'not-started' | 'loading' | 'finished' | 'failed';
 
 export class SessionToken {
   public constructor(
     public readonly token: string,
     public readonly expiryTime: moment.Moment,
-  ) { }
+  ) {}
 
   public static fromJson(json: any): SessionToken {
     jsonConv.toObject(json);
@@ -38,11 +34,13 @@ export default class Api {
   public baseUrl = '';
 
   public defaultHeaders: Record<string, string> = {
-    'Authorization': ''
+    Authorization: '',
   };
 
   private _sessionToken: SessionToken | null = null;
-  public get sessionToken() { return this._sessionToken; }
+  public get sessionToken() {
+    return this._sessionToken;
+  }
   public set sessionToken(token: SessionToken | null) {
     this._sessionToken = token;
     this.defaultHeaders['Authorization'] =

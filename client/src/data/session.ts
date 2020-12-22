@@ -1,21 +1,28 @@
-import { action, computed, observable, runInAction, makeObservable } from 'mobx';
+import {
+  action,
+  computed,
+  observable,
+  runInAction,
+  makeObservable,
+} from 'mobx';
 import React, { useContext } from 'react';
 
 import { ensureOk } from '../util';
 import Api, { SessionToken } from './api';
 
-export class AuthError extends Error { }
+export class AuthError extends Error {}
 
-export type SessionState =
-  | 'logged-out'
-  | 'logged-in'
-  | 'expired';
+export type SessionState = 'logged-out' | 'logged-in' | 'expired';
 
 export class Session {
   public currentEmail = '';
-  public get isLoggedIn() { return this.state === 'logged-in'; }
+  public get isLoggedIn() {
+    return this.state === 'logged-in';
+  }
   private _state: SessionState = 'logged-out';
-  public get state() { return this._state; }
+  public get state() {
+    return this._state;
+  }
 
   private updateState() {
     if (this.api.sessionToken === null) {
@@ -81,16 +88,22 @@ export class Session {
   }
 
   public async changePassword(oldPassword: string, newPassword: string) {
-    ensureOk(await this.api.postJson('/account/password', {
-      oldPassword, newPassword,
-    }));
+    ensureOk(
+      await this.api.postJson('/account/password', {
+        oldPassword,
+        newPassword,
+      }),
+    );
   }
 
   private persistInLocalStorage() {
-    localStorage.setItem('session', JSON.stringify({
-      currentEmail: this.currentEmail,
-      sessionToken: this.api.sessionToken,
-    }));
+    localStorage.setItem(
+      'session',
+      JSON.stringify({
+        currentEmail: this.currentEmail,
+        sessionToken: this.api.sessionToken,
+      }),
+    );
   }
 }
 

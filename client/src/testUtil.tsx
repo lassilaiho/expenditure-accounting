@@ -1,4 +1,4 @@
-import DateFnsUtil from "@date-io/date-fns";
+import DateFnsUtil from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { render } from '@testing-library/react';
 import React, { useRef } from 'react';
@@ -7,7 +7,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { fakeApi } from './data/fakeApi';
 import { Store, StoreContext } from './data/store';
 
-const TestProviders = (defaultStore?: Store, history?: string[]) => (props: any) => {
+const TestProviders = (defaultStore?: Store, history?: string[]) => (
+  props: any,
+) => {
   const store = useRef<Store | null>(null);
   if (store.current === null) {
     if (defaultStore === undefined) {
@@ -19,9 +21,7 @@ const TestProviders = (defaultStore?: Store, history?: string[]) => (props: any)
   return (
     <StoreContext.Provider value={store.current}>
       <MuiPickersUtilsProvider utils={DateFnsUtil}>
-        <MemoryRouter initialEntries={history}>
-          {props.children}
-        </MemoryRouter>
+        <MemoryRouter initialEntries={history}>{props.children}</MemoryRouter>
       </MuiPickersUtilsProvider>
     </StoreContext.Provider>
   );

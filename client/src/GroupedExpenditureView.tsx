@@ -46,12 +46,7 @@ function getLatest(purchases: Purchase[]) {
   return latest;
 }
 
-function makeItem(
-  i: number,
-  text: string,
-  expenditure: Big,
-  history: History,
-) {
+function makeItem(i: number, text: string, expenditure: Big, history: History) {
   return (
     <ListItem
       key={i}
@@ -60,7 +55,8 @@ function makeItem(
     >
       <ListItemText
         primary={text}
-        secondary={currency.format(numOfBig(expenditure))} />
+        secondary={currency.format(numOfBig(expenditure))}
+      />
     </ListItem>
   );
 }

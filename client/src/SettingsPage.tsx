@@ -3,7 +3,7 @@ import {
   ListItem,
   ListItemText,
   ListSubheader,
-  Paper
+  Paper,
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
@@ -27,28 +27,31 @@ const SettingsPage: React.FC<SettingsProps> = observer(props => {
     setDialogOpen(false);
   }
 
-  return <>
-    <Scaffold
-      nav={<MenuButton onClick={props.openNavigation} />}
-      title='Settings'
-      content={
-        <Paper>
-          <List subheader={<ListSubheader>My Account</ListSubheader>}>
-            <ListItem>
-              <ListItemText>{session.currentEmail}</ListItemText>
-            </ListItem>
-            <ListItem button onClick={() => setDialogOpen(true)}>
-              <ListItemText>Change Password</ListItemText>
-            </ListItem>
-          </List>
-        </Paper>
-      }
-    />
-    <PasswordChangeDialog
-      open={dialogOpen}
-      onSubmit={changePassword}
-      onDismiss={() => setDialogOpen(false)} />
-  </>;
+  return (
+    <>
+      <Scaffold
+        nav={<MenuButton onClick={props.openNavigation} />}
+        title='Settings'
+        content={
+          <Paper>
+            <List subheader={<ListSubheader>My Account</ListSubheader>}>
+              <ListItem>
+                <ListItemText>{session.currentEmail}</ListItemText>
+              </ListItem>
+              <ListItem button onClick={() => setDialogOpen(true)}>
+                <ListItemText>Change Password</ListItemText>
+              </ListItem>
+            </List>
+          </Paper>
+        }
+      />
+      <PasswordChangeDialog
+        open={dialogOpen}
+        onSubmit={changePassword}
+        onDismiss={() => setDialogOpen(false)}
+      />
+    </>
+  );
 });
 
 export default SettingsPage;

@@ -13,23 +13,30 @@ export interface DailyExpenditurePageProps {
   openNavigation: () => void;
 }
 
-const DailyExpenditurePage: React.FC<DailyExpenditurePageProps> = observer(props => {
-  const store = useStore();
-  return <Scaffold
-    nav={<MenuButton onClick={props.openNavigation} />}
-    title='Daily Expenditure'
-    content={
-      <Paper>
-        {store.dataState === 'loading'
-          ? <CenteredLoader />
-          : <GroupedExpenditureView
-            purchases={store.purchases}
-            splitHere={splitFunc}
-            format={formatFunc} />}
-      </Paper>
-    }
-  />;
-});
+const DailyExpenditurePage: React.FC<DailyExpenditurePageProps> = observer(
+  props => {
+    const store = useStore();
+    return (
+      <Scaffold
+        nav={<MenuButton onClick={props.openNavigation} />}
+        title='Daily Expenditure'
+        content={
+          <Paper>
+            {store.dataState === 'loading' ? (
+              <CenteredLoader />
+            ) : (
+              <GroupedExpenditureView
+                purchases={store.purchases}
+                splitHere={splitFunc}
+                format={formatFunc}
+              />
+            )}
+          </Paper>
+        }
+      />
+    );
+  },
+);
 
 function splitFunc(prev: Purchase, current: Purchase) {
   return current.date.isSame(prev.date, 'day');

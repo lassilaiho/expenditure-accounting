@@ -2,8 +2,8 @@ import moment from 'moment';
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import { fakeApi } from 'data/fakeApi';
-import { Store } from 'data/store';
+import { fakeApi } from './data/fakeApi';
+import { Store } from './data/store';
 import PurchasePage from './PurchasePage';
 import { render as testUtilRender } from './testUtil';
 

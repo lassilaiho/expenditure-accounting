@@ -8,7 +8,7 @@ import {
   Paper,
   TextField,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -68,11 +68,9 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
 
   function updateDate(d: Date | null) {
     if (d) {
-      setDate(moment.utc([
-        d.getFullYear(),
-        d.getMonth(),
-        d.getDate(),
-      ]).toDate());
+      setDate(
+        moment.utc([d.getFullYear(), d.getMonth(), d.getDate()]).toDate(),
+      );
     } else {
       setDate(purchase.date.toDate());
     }
@@ -95,83 +93,86 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
     setTags(tags.filter(t => t.toLowerCase() !== lowerCase));
   }
 
-  return <Scaffold
-    nav={<BackButton />}
-    title={props.title ?? 'Edit Purchase'}
-    actions={
-      <IconButton color='inherit' onClick={save}>
-        <DoneIcon />
-      </IconButton>
-    }
-    content={
-      <Paper>
-        <Box p={2}>
-          <FormGroup>
-            <Autocomplete
-              id='product-autocomplete'
-              freeSolo
-              options={store.products.map(p => p.name)}
-              value={name}
-              onChange={(e, v) => setName(v ?? '')}
-              onInputChange={(e, v) => setInputtedName(v ?? '')}
-              renderInput={params => (
-                <TextField
-                  {...params}
-                  label='Product'
-                  fullWidth />
-              )} />
-            <KeyboardDatePicker
-              label='Purchase Date'
-              variant={atLeastMedium ? 'inline' : 'dialog'}
-              format='dd.MM.yyyy'
-              margin='normal'
-              value={date}
-              onChange={updateDate} />
-            <TextField
-              label='Price'
-              type='number'
-              value={price}
-              onChange={e => setPrice(e.target.value)}
-              InputProps={{
-                endAdornment: <InputAdornment position='end'>€</InputAdornment>
-              }} />
-            <TextField
-              label='Quantity'
-              type='number'
-              value={quantity}
-              onChange={e => setQuantity(e.target.value)} />
-            <Box display='flex'>
-              <Box flexGrow={1}>
-                <Autocomplete
-                  id='tag-autocomplete'
-                  freeSolo
-                  options={store.tags.map(t => t.name)}
-                  value={newTag}
-                  onChange={(e, v) => setNewTag(v ?? '')}
-                  onInputChange={(e, v) => setInputtedNewTag(v ?? '')}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      label='Add Tag'
-                      fullWidth />
-                  )} />
-              </Box>
-              <Button variant='contained' color='primary' onClick={addTag}>
-                Add
-              </Button>
-            </Box>
-            <Box display='flex' flexWrap='wrap' mt={1}>
-              {tags.map(t => (
-                <Box m={1} key={t}>
-                  <Chip label={t} onDelete={() => deleteTag(t)} />
+  return (
+    <Scaffold
+      nav={<BackButton />}
+      title={props.title ?? 'Edit Purchase'}
+      actions={
+        <IconButton color='inherit' onClick={save}>
+          <DoneIcon />
+        </IconButton>
+      }
+      content={
+        <Paper>
+          <Box p={2}>
+            <FormGroup>
+              <Autocomplete
+                id='product-autocomplete'
+                freeSolo
+                options={store.products.map(p => p.name)}
+                value={name}
+                onChange={(e, v) => setName(v ?? '')}
+                onInputChange={(e, v) => setInputtedName(v ?? '')}
+                renderInput={params => (
+                  <TextField {...params} label='Product' fullWidth />
+                )}
+              />
+              <KeyboardDatePicker
+                label='Purchase Date'
+                variant={atLeastMedium ? 'inline' : 'dialog'}
+                format='dd.MM.yyyy'
+                margin='normal'
+                value={date}
+                onChange={updateDate}
+              />
+              <TextField
+                label='Price'
+                type='number'
+                value={price}
+                onChange={e => setPrice(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>€</InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                label='Quantity'
+                type='number'
+                value={quantity}
+                onChange={e => setQuantity(e.target.value)}
+              />
+              <Box display='flex'>
+                <Box flexGrow={1}>
+                  <Autocomplete
+                    id='tag-autocomplete'
+                    freeSolo
+                    options={store.tags.map(t => t.name)}
+                    value={newTag}
+                    onChange={(e, v) => setNewTag(v ?? '')}
+                    onInputChange={(e, v) => setInputtedNewTag(v ?? '')}
+                    renderInput={params => (
+                      <TextField {...params} label='Add Tag' fullWidth />
+                    )}
+                  />
                 </Box>
-              ))}
-            </Box>
-          </FormGroup>
-        </Box>
-      </Paper>
-    }
-  />;
+                <Button variant='contained' color='primary' onClick={addTag}>
+                  Add
+                </Button>
+              </Box>
+              <Box display='flex' flexWrap='wrap' mt={1}>
+                {tags.map(t => (
+                  <Box m={1} key={t}>
+                    <Chip label={t} onDelete={() => deleteTag(t)} />
+                  </Box>
+                ))}
+              </Box>
+            </FormGroup>
+          </Box>
+        </Paper>
+      }
+    />
+  );
 });
 
 export default PurchaseEditor;

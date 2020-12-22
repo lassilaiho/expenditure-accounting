@@ -1,5 +1,5 @@
 import Big from 'big.js';
-import moment from "moment";
+import moment from 'moment';
 
 export async function ensureOk(r: Response) {
   if (!r.ok) {
@@ -22,10 +22,10 @@ export class DateRange {
   public constructor(
     public readonly from: moment.Moment,
     public readonly to: moment.Moment,
-  ) { }
+  ) {}
 
   public isIn(x: moment.Moment) {
-    return x.isBetween(this.from, this.to, undefined, "[]");
+    return x.isBetween(this.from, this.to, undefined, '[]');
   }
 }
 

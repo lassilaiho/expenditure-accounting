@@ -4,7 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
+  TextField,
 } from '@material-ui/core';
 import React, { useState } from 'react';
 
@@ -39,7 +39,8 @@ const PasswordChangeDialog: React.FC<PasswordChangeDialogProps> = props => {
           label='Old Password'
           value={oldPassword}
           onChange={e => setOldPassword(e.target.value)}
-          fullWidth />
+          fullWidth
+        />
         <TextField
           type='password'
           label='New Password'
@@ -47,7 +48,8 @@ const PasswordChangeDialog: React.FC<PasswordChangeDialogProps> = props => {
           onChange={e => setNewPassword(e.target.value)}
           error={!newIsValid}
           helperText={newIsValid ? undefined : 'Must not be empty.'}
-          fullWidth />
+          fullWidth
+        />
         <TextField
           type='password'
           label='New Password Again'
@@ -55,7 +57,8 @@ const PasswordChangeDialog: React.FC<PasswordChangeDialogProps> = props => {
           onChange={e => setNewPasswordAgain(e.target.value)}
           error={!newAgainIsValid}
           helperText={newAgainIsValid ? undefined : "Passwords don't match."}
-          fullWidth />
+          fullWidth
+        />
       </DialogContent>
       <DialogActions>
         <Button color='primary' onClick={onDismiss}>

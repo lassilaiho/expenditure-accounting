@@ -27,9 +27,12 @@ const PurchasePage: React.FC = observer(() => {
       new Big(1),
       [],
     );
-    return <PurchaseEditor
-      purchase={purchase}
-      onSave={() => store.addPurchase(purchase)} />;
+    return (
+      <PurchaseEditor
+        purchase={purchase}
+        onSave={() => store.addPurchase(purchase)}
+      />
+    );
   }
   const id = parseInt(idParam ?? '');
   if (isNaN(id)) {
@@ -37,19 +40,24 @@ const PurchasePage: React.FC = observer(() => {
   }
   const purchase = store.purchasesById.get(id);
   if (purchase) {
-    return <PurchaseEditor
-      purchase={purchase}
-      onSave={() => store.updatePurchase(purchase.id)} />;
+    return (
+      <PurchaseEditor
+        purchase={purchase}
+        onSave={() => store.updatePurchase(purchase.id)}
+      />
+    );
   }
-  return <Scaffold
-    nav={<BackButton />}
-    title='Edit Purchase'
-    content={
-      <Paper>
-        <CenteredLoader />
-      </Paper>
-    }
-  />;
+  return (
+    <Scaffold
+      nav={<BackButton />}
+      title='Edit Purchase'
+      content={
+        <Paper>
+          <CenteredLoader />
+        </Paper>
+      }
+    />
+  );
 });
 
 export default PurchasePage;

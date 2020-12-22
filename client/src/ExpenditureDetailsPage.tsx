@@ -20,19 +20,24 @@ const ExpenditureDetailsPage: React.FC = observer(() => {
     return <Redirect to='/' />;
   }
 
-  return <Scaffold
-    nav={<BackButton />}
-    title={'Expenditure on ' + dateScopeToString(dateScope)}
-    content={
-      <Paper>
-        {store.dataState === 'loading'
-          ? <CenteredLoader />
-          : <ExpenditureByTags
-            purchases={store.purchases}
-            dateRange={dateScopeToRange(dateScope)} />}
-      </Paper>
-    }
-  />;
+  return (
+    <Scaffold
+      nav={<BackButton />}
+      title={'Expenditure on ' + dateScopeToString(dateScope)}
+      content={
+        <Paper>
+          {store.dataState === 'loading' ? (
+            <CenteredLoader />
+          ) : (
+            <ExpenditureByTags
+              purchases={store.purchases}
+              dateRange={dateScopeToRange(dateScope)}
+            />
+          )}
+        </Paper>
+      }
+    />
+  );
 });
 
 type DateScope =
@@ -41,8 +46,10 @@ type DateScope =
 
 function dateScopeToString(s: DateScope) {
   switch (s.type) {
-    case 'day': return `${s.day}.${s.month}.${s.year}`;
-    case 'month': return `${s.month}/${s.year}`;
+    case 'day':
+      return `${s.day}.${s.month}.${s.year}`;
+    case 'month':
+      return `${s.month}/${s.year}`;
   }
 }
 
@@ -51,7 +58,8 @@ function dateScopeToRange(s: DateScope) {
     case 'day': {
       const date = moment.utc([s.year, s.month - 1, s.day]);
       return new DateRange(date, date.clone().endOf('day'));
-    } case 'month': {
+    }
+    case 'month': {
       const date = moment.utc([s.year, s.month - 1]);
       return new DateRange(date, date.clone().endOf('month'));
     }

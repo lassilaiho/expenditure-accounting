@@ -1,5 +1,11 @@
 import Big from 'big.js';
-import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import {
+  action,
+  computed,
+  makeObservable,
+  observable,
+  runInAction,
+} from 'mobx';
 import moment from 'moment';
 import React, { useContext } from 'react';
 
@@ -22,10 +28,7 @@ export class Tag {
 
   public static fromJson(json: any) {
     jsonConv.toObject(json);
-    return new Tag(
-      jsonConv.toNumber(json.id),
-      jsonConv.toString(json.name),
-    );
+    return new Tag(jsonConv.toNumber(json.id), jsonConv.toString(json.name));
   }
 
   public lowerCaseMatch(s: string) {
@@ -39,14 +42,20 @@ export class Purchase {
   public date: moment.Moment;
   public quantity: Big;
   public price: Big;
-  public get totalPrice() { return this.quantity.mul(this.price); }
+  public get totalPrice() {
+    return this.quantity.mul(this.price);
+  }
   public tags: Tag[];
   public get tagsSortedByName() {
     return this.tags.slice().sort((a, b) => {
       const aName = a.name.toLocaleLowerCase();
       const bName = b.name.toLocaleLowerCase();
-      if (aName < bName) { return -1; }
-      if (aName > bName) { return 1; }
+      if (aName < bName) {
+        return -1;
+      }
+      if (aName > bName) {
+        return 1;
+      }
       return 0;
     });
   }
@@ -90,8 +99,9 @@ export class Purchase {
   }
 
   public lowerCaseMatch(s: string) {
-    return this.product.lowerCaseMatch(s)
-      || this.tags.some(t => t.lowerCaseMatch(s));
+    return (
+      this.product.lowerCaseMatch(s) || this.tags.some(t => t.lowerCaseMatch(s))
+    );
   }
 }
 
@@ -163,7 +173,10 @@ export class Store {
   }
 
   public constructor(private api: Api) {
-    makeObservable<Store, 'tagsByName' | 'productsByName' | 'parsePurchaseJson'>(this, {
+    makeObservable<
+      Store,
+      'tagsByName' | 'productsByName' | 'parsePurchaseJson'
+    >(this, {
       dataState: observable,
       purchases: observable,
       purchasesById: computed,
@@ -182,16 +195,15 @@ export class Store {
   public async updatePurchase(id: number) {
     const purchase = this.purchasesById.get(id);
     if (purchase) {
-      ensureOk(await this.api.patchJson(
-        `/purchases/${purchase.id}`,
-        {
+      ensureOk(
+        await this.api.patchJson(`/purchases/${purchase.id}`, {
           product: purchase.product.id,
           date: purchase.date.format(),
           price: purchase.price,
           quantity: purchase.quantity,
           tags: purchase.tags.map(t => t.id),
-        },
-      ));
+        }),
+      );
     } else {
       throw new Error(`No purchase with id: ${id}`);
     }
@@ -291,7 +303,7 @@ export class Store {
         this.dataState = 'finished';
       });
     } catch (e) {
-      runInAction(() => this.dataState = 'failed');
+      runInAction(() => (this.dataState = 'failed'));
       throw e;
     }
   }
@@ -323,8 +335,7 @@ export class Store {
   }
 }
 
-export const StoreContext =
-  React.createContext<Store | null>(null);
+export const StoreContext = React.createContext<Store | null>(null);
 
 export function useStore() {
   const store = useContext(StoreContext);

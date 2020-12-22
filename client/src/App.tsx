@@ -1,4 +1,4 @@
-import DateFnsUtil from "@date-io/date-fns";
+import DateFnsUtil from '@date-io/date-fns';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { observer } from 'mobx-react';
@@ -7,7 +7,7 @@ import {
   BrowserRouter as Router,
   Redirect,
   Route,
-  Switch
+  Switch,
 } from 'react-router-dom';
 
 import DailyExpenditurePage from './DailyExpenditurePage';
@@ -17,10 +17,10 @@ import { Store, StoreContext } from './data/store';
 import ExpenditureDetailsPage from './ExpenditureDetailsPage';
 import LoginPage from './LoginPage';
 import MonthlyExpenditurePage from './MonthlyExpenditurePage';
-import NavigationDrawer from "./NavigationDrawer";
+import NavigationDrawer from './NavigationDrawer';
 import PurchasePage from './PurchasePage';
 import PurchasesPage from './PurchasesPage';
-import SettingsPage from "./SettingsPage";
+import SettingsPage from './SettingsPage';
 
 interface Stores {
   session: Session;
@@ -31,9 +31,10 @@ const App: React.FC = observer(() => {
   const [navigationOpen, setNavigationOpen] = useState(false);
   const stores = useRef<Stores | null>(null);
   if (stores.current === null) {
-    const apiUrl = typeof process.env.REACT_APP_API_URL === 'string'
-      ? process.env.REACT_APP_API_URL
-      : 'http://localhost:8080/api';
+    const apiUrl =
+      typeof process.env.REACT_APP_API_URL === 'string'
+        ? process.env.REACT_APP_API_URL
+        : 'http://localhost:8080/api';
     const api = new Api(apiUrl);
     stores.current = {
       session: Session.fromLocalStorage(api),
@@ -54,13 +55,14 @@ const App: React.FC = observer(() => {
           <Router>
             <NavigationDrawer
               open={navigationOpen}
-              onClose={() => setNavigationOpen(false)} />
+              onClose={() => setNavigationOpen(false)}
+            />
             <Switch>
-              {session.isLoggedIn
-                ? null
-                : <Route path='/'>
+              {session.isLoggedIn ? null : (
+                <Route path='/'>
                   <LoginPage openNavigation={openNavigation} />
-                </Route>}
+                </Route>
+              )}
               <Route path='/purchases/:id'>
                 <PurchasePage />
               </Route>

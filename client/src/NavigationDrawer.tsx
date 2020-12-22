@@ -1,4 +1,10 @@
-import { Divider, Drawer, List, ListItem, ListItemText } from '@material-ui/core';
+import {
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -28,8 +34,8 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
           <ListItemText>Expenditure Accounting</ListItemText>
         </ListItem>
         <Divider />
-        {session.isLoggedIn
-          ? <>
+        {session.isLoggedIn ? (
+          <>
             <ListItem button onClick={linkOpener('/settings')}>
               <ListItemText>{session.currentEmail}</ListItemText>
             </ListItem>
@@ -47,9 +53,11 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
               <ListItemText>Monthly Expenditure</ListItemText>
             </ListItem>
           </>
-          : <ListItem button onClick={() => props.onClose()}>
+        ) : (
+          <ListItem button onClick={() => props.onClose()}>
             <ListItemText>Login</ListItemText>
-          </ListItem>}
+          </ListItem>
+        )}
       </List>
     </Drawer>
   );
