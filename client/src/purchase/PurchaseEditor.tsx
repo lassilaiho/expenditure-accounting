@@ -10,7 +10,7 @@ import {
   useTheme,
 } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Autocomplete, AutocompleteChangeReason } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import Big from 'big.js';
 import { runInAction } from 'mobx';
@@ -60,6 +60,32 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
     history.goBack();
   }
 
+  async function prefillFields(
+    event: React.ChangeEvent<unknown>,
+    value: string | null,
+    reason: AutocompleteChangeReason,
+  ) {
+    if (
+      !value ||
+      reason !== 'select-option' ||
+      (tags.length && price && quantity)
+    ) {
+      return;
+    }
+    const latest = await store.getLatestPurchaseByProduct(value);
+    if (latest) {
+      if (tags.length === 0) {
+        setTags(latest.tagsSortedByName.map(t => t.name));
+      }
+      if (!price || price === '1') {
+        setPrice(latest.price.valueOf());
+      }
+      if (!quantity || quantity === '1') {
+        setQuantity(latest.quantity.valueOf());
+      }
+    }
+  }
+
   return (
     <Scaffold
       nav={<BackButton />}
@@ -79,6 +105,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
                 options={store.products.map(p => p.name)}
                 defaultValue={initialName}
                 inputValue={name}
+                onChange={prefillFields}
                 onInputChange={(e, v) => setName(v ?? '')}
                 renderInput={params => (
                   <TextField {...params} label='Product' fullWidth />

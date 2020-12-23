@@ -279,6 +279,13 @@ export class Store {
     runInAction(() => this.purchases.splice(i, 1));
   }
 
+  public async getLatestPurchaseByProduct(productName: string) {
+    productName = productName.toLocaleLowerCase();
+    return (
+      this.purchases.find(p => p.product.lowerCaseMatch(productName)) ?? null
+    );
+  }
+
   private getTagByName(name: string) {
     return this.tagsByName.get(name.toLowerCase());
   }
