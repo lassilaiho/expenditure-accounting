@@ -15,7 +15,7 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import Big from 'big.js';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Scaffold from '../common/Scaffold';
@@ -40,6 +40,9 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
 
   const theme = useTheme();
   const atLeastMedium = useMediaQuery(theme.breakpoints.up('md'));
+
+  const nameInputRef = useRef<HTMLElement>(null);
+  useEffect(() => nameInputRef.current?.focus(), []);
 
   const history = useHistory();
   const store = useStore();
@@ -108,7 +111,12 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
                 onChange={prefillFields}
                 onInputChange={(e, v) => setName(v ?? '')}
                 renderInput={params => (
-                  <TextField {...params} label='Product' fullWidth />
+                  <TextField
+                    {...params}
+                    inputRef={nameInputRef}
+                    label='Product'
+                    fullWidth
+                  />
                 )}
               />
               <KeyboardDatePicker
