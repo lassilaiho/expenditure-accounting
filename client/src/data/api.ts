@@ -30,6 +30,33 @@ export class SessionToken {
   }
 }
 
+export class ConnectionError extends Error {
+  public readonly name = 'ConnectionError';
+
+  public get message() {
+    return this.cause.message;
+  }
+
+  public constructor(public readonly cause: Error, ...params: any[]) {
+    super(...params);
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, ConnectionError);
+    }
+  }
+}
+
+async function apiFetch(input: RequestInfo, init?: RequestInit | undefined) {
+  try {
+    return await fetch(input, init);
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new ConnectionError(e);
+    }
+    throw e;
+  }
+}
+
 export default class Api {
   public baseUrl = '';
 
@@ -52,14 +79,14 @@ export default class Api {
   }
 
   public async get(url: string) {
-    return fetch(this.baseUrl + url, {
+    return apiFetch(this.baseUrl + url, {
       mode: 'cors',
       headers: { ...this.defaultHeaders },
     });
   }
 
   public async postJson(url: string, body: any) {
-    return fetch(this.baseUrl + url, {
+    return apiFetch(this.baseUrl + url, {
       mode: 'cors',
       method: 'POST',
       headers: {
@@ -71,7 +98,7 @@ export default class Api {
   }
 
   public async patchJson(url: string, body: any) {
-    return fetch(this.baseUrl + url, {
+    return apiFetch(this.baseUrl + url, {
       mode: 'cors',
       method: 'PATCH',
       headers: {
@@ -83,7 +110,7 @@ export default class Api {
   }
 
   public async delete(url: string) {
-    return fetch(this.baseUrl + url, {
+    return apiFetch(this.baseUrl + url, {
       mode: 'cors',
       method: 'DELETE',
       headers: { ...this.defaultHeaders },

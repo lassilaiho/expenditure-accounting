@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`handles a connection error correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="makeStyles-root-7"
+  >
+    <header
+      class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
+    >
+      <div
+        class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+      >
+        <h6
+          class="MuiTypography-root makeStyles-title-9 MuiTypography-h6"
+        >
+          Error
+        </h6>
+      </div>
+    </header>
+    <div
+      class="makeStyles-contentRoot-8"
+    >
+      <div
+        class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+        style="width: 100%; height: 100%;"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <div
+            class="MuiBox-root MuiBox-root-10"
+          >
+            <h4
+              class="MuiTypography-root MuiTypography-h4"
+            >
+              Network connection is unavailable.
+            </h4>
+            <p
+              class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph"
+            >
+              You can try reloading the page when you are back online.
+            </p>
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="MuiButton-label"
+              >
+                Reload page
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+            <br />
+            <br />
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="MuiButton-label"
+              >
+                Show details
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`handles an error during rendering correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="makeStyles-root-2"
+  >
+    <header
+      class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
+    >
+      <div
+        class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+      >
+        <h6
+          class="MuiTypography-root makeStyles-title-4 MuiTypography-h6"
+        >
+          Error
+        </h6>
+      </div>
+    </header>
+    <div
+      class="makeStyles-contentRoot-3"
+    >
+      <div
+        class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
+        style="width: 100%; height: 100%;"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+        >
+          <div
+            class="MuiBox-root MuiBox-root-5"
+          >
+            <h4
+              class="MuiTypography-root MuiTypography-h4"
+            >
+              Something went wrong.
+            </h4>
+            <p
+              class="MuiTypography-root MuiTypography-body1 MuiTypography-paragraph"
+            >
+              You can try reloading the page.
+            </p>
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="MuiButton-label"
+              >
+                Reload page
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+            <br />
+            <br />
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="MuiButton-label"
+              >
+                Show details
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`renders correctly when no error occurs 1`] = `
+<DocumentFragment>
+  <div>
+    test
+  </div>
+</DocumentFragment>
+`;

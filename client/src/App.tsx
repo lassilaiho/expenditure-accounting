@@ -10,6 +10,7 @@ import {
   Switch,
 } from 'react-router-dom';
 
+import ErrorBoundary from './ErrorBoundary';
 import DailyExpenditurePage from './expenditure/DailyExpenditurePage';
 import Api from './data/api';
 import { Session, SessionContext } from './data/session';
@@ -53,38 +54,40 @@ const App: React.FC = observer(() => {
         <MuiPickersUtilsProvider utils={MomentUtil}>
           <CssBaseline />
           <Router>
-            <NavigationDrawer
-              open={navigationOpen}
-              onClose={() => setNavigationOpen(false)}
-            />
-            <Switch>
-              {session.isLoggedIn ? null : (
-                <Route path='/'>
-                  <LoginPage openNavigation={openNavigation} />
+            <ErrorBoundary>
+              <NavigationDrawer
+                open={navigationOpen}
+                onClose={() => setNavigationOpen(false)}
+              />
+              <Switch>
+                {session.isLoggedIn ? null : (
+                  <Route path='/'>
+                    <LoginPage openNavigation={openNavigation} />
+                  </Route>
+                )}
+                <Route path='/purchases/:id'>
+                  <PurchasePage />
                 </Route>
-              )}
-              <Route path='/purchases/:id'>
-                <PurchasePage />
-              </Route>
-              <Route path='/purchases'>
-                <PurchasesPage openNavigation={openNavigation} />
-              </Route>
-              <Route path='/expenditure/daily'>
-                <DailyExpenditurePage openNavigation={openNavigation} />
-              </Route>
-              <Route path='/expenditure/monthly'>
-                <MonthlyExpenditurePage openNavigation={openNavigation} />
-              </Route>
-              <Route path='/expenditure/'>
-                <ExpenditureDetailsPage />
-              </Route>
-              <Route path='/settings'>
-                <SettingsPage openNavigation={openNavigation} />
-              </Route>
-              <Route path='/'>
-                <Redirect to='/purchases' />
-              </Route>
-            </Switch>
+                <Route path='/purchases'>
+                  <PurchasesPage openNavigation={openNavigation} />
+                </Route>
+                <Route path='/expenditure/daily'>
+                  <DailyExpenditurePage openNavigation={openNavigation} />
+                </Route>
+                <Route path='/expenditure/monthly'>
+                  <MonthlyExpenditurePage openNavigation={openNavigation} />
+                </Route>
+                <Route path='/expenditure/'>
+                  <ExpenditureDetailsPage />
+                </Route>
+                <Route path='/settings'>
+                  <SettingsPage openNavigation={openNavigation} />
+                </Route>
+                <Route path='/'>
+                  <Redirect to='/purchases' />
+                </Route>
+              </Switch>
+            </ErrorBoundary>
           </Router>
         </MuiPickersUtilsProvider>
       </StoreContext.Provider>
