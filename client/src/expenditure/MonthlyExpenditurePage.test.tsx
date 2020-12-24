@@ -7,7 +7,7 @@ import MonthlyExpenditurePage from './MonthlyExpenditurePage';
 
 test('renders correctly without data', () => {
   const { asFragment } = render(
-    <MonthlyExpenditurePage openNavigation={() => {}} />,
+    <MonthlyExpenditurePage openNavigation={() => undefined} />,
   );
   expect(asFragment()).toMatchSnapshot();
 });
@@ -16,7 +16,7 @@ test('renders correctly with data', async () => {
   const store = new Store(fakeApi);
   await store.reloadData();
   const { asFragment } = render(
-    <MonthlyExpenditurePage openNavigation={() => {}} />,
+    <MonthlyExpenditurePage openNavigation={() => undefined} />,
     { store },
   );
   expect(asFragment()).toMatchSnapshot();

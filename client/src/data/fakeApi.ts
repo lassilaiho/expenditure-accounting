@@ -90,7 +90,7 @@ const purchases = [
 
 export const fakeData = { tags, products, purchases };
 
-export const fakeApi = new FakeApi(async (method, url, body) => {
+export const fakeApi = new FakeApi(async (method, url) => {
   switch (method + url) {
     case 'get/purchases':
       return jsonResponse({ purchases });

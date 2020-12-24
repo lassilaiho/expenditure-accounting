@@ -21,9 +21,9 @@ test('renders correctly with purchase with quantity 1', () => {
     <PurchaseItem
       purchase={quantity1}
       expanded={false}
-      onToggle={() => {}}
-      onEdit={() => {}}
-      onDelete={() => {}}
+      onToggle={() => undefined}
+      onEdit={() => undefined}
+      onDelete={() => undefined}
     />,
   );
   expect(asFragment()).toMatchSnapshot();
@@ -34,9 +34,9 @@ test('renders correctly with purchase with integer quantity not 1', async () => 
     <PurchaseItem
       purchase={quantityIntNot1}
       expanded={false}
-      onToggle={() => {}}
-      onEdit={() => {}}
-      onDelete={() => {}}
+      onToggle={() => undefined}
+      onEdit={() => undefined}
+      onDelete={() => undefined}
     />,
   );
   expect(asFragment()).toMatchSnapshot();
@@ -47,9 +47,9 @@ test('renders correctly with purchase with decimal quantity not 1', async () => 
     <PurchaseItem
       purchase={quantityDecNot1}
       expanded={false}
-      onToggle={() => {}}
-      onEdit={() => {}}
-      onDelete={() => {}}
+      onToggle={() => undefined}
+      onEdit={() => undefined}
+      onDelete={() => undefined}
     />,
   );
   expect(asFragment()).toMatchSnapshot();
@@ -60,9 +60,9 @@ test('renders correctly when expanded', async () => {
     <PurchaseItem
       purchase={quantityDecNot1}
       expanded={true}
-      onToggle={() => {}}
-      onEdit={() => {}}
-      onDelete={() => {}}
+      onToggle={() => undefined}
+      onEdit={() => undefined}
+      onDelete={() => undefined}
     />,
   );
   expect(asFragment()).toMatchSnapshot();

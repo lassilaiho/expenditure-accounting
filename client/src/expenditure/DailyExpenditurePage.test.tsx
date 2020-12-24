@@ -7,7 +7,7 @@ import DailyExpenditurePage from './DailyExpenditurePage';
 
 test('renders correctly without data', () => {
   const { asFragment } = render(
-    <DailyExpenditurePage openNavigation={() => {}} />,
+    <DailyExpenditurePage openNavigation={() => undefined} />,
   );
   expect(asFragment()).toMatchSnapshot();
 });
@@ -16,7 +16,7 @@ test('renders correctly with data', async () => {
   const store = new Store(fakeApi);
   await store.reloadData();
   const { asFragment } = render(
-    <DailyExpenditurePage openNavigation={() => {}} />,
+    <DailyExpenditurePage openNavigation={() => undefined} />,
     { store },
   );
   expect(asFragment()).toMatchSnapshot();
