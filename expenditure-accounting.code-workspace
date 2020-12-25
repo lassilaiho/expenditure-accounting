@@ -23,6 +23,7 @@
 			"editor.detectIndentation": false,
 			"editor.defaultFormatter": "esbenp.prettier-vscode"
 		},
-		"typescript.tsdk": "client/node_modules/typescript/lib"
+		"typescript.tsdk": "client/node_modules/typescript/lib",
+		"typescript.preferences.importModuleSpecifier": "relative"
 	}
 }
