@@ -44,37 +44,25 @@ func (api *API) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *API) Logout(w http.ResponseWriter, r *http.Request) {
-	session, err := api.DB.ValidateSession(r)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-	if err = api.DB.DeleteSession(r.Context(), session.ID); err != nil {
+	if err := api.DB.DeleteSession(r.Context(), getSession(r).ID); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
 func (api *API) ChangePassword(w http.ResponseWriter, r *http.Request) {
-	session, err := api.DB.ValidateSession(r)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
 	var reqData struct {
 		OldPassword string `json:"oldPassword"`
 		NewPassword string `json:"newPassword"`
 	}
-	if err = json.NewDecoder(r.Body).Decode(&reqData); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&reqData); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	err = api.DB.ChangePasswordForAccount(
+	err := api.DB.ChangePasswordForAccount(
 		r.Context(),
-		session.AccountID,
+		getSession(r).AccountID,
 		reqData.OldPassword,
 		reqData.NewPassword)
 	if err != nil {

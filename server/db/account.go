@@ -3,11 +3,8 @@ package db
 import (
 	"context"
 	"database/sql"
-	"encoding/base64"
 	"errors"
 	"log"
-	"net/http"
-	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -16,7 +13,6 @@ import (
 
 var (
 	ErrInvalidEmailOrPassword = errors.New("invalid email or password")
-	ErrInvalidSession         = errors.New("missing or invalid session token")
 	ErrSessionExpired         = errors.New("session has been expired")
 )
 
@@ -100,25 +96,11 @@ func (api *API) DeleteSession(ctx context.Context, id int64) error {
 	return err
 }
 
-func (api *API) ValidateSession(r *http.Request) (*Session, error) {
-	authStr := r.Header.Get("Authorization")
-	if authStr == "" {
-		return nil, ErrInvalidSession
-	}
-	authParts := strings.Split(authStr, " ")
-	if len(authParts) != 2 || strings.ToLower(authParts[0]) != "basic" {
-		return nil, ErrInvalidSession
-	}
-	tokenBytes, err := base64.StdEncoding.DecodeString(authParts[1])
-	if err != nil {
-		return nil, ErrInvalidSession
-	}
-	session := &Session{
-		Token: string(tokenBytes),
-	}
-	err = api.DB.
+func (api *API) ValidateSession(ctx context.Context, token string) (*Session, error) {
+	session := &Session{Token: token}
+	err := api.DB.
 		QueryRowContext(
-			r.Context(),
+			ctx,
 			"SELECT id, account_id, expiry_time FROM sessions WHERE token = $1",
 			session.Token).
 		Scan(

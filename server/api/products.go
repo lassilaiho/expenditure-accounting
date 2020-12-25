@@ -7,21 +7,15 @@ import (
 )
 
 func (api *API) AddProduct(w http.ResponseWriter, r *http.Request) {
-	session, err := api.DB.ValidateSession(r)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
 	var requestData struct {
 		Name string `json:"name"`
 	}
-	if err = json.NewDecoder(r.Body).Decode(&requestData); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	product, err := api.DB.InsertProduct(r.Context(), session.AccountID, requestData.Name)
+	product, err := api.DB.InsertProduct(r.Context(), getSession(r).AccountID, requestData.Name)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)

@@ -9,25 +9,20 @@ import (
 )
 
 func (api *API) AddTags(w http.ResponseWriter, r *http.Request) {
-	session, err := api.DB.ValidateSession(r)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
 	var requestData struct {
 		Tags []string `json:"tags"`
 	}
-	if err = json.NewDecoder(r.Body).Decode(&requestData); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	var err error
 	var responseData struct {
 		Tags []*db.Tag `json:"tags"`
 	}
 	responseData.Tags, err = api.DB.InsertTags(
-		r.Context(), session.AccountID, requestData.Tags)
+		r.Context(), getSession(r).AccountID, requestData.Tags)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
