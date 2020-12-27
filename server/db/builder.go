@@ -95,6 +95,20 @@ func (b *queryBuilder) And() *queryBuilder {
 	return b
 }
 
+func (b *queryBuilder) In(col string, val []interface{}) *queryBuilder {
+	b.query.WriteRune(' ')
+	b.query.WriteString(col)
+	b.query.WriteString(" IN (")
+	for i, val := range val {
+		if i > 0 {
+			b.query.WriteRune(',')
+		}
+		b.writeParam(val)
+	}
+	b.query.WriteRune(')')
+	return b
+}
+
 func (b *queryBuilder) Build() (string, []interface{}) {
 	return b.query.String(), b.params
 }

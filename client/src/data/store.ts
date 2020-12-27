@@ -175,7 +175,10 @@ export class Store {
   public constructor(private api: Api) {
     makeObservable<
       Store,
-      'tagsByName' | 'productsByName' | 'parsePurchaseJson'
+      | 'tagsByName'
+      | 'productsByName'
+      | 'parsePurchaseJson'
+      | 'parsePurchasesJson'
     >(this, {
       dataState: observable,
       purchases: observable,
@@ -188,7 +191,9 @@ export class Store {
       productsByName: computed,
       addTags: action,
       reloadData: action,
+      parsePurchasesJson: action,
       parsePurchaseJson: action,
+      restorePurchase: action,
     });
   }
 
@@ -279,6 +284,21 @@ export class Store {
     runInAction(() => this.purchases.splice(i, 1));
   }
 
+  public async restorePurchase(id: number) {
+    const resp = await this.api.postJson(`/purchases/${id}/restore`, {});
+    await ensureOk(resp);
+    const purchase = this.parsePurchaseJson((await resp.json()).purchase);
+    runInAction(() => {
+      for (let i = 0; i < this.purchases.length; i++) {
+        if (purchase.date > this.purchases[i].date) {
+          this.purchases.splice(i, 0, purchase);
+          return;
+        }
+      }
+      this.purchases.splice(this.purchases.length, 0, purchase);
+    });
+  }
+
   public async getLatestPurchaseByProduct(productName: string) {
     productName = productName.toLocaleLowerCase();
     return (
@@ -306,7 +326,7 @@ export class Store {
 
       const json = await resp.json();
       runInAction(() => {
-        this.parsePurchaseJson(json);
+        this.parsePurchasesJson(json);
         this.dataState = 'finished';
       });
     } catch (e) {
@@ -315,30 +335,34 @@ export class Store {
     }
   }
 
-  private parsePurchaseJson(data: any) {
+  private parsePurchasesJson(data: any) {
     const purchases = data.purchases;
     if (!Array.isArray(purchases)) {
       throw new Error('Invalid response json');
     }
     for (const obj of purchases) {
-      const purchase = Purchase.fromJson(obj);
-      const product = this.productsById.get(purchase.product.id);
-      if (product) {
-        purchase.product = product;
-      } else {
-        this.productsById.set(purchase.product.id, purchase.product);
-      }
-      for (let i = 0; i < purchase.tags.length; i++) {
-        const currentTag = purchase.tags[i];
-        const existingTag = this.tagsById.get(currentTag.id);
-        if (existingTag) {
-          purchase.tags[i] = existingTag;
-        } else {
-          this.tagsById.set(currentTag.id, currentTag);
-        }
-      }
-      this.purchases.push(purchase);
+      this.purchases.push(this.parsePurchaseJson(obj));
     }
+  }
+
+  private parsePurchaseJson(data: any) {
+    const purchase = Purchase.fromJson(data);
+    const product = this.productsById.get(purchase.product.id);
+    if (product) {
+      purchase.product = product;
+    } else {
+      this.productsById.set(purchase.product.id, purchase.product);
+    }
+    for (let i = 0; i < purchase.tags.length; i++) {
+      const currentTag = purchase.tags[i];
+      const existingTag = this.tagsById.get(currentTag.id);
+      if (existingTag) {
+        purchase.tags[i] = existingTag;
+      } else {
+        this.tagsById.set(currentTag.id, currentTag);
+      }
+    }
+    return purchase;
   }
 }
 

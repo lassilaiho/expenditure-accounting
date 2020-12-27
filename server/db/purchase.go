@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
-	"log"
+	"errors"
 	"time"
 )
 
@@ -264,7 +264,6 @@ WHERE
 			AND NOT purchases.deleted
 			AND products.id = $3
 	) = 0`
-	log.Printf("%d, %#v\n", purchaseID, ids)
 	_, err = tx.ExecContext(ctx, query, accountID, purchaseID, ids.ProductID)
 	if err != nil {
 		tx.Rollback()
@@ -309,6 +308,100 @@ WHERE
 		return err
 	}
 	return nil
+}
+
+func (api *API) RestorePurchaseById(ctx context.Context, purchaseID, accountID int64) (*Purchase, error) {
+	tx, err := api.DB.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	purchase := &Purchase{ID: purchaseID}
+	query := `
+UPDATE purchases
+SET deleted = FALSE
+WHERE id = $1 AND account_id = $2
+RETURNING date, product_id, quantity, price`
+	err = tx.QueryRowContext(ctx, query, purchaseID, accountID).
+		Scan(&purchase.Date, &purchase.Product.ID, &purchase.Quantity, &purchase.Price)
+	if err != nil {
+		tx.Rollback()
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, ErrNoRowsAffected
+		}
+		return nil, err
+	}
+	query = `
+UPDATE products
+SET deleted = FALSE
+WHERE account_id = $1 AND id = $2
+RETURNING name`
+	err = tx.QueryRowContext(ctx, query, accountID, purchase.Product.ID).
+		Scan(&purchase.Product.Name)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	query = `
+UPDATE purchase_tag
+SET deleted = FALSE
+FROM purchases
+WHERE
+	purchases.id = purchase_tag.purchase_id
+	AND purchases.account_id = $1
+	AND purchases.id = $2
+RETURNING purchase_tag.tag_id`
+	rows, err := tx.QueryContext(ctx, query, accountID, purchaseID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	defer rows.Close()
+	tagIDs := []interface{}{}
+	for rows.Next() {
+		var tagID int64
+		if err = rows.Scan(&tagID); err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		tagIDs = append(tagIDs, tagID)
+	}
+	if err := rows.Err(); err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	purchase.Tags = make([]*Tag, len(tagIDs))
+	if len(tagIDs) > 0 {
+		query, args := updateQuery("tags").
+			Set("deleted", false).
+			Where().
+			Column("account_id", accountID).
+			And().In("id", tagIDs).
+			Returning("name").
+			Build()
+		rows, err := tx.QueryContext(ctx, query, args...)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		defer rows.Close()
+		for i := 0; rows.Next(); i++ {
+			tag := &Tag{ID: tagIDs[i].(int64)}
+			if err = rows.Scan(&tag.Name); err != nil {
+				tx.Rollback()
+				return nil, err
+			}
+			purchase.Tags[i] = tag
+		}
+		if err = rows.Err(); err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
+	if err = tx.Commit(); err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	return purchase, nil
 }
 
 type PurchaseUpdate struct {

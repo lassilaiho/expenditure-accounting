@@ -1,11 +1,11 @@
-import { Fab, IconButton } from '@material-ui/core';
+import { Button, Fab, IconButton, Snackbar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import { observer } from 'mobx-react';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useStore } from '../data/store';
+import { Purchase, useStore } from '../data/store';
 import MenuButton from '../common/MenuButton';
 import SearchPage from '../common/SearchPage';
 import Scaffold from '../common/Scaffold';
@@ -22,6 +22,9 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
 
   const [isSearching, setIsSearching] = useState(false);
   const [shownPurchases, setShownPurchases] = useState(store.purchases);
+  const [undoablePurchaseId, setUndoablePurchaseId] = useState<number | null>(
+    null,
+  );
 
   function stopSearching() {
     setShownPurchases(store.purchases);
@@ -41,7 +44,20 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
   const onEdit = useCallback(p => history.push(`/purchases/${p.id}`), [
     history,
   ]);
-  const onDelete = useCallback(p => store.deletePurchase(p.id), [store]);
+  const onDelete = useCallback(
+    async (p: Purchase) => {
+      await store.deletePurchase(p.id);
+      setUndoablePurchaseId(p.id);
+    },
+    [store],
+  );
+
+  function undoDelete() {
+    if (undoablePurchaseId !== null) {
+      store.restorePurchase(undoablePurchaseId);
+      setUndoablePurchaseId(null);
+    }
+  }
 
   function renderList() {
     return store.dataState === 'loading' ? (
@@ -55,26 +71,45 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
     );
   }
 
-  return isSearching ? (
-    <SearchPage onCancel={stopSearching} onSearch={searchPurchases}>
-      {renderList()}
-    </SearchPage>
-  ) : (
-    <Scaffold
-      nav={<MenuButton onClick={props.openNavigation} />}
-      title='Purchases'
-      actions={
-        <IconButton color='inherit' onClick={() => setIsSearching(true)}>
-          <SearchIcon />
-        </IconButton>
-      }
-      content={renderList()}
-      fab={
-        <Fab color='secondary' onClick={() => history.push('/purchases/new')}>
-          <AddIcon />
-        </Fab>
-      }
-    />
+  return (
+    <>
+      {isSearching ? (
+        <SearchPage onCancel={stopSearching} onSearch={searchPurchases}>
+          {renderList()}
+        </SearchPage>
+      ) : (
+        <Scaffold
+          nav={<MenuButton onClick={props.openNavigation} />}
+          title='Purchases'
+          actions={
+            <IconButton color='inherit' onClick={() => setIsSearching(true)}>
+              <SearchIcon />
+            </IconButton>
+          }
+          content={renderList()}
+          fab={
+            <Fab
+              color='secondary'
+              onClick={() => history.push('/purchases/new')}
+            >
+              <AddIcon />
+            </Fab>
+          }
+        />
+      )}
+      <Snackbar
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        open={undoablePurchaseId !== null}
+        autoHideDuration={6000}
+        message={'Purchase deleted'}
+        action={
+          <Button color='secondary' size='small' onClick={undoDelete}>
+            UNDO
+          </Button>
+        }
+        onClose={() => setUndoablePurchaseId(null)}
+      />
+    </>
   );
 });
 

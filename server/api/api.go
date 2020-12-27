@@ -30,6 +30,7 @@ func NewHandler(api *API) http.Handler {
 	authed.Path("/purchases").Methods("POST").HandlerFunc(api.AddPurchase)
 	authed.Path("/purchases/{id}").Methods("PATCH").HandlerFunc(api.UpdatePurchase)
 	authed.Path("/purchases/{id}").Methods("DELETE").HandlerFunc(api.DeletePurchase)
+	authed.Path("/purchases/{id}/restore").Methods("POST").HandlerFunc(api.RestorePurchase)
 	authed.Path("/tags").Methods("POST").HandlerFunc(api.AddTags)
 
 	return root

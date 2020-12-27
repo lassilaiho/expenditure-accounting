@@ -28,6 +28,18 @@ func generateSessionToken() string {
 	return uuid.New().String()
 }
 
+func (api *API) InsertAccount(ctx context.Context, email, password, role string) error {
+	hash, err := api.hashPassword(password)
+	if err != nil {
+		return err
+	}
+	query := `
+INSERT INTO accounts (email, password_hash, role)
+VALUES ($1, $2, $3)`
+	_, err = api.DB.ExecContext(ctx, query, email, hash, role)
+	return err
+}
+
 type Session struct {
 	ID         int64     `json:"id"`
 	Token      string    `json:"token"`
@@ -61,6 +73,7 @@ func (api *API) CreateSession(ctx context.Context, email, password string) (*Ses
 	}
 	now := time.Now().UTC()
 	session := &Session{
+		AccountID:  accountID,
 		Token:      generateSessionToken(),
 		ExpiryTime: now.Add(api.SessionTimeout),
 	}

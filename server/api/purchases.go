@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -110,5 +111,33 @@ func (api *API) DeletePurchase(w http.ResponseWriter, r *http.Request) {
 			log.Print(err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (api *API) RestorePurchase(w http.ResponseWriter, r *http.Request) {
+	purchaseID, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	purchase, err := api.DB.RestorePurchaseById(
+		r.Context(), purchaseID, getSession(r).AccountID)
+	if err != nil {
+		if errors.Is(err, db.ErrNoRowsAffected) {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			log.Print(err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		return
+	}
+	err = json.NewEncoder(w).Encode(struct {
+		Purchase *db.Purchase `json:"purchase"`
+	}{Purchase: purchase})
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
