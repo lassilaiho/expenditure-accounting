@@ -1,4 +1,4 @@
-import Api from './api';
+import HttpClient from './HttpClient';
 
 export type FakeResponse = (
   method: string,
@@ -6,7 +6,7 @@ export type FakeResponse = (
   body?: any,
 ) => Promise<Response>;
 
-export class FakeApi extends Api {
+export class FakeClient extends HttpClient {
   public constructor(private fakeResponse: FakeResponse) {
     super('');
   }
@@ -90,7 +90,7 @@ const purchases = [
 
 export const fakeData = { tags, products, purchases };
 
-export const fakeApi = new FakeApi(async (method, url) => {
+export const fakeClient = new FakeClient(async (method, url) => {
   switch (method + url) {
     case 'get/purchases':
       return jsonResponse({ purchases });

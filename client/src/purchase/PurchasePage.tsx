@@ -1,13 +1,17 @@
 import { Paper } from '@material-ui/core';
 import Big from 'big.js';
-import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 
 import BackButton from '../common/BackButton';
 import Scaffold from '../common/Scaffold';
-import { Product, Purchase, useStore } from '../data/store';
+import {
+  getPurchaseById,
+  useApi,
+  useAppDispatch,
+  useAppSelector,
+} from '../data/store';
 import CenteredLoader from '../common/CenteredLoader';
 import PurchaseEditor from './PurchaseEditor';
 
@@ -15,35 +19,37 @@ interface PurchasePageParams {
   id: string;
 }
 
-const PurchasePage: React.FC = observer(() => {
-  const store = useStore();
+const PurchasePage: React.FC = () => {
+  const api = useApi();
+  const dispatch = useAppDispatch();
   const { id: idParam } = useParams<PurchasePageParams>();
+  const id = parseInt(idParam ?? '');
+  let purchase = useAppSelector(getPurchaseById(id));
+
   if (idParam === 'new') {
-    const purchase = new Purchase(
-      -1,
-      new Product(-1, ''),
-      moment.utc(),
-      new Big(1),
-      new Big(1),
-      [],
-    );
+    purchase = {
+      id: -1,
+      product: -1,
+      date: moment.utc(),
+      quantity: new Big(1),
+      price: new Big(1),
+      tags: [],
+    };
     return (
       <PurchaseEditor
         purchase={purchase}
-        onSave={() => store.addPurchase(purchase)}
+        onSave={update => dispatch(api.addPurchase(update))}
       />
     );
   }
-  const id = parseInt(idParam ?? '');
   if (isNaN(id)) {
     return <Redirect to='/' />;
   }
-  const purchase = store.purchasesById.get(id);
   if (purchase) {
     return (
       <PurchaseEditor
         purchase={purchase}
-        onSave={() => store.updatePurchase(purchase.id)}
+        onSave={update => dispatch(api.updatePurchase(update))}
       />
     );
   }
@@ -58,6 +64,6 @@ const PurchasePage: React.FC = observer(() => {
       }
     />
   );
-});
+};
 
 export default PurchasePage;

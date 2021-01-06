@@ -12,7 +12,13 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 
-import { Purchase } from '../data/store';
+import {
+  getProductById,
+  getTagsSortedByName,
+  Purchase,
+  totalPrice,
+  useAppSelector,
+} from '../data/store';
 import { currency, numOfBig, threeDecimals } from '../util';
 
 export interface PurchaseListItemProps {
@@ -25,6 +31,9 @@ export interface PurchaseListItemProps {
 
 const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
   const { purchase: p, expanded, onToggle } = props;
+  const product = useAppSelector(getProductById(p.product));
+  const tags = useAppSelector(getTagsSortedByName(p.tags));
+
   let quantity = '';
   if (!p.quantity.eq(1)) {
     if (p.quantity.round(0).eq(p.quantity)) {
@@ -44,7 +53,7 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
     props.onDelete(p);
   }
 
-  const formattedPrice = currency.format(numOfBig(p.totalPrice));
+  const formattedPrice = currency.format(numOfBig(totalPrice(p)));
 
   return (
     <Accordion
@@ -54,7 +63,7 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box>
-          <Typography>{quantity + p.product.name}</Typography>
+          <Typography>{quantity + product.name}</Typography>
           <Typography color='textSecondary'>
             {`${p.date.format('D.M.YYYY')} • ${formattedPrice}`}
           </Typography>
@@ -62,7 +71,7 @@ const PurchaseItem: React.FC<PurchaseListItemProps> = props => {
       </AccordionSummary>
       <AccordionDetails>
         <Box display='flex' flexWrap='wrap'>
-          {p.tagsSortedByName.map(t => (
+          {tags.map(t => (
             <Box m={1} key={t.id}>
               <Chip label={t.name} />
             </Box>

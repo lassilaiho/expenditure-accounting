@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import * as api from './api';
+import * as api from './HttpClient';
 
 describe('SessionToken', () => {
   let token: api.SessionToken;

@@ -8,12 +8,17 @@ import {
   Theme,
   Typography,
 } from '@material-ui/core';
-import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
-import { AuthError, useSession } from '../data/session';
 import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
+import {
+  AuthError,
+  getIsLoggedIn,
+  useApi,
+  useAppDispatch,
+  useAppSelector,
+} from '../data/store';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,21 +36,23 @@ export interface LoginPageProps {
   openNavigation: () => void;
 }
 
-const LoginPage: React.FC<LoginPageProps> = observer(props => {
+const LoginPage: React.FC<LoginPageProps> = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const session = useSession();
+  const dispatch = useAppDispatch();
+  const api = useApi(false);
+  const isLoggedIn = useAppSelector(getIsLoggedIn);
 
   const classes = useStyles();
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!session.isLoggedIn) {
+    if (!isLoggedIn) {
       try {
-        await session.login(email, password);
+        await dispatch(api.login(email, password));
       } catch (e) {
         if (e instanceof AuthError) {
           setErrorMessage('Wrong email or password');
@@ -94,6 +101,6 @@ const LoginPage: React.FC<LoginPageProps> = observer(props => {
       }
     />
   );
-});
+};
 
 export default LoginPage;

@@ -1,5 +1,4 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core';
-import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { Virtuoso } from 'react-virtuoso';
@@ -28,7 +27,7 @@ export interface PurchaseListProps {
   onDeletePurchase: (p: Purchase) => void;
 }
 
-const PurchaseList: React.FC<PurchaseListProps> = observer(props => {
+const PurchaseList: React.FC<PurchaseListProps> = props => {
   const { purchases } = props;
 
   const classes = useStyles();
@@ -74,6 +73,6 @@ const PurchaseList: React.FC<PurchaseListProps> = observer(props => {
       )}
     </AutoSizer>
   );
-});
+};
 
 export default PurchaseList;

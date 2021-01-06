@@ -1,19 +1,18 @@
 import React from 'react';
+import { AppStore, getPurchaseById, newStore, Purchase } from '../data/store';
 
-import { fakeApi } from '../data/fakeApi';
-import { Purchase, Store } from '../data/store';
-import { render } from '../testUtil';
+import { fakeApi, render } from '../testUtil';
 import PurchaseItem from './PurchaseItem';
 
-let store: Store;
+let store: AppStore;
 let quantity1: Purchase, quantityIntNot1: Purchase, quantityDecNot1: Purchase;
 
 beforeAll(async () => {
-  store = new Store(fakeApi);
-  await store.reloadData();
-  quantity1 = store.purchases[0];
-  quantityIntNot1 = store.purchases[1];
-  quantityDecNot1 = store.purchases[2];
+  store = newStore();
+  await store.dispatch(fakeApi.reloadData);
+  quantity1 = getPurchaseById(1)(store.getState());
+  quantityIntNot1 = getPurchaseById(2)(store.getState());
+  quantityDecNot1 = getPurchaseById(3)(store.getState());
 });
 
 test('renders correctly with purchase with quantity 1', () => {
@@ -25,6 +24,7 @@ test('renders correctly with purchase with quantity 1', () => {
       onEdit={() => undefined}
       onDelete={() => undefined}
     />,
+    { store },
   );
   expect(asFragment()).toMatchSnapshot();
 });
@@ -38,6 +38,7 @@ test('renders correctly with purchase with integer quantity not 1', async () => 
       onEdit={() => undefined}
       onDelete={() => undefined}
     />,
+    { store },
   );
   expect(asFragment()).toMatchSnapshot();
 });
@@ -51,6 +52,7 @@ test('renders correctly with purchase with decimal quantity not 1', async () => 
       onEdit={() => undefined}
       onDelete={() => undefined}
     />,
+    { store },
   );
   expect(asFragment()).toMatchSnapshot();
 });
@@ -64,6 +66,7 @@ test('renders correctly when expanded', async () => {
       onEdit={() => undefined}
       onDelete={() => undefined}
     />,
+    { store },
   );
   expect(asFragment()).toMatchSnapshot();
 });

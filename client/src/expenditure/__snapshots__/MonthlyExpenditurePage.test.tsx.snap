@@ -71,7 +71,7 @@ exports[`renders correctly with data 1`] = `
                 <p
                   class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                 >
-                  2,00 €
+                  2,16 €
                 </p>
               </div>
               <span
@@ -96,30 +96,6 @@ exports[`renders correctly with data 1`] = `
                   class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                 >
                   132,00 €
-                </p>
-              </div>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </div>
-            <div
-              aria-disabled="false"
-              class="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
-              role="button"
-              tabindex="0"
-            >
-              <div
-                class="MuiListItemText-root MuiListItemText-multiline"
-              >
-                <span
-                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
-                >
-                  3/2020
-                </span>
-                <p
-                  class="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
-                >
-                  0,16 €
                 </p>
               </div>
               <span

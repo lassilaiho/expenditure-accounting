@@ -5,25 +5,31 @@ import {
   ListSubheader,
   Paper,
 } from '@material-ui/core';
-import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
-import { useSession } from '../data/session';
 import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
+import {
+  getCurrentEmail,
+  useApi,
+  useAppDispatch,
+  useAppSelector,
+} from '../data/store';
 import PasswordChangeDialog from './PasswordChangeDialog';
 
 export interface SettingsProps {
   openNavigation: () => void;
 }
 
-const SettingsPage: React.FC<SettingsProps> = observer(props => {
-  const session = useSession();
+const SettingsPage: React.FC<SettingsProps> = props => {
+  const currentEmail = useAppSelector(getCurrentEmail);
+  const api = useApi(false);
+  const dispatch = useAppDispatch();
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
   async function changePassword(oldPassword: string, newPassword: string) {
-    await session.changePassword(oldPassword, newPassword);
+    await dispatch(api.changePassword(oldPassword, newPassword));
     setDialogOpen(false);
   }
 
@@ -36,7 +42,7 @@ const SettingsPage: React.FC<SettingsProps> = observer(props => {
           <Paper>
             <List subheader={<ListSubheader>My Account</ListSubheader>}>
               <ListItem>
-                <ListItemText>{session.currentEmail}</ListItemText>
+                <ListItemText>{currentEmail}</ListItemText>
               </ListItem>
               <ListItem button onClick={() => setDialogOpen(true)}>
                 <ListItemText>Change Password</ListItemText>
@@ -52,6 +58,6 @@ const SettingsPage: React.FC<SettingsProps> = observer(props => {
       />
     </>
   );
-});
+};
 
 export default SettingsPage;

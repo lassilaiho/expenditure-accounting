@@ -5,20 +5,30 @@ import {
   ListItem,
   ListItemText,
 } from '@material-ui/core';
-import { observer } from 'mobx-react';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useSession } from './data/session';
+import {
+  getCurrentEmail,
+  getIsLoggedIn,
+  useApi,
+  useAppDispatch,
+  useAppSelector,
+} from './data/store';
 
 export interface NavigationDrawerProps {
   open: boolean;
   onClose: () => void;
 }
 
-const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
-  const session = useSession();
+const NavigationDrawer: React.FC<NavigationDrawerProps> = props => {
   const history = useHistory();
+  const { loggedIn, currentEmail } = useAppSelector(state => ({
+    loggedIn: getIsLoggedIn(state),
+    currentEmail: getCurrentEmail(state),
+  }));
+  const dispatch = useAppDispatch();
+  const api = useApi(false);
 
   function linkOpener(url: string) {
     return () => {
@@ -34,12 +44,12 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
           <ListItemText>Expenditure Accounting</ListItemText>
         </ListItem>
         <Divider />
-        {session.isLoggedIn ? (
+        {loggedIn ? (
           <>
             <ListItem button onClick={linkOpener('/settings')}>
-              <ListItemText>{session.currentEmail}</ListItemText>
+              <ListItemText>{currentEmail}</ListItemText>
             </ListItem>
-            <ListItem button onClick={() => session.logout()}>
+            <ListItem button onClick={() => dispatch(api.logout)}>
               <ListItemText>Logout</ListItemText>
             </ListItem>
             <Divider />
@@ -61,6 +71,6 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = observer(props => {
       </List>
     </Drawer>
   );
-});
+};
 
 export default NavigationDrawer;

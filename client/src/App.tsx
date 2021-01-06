@@ -1,8 +1,8 @@
 import MomentUtil from '@date-io/moment';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { observer } from 'mobx-react';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
   Redirect,
@@ -12,9 +12,14 @@ import {
 
 import ErrorBoundary from './ErrorBoundary';
 import DailyExpenditurePage from './expenditure/DailyExpenditurePage';
-import Api from './data/api';
-import { Session, SessionContext } from './data/session';
-import { Store, StoreContext } from './data/store';
+import HttpClient from './data/HttpClient';
+import {
+  Api,
+  ApiContext,
+  getIsLoggedIn,
+  store,
+  useAppSelector,
+} from './data/store';
 import ExpenditureDetailsPage from './expenditure/ExpenditureDetailsPage';
 import LoginPage from './account/LoginPage';
 import MonthlyExpenditurePage from './expenditure/MonthlyExpenditurePage';
@@ -23,76 +28,72 @@ import PurchasePage from './purchase/PurchasePage';
 import PurchasesPage from './purchase/PurchasesPage';
 import SettingsPage from './account/SettingsPage';
 
-interface Stores {
-  session: Session;
-  store: Store;
-}
-
-const App: React.FC = observer(() => {
+const AppRoot: React.FC = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
-  const stores = useRef<Stores | null>(null);
-  if (stores.current === null) {
+  const loggedIn = useAppSelector(getIsLoggedIn);
+
+  const openNavigation = useCallback(() => setNavigationOpen(true), []);
+
+  return (
+    <Router>
+      <ErrorBoundary>
+        <NavigationDrawer
+          open={navigationOpen}
+          onClose={() => setNavigationOpen(false)}
+        />
+        <Switch>
+          {loggedIn ? null : (
+            <Route path='/'>
+              <LoginPage openNavigation={openNavigation} />
+            </Route>
+          )}
+          <Route path='/purchases/:id'>
+            <PurchasePage />
+          </Route>
+          <Route path='/purchases'>
+            <PurchasesPage openNavigation={openNavigation} />
+          </Route>
+          <Route path='/expenditure/daily'>
+            <DailyExpenditurePage openNavigation={openNavigation} />
+          </Route>
+          <Route path='/expenditure/monthly'>
+            <MonthlyExpenditurePage openNavigation={openNavigation} />
+          </Route>
+          <Route path='/expenditure/'>
+            <ExpenditureDetailsPage />
+          </Route>
+          <Route path='/settings'>
+            <SettingsPage openNavigation={openNavigation} />
+          </Route>
+          <Route path='/'>
+            <Redirect to='/purchases' />
+          </Route>
+        </Switch>
+      </ErrorBoundary>
+    </Router>
+  );
+};
+
+const App: React.FC = () => {
+  const api = useRef<Api | null>(null);
+  if (api.current === null) {
     const apiUrl =
       typeof process.env.REACT_APP_API_URL === 'string'
         ? process.env.REACT_APP_API_URL
         : 'http://localhost:8080/api';
-    const api = new Api(apiUrl);
-    stores.current = {
-      session: Session.fromLocalStorage(api),
-      store: new Store(api),
-    };
+    const client = new HttpClient(apiUrl);
+    api.current = Api.fromLocalStorage(client, store);
   }
-  const { session, store } = stores.current;
-
-  function openNavigation() {
-    setNavigationOpen(true);
-  }
-
   return (
-    <SessionContext.Provider value={session}>
-      <StoreContext.Provider value={store}>
+    <Provider store={store}>
+      <ApiContext.Provider value={api.current}>
         <MuiPickersUtilsProvider utils={MomentUtil}>
           <CssBaseline />
-          <Router>
-            <ErrorBoundary>
-              <NavigationDrawer
-                open={navigationOpen}
-                onClose={() => setNavigationOpen(false)}
-              />
-              <Switch>
-                {session.isLoggedIn ? null : (
-                  <Route path='/'>
-                    <LoginPage openNavigation={openNavigation} />
-                  </Route>
-                )}
-                <Route path='/purchases/:id'>
-                  <PurchasePage />
-                </Route>
-                <Route path='/purchases'>
-                  <PurchasesPage openNavigation={openNavigation} />
-                </Route>
-                <Route path='/expenditure/daily'>
-                  <DailyExpenditurePage openNavigation={openNavigation} />
-                </Route>
-                <Route path='/expenditure/monthly'>
-                  <MonthlyExpenditurePage openNavigation={openNavigation} />
-                </Route>
-                <Route path='/expenditure/'>
-                  <ExpenditureDetailsPage />
-                </Route>
-                <Route path='/settings'>
-                  <SettingsPage openNavigation={openNavigation} />
-                </Route>
-                <Route path='/'>
-                  <Redirect to='/purchases' />
-                </Route>
-              </Switch>
-            </ErrorBoundary>
-          </Router>
+          <AppRoot />
         </MuiPickersUtilsProvider>
-      </StoreContext.Provider>
-    </SessionContext.Provider>
+      </ApiContext.Provider>
+    </Provider>
   );
-});
+};
 
 export default App;

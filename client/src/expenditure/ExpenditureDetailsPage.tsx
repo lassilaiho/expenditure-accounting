@@ -1,19 +1,19 @@
 import { Paper } from '@material-ui/core';
-import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 
 import CenteredLoader from '../common/CenteredLoader';
 import BackButton from '../common/BackButton';
-import { useStore } from '../data/store';
 import Scaffold from '../common/Scaffold';
 import { DateRange } from '../util';
+import { getDataState, getPurchases, useAppSelector } from '../data/store';
 import ExpenditureByTags from './ExpenditureByTags';
 
-const ExpenditureDetailsPage: React.FC = observer(() => {
+const ExpenditureDetailsPage: React.FC = () => {
   const location = useLocation();
-  const store = useStore();
+  const dataState = useAppSelector(getDataState);
+  const purchases = useAppSelector(getPurchases);
 
   const dateScope = parseDateScope(location.pathname);
   if (!dateScope) {
@@ -26,11 +26,11 @@ const ExpenditureDetailsPage: React.FC = observer(() => {
       title={'Expenditure on ' + dateScopeToString(dateScope)}
       content={
         <Paper>
-          {store.dataState === 'loading' ? (
+          {dataState !== 'finished' ? (
             <CenteredLoader />
           ) : (
             <ExpenditureByTags
-              purchases={store.purchases}
+              purchases={purchases}
               dateRange={dateScopeToRange(dateScope)}
             />
           )}
@@ -38,7 +38,7 @@ const ExpenditureDetailsPage: React.FC = observer(() => {
       }
     />
   );
-});
+};
 
 type DateScope =
   | { type: 'day'; day: number; month: number; year: number }

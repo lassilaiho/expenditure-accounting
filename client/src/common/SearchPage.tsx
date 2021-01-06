@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import CloseIcon from '@material-ui/icons/Close';
-import { observer } from 'mobx-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import Scaffold from '../common/Scaffold';
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const SearchPage: React.FC<SearchPageProps> = observer(props => {
+const SearchPage: React.FC<SearchPageProps> = props => {
   const classes = useStyles();
   const [searchString, setSearchString] = useState('');
   const inputRef = useRef<HTMLInputElement | undefined>();
@@ -93,6 +92,6 @@ const SearchPage: React.FC<SearchPageProps> = observer(props => {
       content={props.children as any}
     />
   );
-});
+};
 
 export default SearchPage;

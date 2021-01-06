@@ -13,27 +13,39 @@ import DoneIcon from '@material-ui/icons/Done';
 import { Autocomplete, AutocompleteChangeReason } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import Big from 'big.js';
-import { runInAction } from 'mobx';
-import { observer } from 'mobx-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Scaffold from '../common/Scaffold';
 import BackButton from '../common/BackButton';
-import { Purchase, useStore } from '../data/store';
+import {
+  getLatestPurchaseByProduct,
+  getProductById,
+  getProducts,
+  getTagsSortedByName,
+  getTags,
+  Purchase,
+  PurchaseUpdate,
+  useAppSelector,
+  useAppStore,
+} from '../data/store';
 
 export interface PurchaseEditorProps {
   title?: string;
   purchase: Purchase;
-  onSave: () => void;
+  onSave: (update: PurchaseUpdate) => void;
 }
 
-const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
+const PurchaseEditor: React.FC<PurchaseEditorProps> = props => {
   const { purchase } = props;
+  const product = useAppSelector(getProductById(purchase.product));
+  const existingTags = useAppSelector(getTagsSortedByName(purchase.tags));
+  const allProducts = useAppSelector(getProducts);
+  const allTags = useAppSelector(getTags);
 
-  const [initialName] = useState(purchase.product.name);
-  const [name, setName] = useState(purchase.product.name);
-  const [tags, setTags] = useState(purchase.tagsSortedByName.map(t => t.name));
+  const [initialName] = useState(product?.name ?? '');
+  const [name, setName] = useState(initialName);
+  const [tags, setTags] = useState(existingTags.map(x => x.name));
   const [date, setDate] = useState(purchase.date);
   const [quantity, setQuantity] = useState(purchase.quantity.toString());
   const [price, setPrice] = useState(purchase.price.toString());
@@ -45,26 +57,22 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
   useEffect(() => nameInputRef.current?.focus(), []);
 
   const history = useHistory();
-  const store = useStore();
+  const store = useAppStore();
 
-  async function save() {
-    const [product, tagObjects] = await Promise.all([
-      store.addProduct(name),
-      store.addTags(tags),
-    ]);
-    runInAction(() => {
-      purchase.product = product;
-      purchase.tags = tagObjects;
-      purchase.date = date;
-      purchase.quantity = new Big(quantity);
-      purchase.price = new Big(price);
+  function save() {
+    props.onSave({
+      id: purchase.id,
+      product: name,
+      date,
+      quantity: new Big(quantity),
+      price: new Big(price),
+      tags,
     });
-    props.onSave();
     history.goBack();
   }
 
-  async function prefillFields(
-    event: React.ChangeEvent<unknown>,
+  function prefillFields(
+    event: ChangeEvent<unknown>,
     value: string | null,
     reason: AutocompleteChangeReason,
   ) {
@@ -75,10 +83,12 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
     ) {
       return;
     }
-    const latest = await store.getLatestPurchaseByProduct(value);
+    const state = store.getState();
+    const latest = getLatestPurchaseByProduct(value)(state);
     if (latest) {
       if (tags.length === 0) {
-        setTags(latest.tagsSortedByName.map(t => t.name));
+        const tags = getTagsSortedByName(latest.tags)(state);
+        setTags(tags.map(t => t.name));
       }
       if (!price || price === '1') {
         setPrice(latest.price.valueOf());
@@ -105,7 +115,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
               <Autocomplete
                 id='product-autocomplete'
                 freeSolo
-                options={store.products.map(p => p.name)}
+                options={allProducts.map(x => x.name)}
                 defaultValue={initialName}
                 inputValue={name}
                 onChange={prefillFields}
@@ -148,7 +158,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
                 id='tag-autocomplete'
                 multiple
                 freeSolo
-                options={store.tags.map(t => t.name)}
+                options={allTags.map(x => x.name)}
                 value={tags}
                 onChange={(e, v) => setTags(v)}
                 renderTags={(value, getTagProps) =>
@@ -171,6 +181,6 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = observer(props => {
       }
     />
   );
-});
+};
 
 export default PurchaseEditor;

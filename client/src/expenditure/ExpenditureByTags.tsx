@@ -1,9 +1,14 @@
 import { Box, List, ListItem, ListItemText } from '@material-ui/core';
 import Big from 'big.js';
-import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Purchase, Tag } from '../data/store';
+import {
+  getTagsById,
+  Purchase,
+  Tag,
+  totalPrice,
+  useAppSelector,
+} from '../data/store';
 import { currency, DateRange, numOfBig } from '../util';
 
 export interface ExpenditureByTagsProps {
@@ -11,8 +16,10 @@ export interface ExpenditureByTagsProps {
   dateRange: DateRange;
 }
 
-const ExpenditureByTags: React.FC<ExpenditureByTagsProps> = observer(props => {
+const ExpenditureByTags: React.FC<ExpenditureByTagsProps> = props => {
   const { purchases, dateRange } = props;
+  const tagsById = useAppSelector(getTagsById);
+
   const indexOfTag = new Map<number, number>();
   const result: [Tag | null, Big][] = [];
   let untaggedResult = new Big(0);
@@ -21,16 +28,16 @@ const ExpenditureByTags: React.FC<ExpenditureByTagsProps> = observer(props => {
       continue;
     }
     if (purchase.tags.length === 0) {
-      untaggedResult = untaggedResult.add(purchase.totalPrice);
+      untaggedResult = untaggedResult.add(totalPrice(purchase));
     }
-    for (const tag of purchase.tags) {
-      let i = indexOfTag.get(tag.id);
+    for (const tagId of purchase.tags) {
+      let i = indexOfTag.get(tagId);
       if (i === undefined) {
         i = result.length;
-        indexOfTag.set(tag.id, i);
-        result.push([tag, new Big(0)]);
+        indexOfTag.set(tagId, i);
+        result.push([tagsById[tagId], new Big(0)]);
       }
-      result[i][1] = result[i][1].add(purchase.totalPrice);
+      result[i][1] = result[i][1].add(totalPrice(purchase));
     }
   }
   if (untaggedResult.eq(0)) {
@@ -51,6 +58,6 @@ const ExpenditureByTags: React.FC<ExpenditureByTagsProps> = observer(props => {
       ))}
     </List>
   );
-});
+};
 
 export default ExpenditureByTags;

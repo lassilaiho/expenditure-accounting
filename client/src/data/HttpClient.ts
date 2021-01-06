@@ -1,35 +1,3 @@
-import moment from 'moment';
-
-import * as jsonConv from './jsonConvert';
-
-export type LoadState = 'not-started' | 'loading' | 'finished' | 'failed';
-
-export class SessionToken {
-  public constructor(
-    public readonly token: string,
-    public readonly expiryTime: moment.Moment,
-  ) {}
-
-  public static fromJson(json: any): SessionToken {
-    jsonConv.toObject(json);
-    return new SessionToken(
-      jsonConv.toString(json.token),
-      jsonConv.toMomentUtc(json.expiryTime),
-    );
-  }
-
-  public get isValid() {
-    return this.expiryTime.isAfter(moment.utc());
-  }
-
-  public toJSON(): unknown {
-    return {
-      token: this.token,
-      expiryTime: this.expiryTime.format(),
-    };
-  }
-}
-
 export class ConnectionError extends Error {
   public readonly name = 'ConnectionError';
 
@@ -57,21 +25,21 @@ async function apiFetch(input: RequestInfo, init?: RequestInit | undefined) {
   }
 }
 
-export default class Api {
+export default class HttpClient {
   public baseUrl = '';
 
   public defaultHeaders: Record<string, string> = {
     Authorization: '',
   };
 
-  private _sessionToken: SessionToken | null = null;
+  private _sessionToken: string | null = null;
   public get sessionToken() {
     return this._sessionToken;
   }
-  public set sessionToken(token: SessionToken | null) {
+  public set sessionToken(token: string | null) {
     this._sessionToken = token;
     this.defaultHeaders['Authorization'] =
-      token === null ? '' : 'Basic ' + btoa(token.token);
+      token === null ? '' : 'Basic ' + btoa(token);
   }
 
   public constructor(baseUrl: string) {

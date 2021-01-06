@@ -1,11 +1,19 @@
 import { Button, Fab, IconButton, Snackbar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
-import { observer } from 'mobx-react';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Purchase, useStore } from '../data/store';
+import {
+  getDataState,
+  getFilteredPurchases,
+  getPurchases,
+  Purchase,
+  useApi,
+  useAppDispatch,
+  useAppSelector,
+  useAppStore,
+} from '../data/store';
 import MenuButton from '../common/MenuButton';
 import SearchPage from '../common/SearchPage';
 import Scaffold from '../common/Scaffold';
@@ -16,28 +24,30 @@ export interface PurchasesPageProps {
   openNavigation: () => void;
 }
 
-const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
-  const store = useStore();
+const PurchasesPage: React.FC<PurchasesPageProps> = props => {
+  const api = useApi();
+  const store = useAppStore();
+  const dispatch = useAppDispatch();
+  const purchases = useAppSelector(getPurchases);
+  const dataState = useAppSelector(getDataState);
   const history = useHistory();
 
   const [isSearching, setIsSearching] = useState(false);
-  const [shownPurchases, setShownPurchases] = useState(store.purchases);
+  const [shownPurchases, setShownPurchases] = useState(purchases);
   const [undoablePurchaseId, setUndoablePurchaseId] = useState<number | null>(
     null,
   );
 
   function stopSearching() {
-    setShownPurchases(store.purchases);
+    setShownPurchases(purchases);
     setIsSearching(false);
   }
 
   function searchPurchases(searchString: string) {
     setShownPurchases(
       searchString === ''
-        ? store.purchases
-        : store.purchases.filter(p =>
-            p.lowerCaseMatch(searchString.toLowerCase()),
-          ),
+        ? purchases
+        : getFilteredPurchases(searchString)(store.getState()),
     );
   }
 
@@ -46,21 +56,21 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
   ]);
   const onDelete = useCallback(
     async (p: Purchase) => {
-      await store.deletePurchase(p.id);
+      await dispatch(api.deletePurchase(p.id));
       setUndoablePurchaseId(p.id);
     },
-    [store],
+    [dispatch, api],
   );
 
   function undoDelete() {
     if (undoablePurchaseId !== null) {
-      store.restorePurchase(undoablePurchaseId);
+      api.restorePurchase(undoablePurchaseId);
       setUndoablePurchaseId(null);
     }
   }
 
   function renderList() {
-    return store.dataState === 'loading' ? (
+    return dataState !== 'finished' ? (
       <CenteredLoader />
     ) : (
       <PurchaseList
@@ -111,6 +121,6 @@ const PurchasesPage: React.FC<PurchasesPageProps> = observer(props => {
       />
     </>
   );
-});
+};
 
 export default PurchasesPage;

@@ -1,7 +1,7 @@
 import { Paper, Typography, Button, Box } from '@material-ui/core';
 import React, { useState } from 'react';
 
-import { ConnectionError } from './data/api';
+import { ConnectionError } from './data/HttpClient';
 
 export interface ErrorDisplayProps {
   error: Error;

@@ -5,7 +5,7 @@ import { History } from 'history';
 import { useHistory } from 'react-router-dom';
 
 import { currency, numOfBig } from '../util';
-import { Purchase } from '../data/store';
+import { Purchase, totalPrice } from '../data/store';
 
 export interface GroupedExpenditureViewProps {
   purchases: Purchase[];
@@ -21,14 +21,14 @@ const GroupedExpneditureView: React.FC<GroupedExpenditureViewProps> = props => {
   const history = useHistory();
   const result: JSX.Element[] = [];
   let prev = getLatest(purchases);
-  let expenditure = prev.totalPrice;
+  let expenditure = totalPrice(prev);
   for (let i = 1; i < purchases.length; i++) {
     const current = purchases[i];
     if (props.splitHere(prev, current)) {
-      expenditure = expenditure.add(current.totalPrice);
+      expenditure = expenditure.add(totalPrice(current));
     } else {
       result.push(makeItem(i, format(prev.date), expenditure, history));
-      expenditure = current.totalPrice;
+      expenditure = totalPrice(current);
     }
     prev = current;
   }
