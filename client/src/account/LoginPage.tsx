@@ -15,9 +15,9 @@ import Scaffold from '../common/Scaffold';
 import {
   AuthError,
   getIsLoggedIn,
-  useApi,
   useAppDispatch,
   useAppSelector,
+  apiLogin,
 } from '../data/store';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,7 +43,6 @@ const LoginPage: React.FC<LoginPageProps> = props => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const dispatch = useAppDispatch();
-  const api = useApi(false);
   const isLoggedIn = useAppSelector(getIsLoggedIn);
 
   const classes = useStyles();
@@ -52,7 +51,7 @@ const LoginPage: React.FC<LoginPageProps> = props => {
     e.preventDefault();
     if (!isLoggedIn) {
       try {
-        await dispatch(api.login(email, password));
+        await dispatch(apiLogin(email, password));
       } catch (e) {
         if (e instanceof AuthError) {
           setErrorMessage('Wrong email or password');

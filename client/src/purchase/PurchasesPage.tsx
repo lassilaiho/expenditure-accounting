@@ -9,10 +9,12 @@ import {
   getFilteredPurchases,
   getPurchases,
   Purchase,
-  useApi,
+  useData,
   useAppDispatch,
   useAppSelector,
   useAppStore,
+  apiDeletePurchase,
+  apiRestorePurchase,
 } from '../data/store';
 import MenuButton from '../common/MenuButton';
 import SearchPage from '../common/SearchPage';
@@ -25,7 +27,7 @@ export interface PurchasesPageProps {
 }
 
 const PurchasesPage: React.FC<PurchasesPageProps> = props => {
-  const api = useApi();
+  const api = useData();
   const store = useAppStore();
   const dispatch = useAppDispatch();
   const purchases = useAppSelector(getPurchases);
@@ -56,7 +58,7 @@ const PurchasesPage: React.FC<PurchasesPageProps> = props => {
   ]);
   const onDelete = useCallback(
     async (p: Purchase) => {
-      await dispatch(api.deletePurchase(p.id));
+      await dispatch(apiDeletePurchase(p.id));
       setUndoablePurchaseId(p.id);
     },
     [dispatch, api],
@@ -64,7 +66,7 @@ const PurchasesPage: React.FC<PurchasesPageProps> = props => {
 
   function undoDelete() {
     if (undoablePurchaseId !== null) {
-      api.restorePurchase(undoablePurchaseId);
+      apiRestorePurchase(undoablePurchaseId);
       setUndoablePurchaseId(null);
     }
   }

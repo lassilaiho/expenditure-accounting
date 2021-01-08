@@ -1,7 +1,7 @@
 import MomentUtil from '@date-io/moment';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -14,14 +14,11 @@ import ErrorBoundary from './ErrorBoundary';
 import DailyExpenditurePage from './expenditure/DailyExpenditurePage';
 import { FetchHttpClient } from './data/HttpClient';
 import {
-  Api,
-  ApiContext,
   getIsLoggedIn,
-  getSession,
   getSessionToken,
-  Session,
-  store,
+  newStore,
   useAppSelector,
+  useLocalStorageSession,
 } from './data/store';
 import ExpenditureDetailsPage from './expenditure/ExpenditureDetailsPage';
 import LoginPage from './account/LoginPage';
@@ -30,6 +27,15 @@ import NavigationDrawer from './NavigationDrawer';
 import PurchasePage from './purchase/PurchasePage';
 import PurchasesPage from './purchase/PurchasesPage';
 import SettingsPage from './account/SettingsPage';
+
+const store = newStore(
+  new FetchHttpClient(
+    typeof process.env.REACT_APP_API_URL === 'string'
+      ? process.env.REACT_APP_API_URL
+      : 'http://localhost:8080/api',
+    () => getSessionToken(store.getState()),
+  ),
+);
 
 const AppRoot: React.FC = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
@@ -78,34 +84,13 @@ const AppRoot: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  useEffect(() => {
-    let prevSession: Session | undefined;
-    return store.subscribe(() => {
-      const session = getSession(store.getState());
-      if (session !== prevSession) {
-        localStorage.setItem('session', JSON.stringify(session));
-        prevSession = session;
-      }
-    });
-  }, []);
-  const api = useRef<Api | null>(null);
-  if (api.current === null) {
-    const apiUrl =
-      typeof process.env.REACT_APP_API_URL === 'string'
-        ? process.env.REACT_APP_API_URL
-        : 'http://localhost:8080/api';
-    const getToken = () => getSessionToken(store.getState());
-    const client = new FetchHttpClient(apiUrl, getToken);
-    api.current = Api.fromLocalStorage(client, store);
-  }
+  useLocalStorageSession(store);
   return (
     <Provider store={store}>
-      <ApiContext.Provider value={api.current}>
-        <MuiPickersUtilsProvider utils={MomentUtil}>
-          <CssBaseline />
-          <AppRoot />
-        </MuiPickersUtilsProvider>
-      </ApiContext.Provider>
+      <MuiPickersUtilsProvider utils={MomentUtil}>
+        <CssBaseline />
+        <AppRoot />
+      </MuiPickersUtilsProvider>
     </Provider>
   );
 };

@@ -1,15 +1,20 @@
 import React from 'react';
-import { AppStore, getPurchaseById, newStore, Purchase } from '../data/store';
+import {
+  apiReloadData,
+  AppStore,
+  getPurchaseById,
+  Purchase,
+} from '../data/store';
 
-import { fakeApi, render } from '../testUtil';
+import { newTestStore, render } from '../testUtil';
 import PurchaseItem from './PurchaseItem';
 
 let store: AppStore;
 let quantity1: Purchase, quantityIntNot1: Purchase, quantityDecNot1: Purchase;
 
 beforeAll(async () => {
-  store = newStore();
-  await store.dispatch(fakeApi.reloadData);
+  store = newTestStore();
+  await store.dispatch(apiReloadData);
   quantity1 = getPurchaseById(1)(store.getState());
   quantityIntNot1 = getPurchaseById(2)(store.getState());
   quantityDecNot1 = getPurchaseById(3)(store.getState());

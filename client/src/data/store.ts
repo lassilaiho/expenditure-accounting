@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import Big from 'big.js';
 import { useDispatch, useSelector, useStore } from 'react-redux';
-import React, { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import moment from 'moment';
 import { ensureOk } from '../util';
 
@@ -216,7 +216,11 @@ const sessionSlice = createSlice({
 });
 const { login, logout } = sessionSlice.actions;
 
-export const newStore = () =>
+type Inject = {
+  http: HttpClient;
+};
+
+export const newStore = (http: HttpClient) =>
   configureStore({
     reducer: {
       tags: tagsSlice.reducer,
@@ -226,13 +230,14 @@ export const newStore = () =>
       session: sessionSlice.reducer,
     },
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware({ serializableCheck: false }),
+      getDefaultMiddleware({
+        serializableCheck: false,
+        thunk: { extraArgument: { http } },
+      }),
   });
 
-export const store = newStore();
-
 export type AppStore = ReturnType<typeof newStore>;
-type GetState = typeof store.getState;
+type GetState = AppStore['getState'];
 export type RootState = ReturnType<GetState>;
 export function useAppStore() {
   return useStore<RootState>();
@@ -240,7 +245,7 @@ export function useAppStore() {
 export function useAppSelector<T>(selector: (state: RootState) => T) {
   return useSelector<RootState, T>(selector);
 }
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = AppStore['dispatch'];
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export const getDataState = (state: RootState) => state.dataState;
@@ -351,10 +356,25 @@ function purchaseFromUpdate(
 
 export class AuthError extends Error {}
 
-export class Api {
-  public constructor(private client: HttpClient) {}
+type Thunk<T = void> = (
+  dispatch: AppDispatch,
+  getState: GetState,
+  inj: Inject,
+) => T;
 
-  public static fromLocalStorage(client: HttpClient, store: AppStore) {
+type AsyncThunk<T = void> = Thunk<Promise<T>>;
+
+export function useLocalStorageSession(store: AppStore) {
+  useEffect(() => {
+    let prevSession: Session | undefined;
+    const unsubscribe = store.subscribe(() => {
+      const session = getSession(store.getState());
+      if (session !== prevSession) {
+        localStorage.setItem('session', JSON.stringify(session));
+        prevSession = session;
+      }
+    });
+
     try {
       const json = localStorage.getItem('session') ?? '';
       const session = sessionFromJson(JSON.parse(json));
@@ -366,13 +386,14 @@ export class Api {
     } catch (e) {
       console.error(e);
     }
-    return new Api(client);
-  }
 
-  public login = (email: string, password: string) => async (
-    dispatch: AppDispatch,
-  ) => {
-    const r = await this.client.postJson('/login', { email, password });
+    return unsubscribe;
+  }, []);
+}
+
+export function apiLogin(email: string, password: string): AsyncThunk {
+  return async (dispatch, _, { http }) => {
+    const r = await http.postJson('/login', { email, password });
     if (r.status === 401) {
       throw new AuthError();
     }
@@ -386,46 +407,45 @@ export class Api {
       }),
     );
   };
+}
 
-  public logout = async (dispatch: AppDispatch) => {
-    const r = await this.client.postJson('/logout', {});
-    ensureOk(r);
-    dispatch(logout);
-  };
+export const apiLogout: AsyncThunk = async (dispatch, _, { http }) => {
+  const r = await http.postJson('/logout', {});
+  ensureOk(r);
+  dispatch(logout);
+};
 
-  public changePassword = (oldPassword: string, newPassword: string) => async (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    dispatch: AppDispatch,
-  ) => {
+export function apiChangePassword(
+  oldPassword: string,
+  newPassword: string,
+): AsyncThunk {
+  return async (dispatch, _, { http }) => {
     ensureOk(
-      await this.client.postJson('/account/password', {
+      await http.postJson('/account/password', {
         oldPassword,
         newPassword,
       }),
     );
   };
+}
 
-  public reloadData = async (dispatch: AppDispatch) => {
-    dispatch(setDataState('loading'));
-    dispatch(clearRemoteData);
-    try {
-      const resp = await this.client.get('/purchases');
-      ensureOk(resp);
-      const json = await resp.json();
-      dispatch(
-        setRemoteData(jsonConv.toArray(purchaseFromJson, json.purchases)),
-      );
-      dispatch(setDataState('finished'));
-    } catch (e) {
-      dispatch(setDataState('failed'));
-      throw e;
-    }
-  };
+export const apiReloadData: AsyncThunk = async (dispatch, _, { http }) => {
+  dispatch(setDataState('loading'));
+  dispatch(clearRemoteData);
+  try {
+    const resp = await http.get('/purchases');
+    ensureOk(resp);
+    const json = await resp.json();
+    dispatch(setRemoteData(jsonConv.toArray(purchaseFromJson, json.purchases)));
+    dispatch(setDataState('finished'));
+  } catch (e) {
+    dispatch(setDataState('failed'));
+    throw e;
+  }
+};
 
-  private addTags = (names: string[]) => async (
-    dispatch: AppDispatch,
-    getState: GetState,
-  ) => {
+function apiAddTags(names: string[]): AsyncThunk<Tag[]> {
+  return async (dispatch, getState, { http }) => {
     const existing: Tag[] = [];
     const newTags: string[] = [];
     const tagsByName = new Map<string, Tag>();
@@ -441,7 +461,7 @@ export class Api {
       }
     }
     if (newTags.length > 0) {
-      const resp = await this.client.postJson('/tags', { tags: newTags });
+      const resp = await http.postJson('/tags', { tags: newTags });
       ensureOk(resp);
       const json = await resp.json();
       const tags = jsonConv.toArray(tagFromJson, json.tags);
@@ -450,35 +470,37 @@ export class Api {
     }
     return existing;
   };
+}
 
-  private addProduct = (name: string) => async (
-    dispatch: AppDispatch,
-    getState: GetState,
-  ) => {
+function apiAddProduct(name: string): AsyncThunk<Product> {
+  return async (dispatch, getState, { http }) => {
     for (const product of Object.values(getState().products.byId)) {
       if (product.name === name) {
         return product;
       }
     }
-    const resp = await this.client.postJson('/products', { name });
+    const resp = await http.postJson('/products', { name });
     ensureOk(resp);
     const product = productFromJson(await resp.json());
     dispatch(addProduct(product));
     return product;
   };
+}
 
-  public addPurchase = (update: PurchaseUpdate) => async (
-    dispatch: AppDispatch,
-    getState: GetState,
-  ) => {
-    const tags = await this.addTags(update.tags)(dispatch, getState);
-    const product = await this.addProduct(update.product)(dispatch, getState);
-    const resp = await this.client.postJson('/purchases', {
+export function apiAddPurchase(update: PurchaseUpdate): AsyncThunk {
+  return async (dispatch, getState, inj) => {
+    const tags = await apiAddTags(update.tags)(dispatch, getState, inj);
+    const product = await apiAddProduct(update.product)(
+      dispatch,
+      getState,
+      inj,
+    );
+    const resp = await inj.http.postJson('/purchases', {
       product: product.id,
       date: update.date.format(),
       price: update.price,
       quantity: update.quantity,
-      tags: tags.map(t=>t.id),
+      tags: tags.map(t => t.id),
     });
     ensureOk(resp);
     const respJson = jsonConv.toObject(await resp.json());
@@ -486,15 +508,18 @@ export class Api {
     const purchase = purchaseFromUpdate({ ...update, id }, product, tags);
     dispatch(addPurchase(purchase));
   };
+}
 
-  public updatePurchase = (update: PurchaseUpdate) => async (
-    dispatch: AppDispatch,
-    getState: GetState,
-  ) => {
-    const tags = await this.addTags(update.tags)(dispatch, getState);
-    const product = await this.addProduct(update.product)(dispatch, getState);
+export function apiUpdatePurchase(update: PurchaseUpdate): AsyncThunk {
+  return async (dispatch, getState, inj) => {
+    const tags = await apiAddTags(update.tags)(dispatch, getState, inj);
+    const product = await apiAddProduct(update.product)(
+      dispatch,
+      getState,
+      inj,
+    );
     ensureOk(
-      await this.client.patchJson(`/purchases/${update.id}`, {
+      await inj.http.patchJson(`/purchases/${update.id}`, {
         product: product.id,
         date: update.date.format(),
         price: update.price,
@@ -505,21 +530,22 @@ export class Api {
     const purchase = purchaseFromUpdate(update, product, tags);
     dispatch(updatePurchase(purchase));
   };
+}
 
-  public deletePurchase = (id: number) => async (
-    dispatch: AppDispatch,
-    getState: GetState,
-  ) => {
+export function apiDeletePurchase(id: number): AsyncThunk {
+  return async (dispatch, getState, { http }) => {
     const p = getState().purchases.byId[id];
     if (!p) {
       throw new Error(`Purchase with id ${id} does not exist`);
     }
-    ensureOk(await this.client.delete(`/purchases/${id}`));
+    ensureOk(await http.delete(`/purchases/${id}`));
     dispatch(deletePurchase(id));
   };
+}
 
-  public restorePurchase = (id: number) => async (dispatch: AppDispatch) => {
-    const resp = await this.client.postJson(`/purchases/${id}/restore`, {});
+export function apiRestorePurchase(id: number): AsyncThunk {
+  return async (dispatch, _, { http }) => {
+    const resp = await http.postJson(`/purchases/${id}/restore`, {});
     await ensureOk(resp);
     const [purchase, product, tags] = purchaseFromJson(
       (await resp.json()).purchase,
@@ -530,19 +556,12 @@ export class Api {
   };
 }
 
-export const ApiContext = React.createContext<Api | null>(null);
-
-export function useApi(loadData = true) {
+export function useData() {
   const dataState = useAppSelector(getDataState);
   const dispatch = useAppDispatch();
-  const api = useContext(ApiContext);
   useEffect(() => {
-    if (api && dataState === 'not-started' && loadData) {
-      dispatch(api.reloadData);
+    if (dataState === 'not-started') {
+      dispatch(apiReloadData);
     }
   });
-  if (api === null) {
-    throw new Error('Api must not be null');
-  }
-  return api;
 }

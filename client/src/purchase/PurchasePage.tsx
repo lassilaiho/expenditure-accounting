@@ -8,9 +8,11 @@ import BackButton from '../common/BackButton';
 import Scaffold from '../common/Scaffold';
 import {
   getPurchaseById,
-  useApi,
+  useData,
   useAppDispatch,
   useAppSelector,
+  apiAddPurchase,
+  apiUpdatePurchase,
 } from '../data/store';
 import CenteredLoader from '../common/CenteredLoader';
 import PurchaseEditor from './PurchaseEditor';
@@ -20,7 +22,7 @@ interface PurchasePageParams {
 }
 
 const PurchasePage: React.FC = () => {
-  const api = useApi();
+  useData();
   const dispatch = useAppDispatch();
   const { id: idParam } = useParams<PurchasePageParams>();
   const id = parseInt(idParam ?? '');
@@ -38,7 +40,7 @@ const PurchasePage: React.FC = () => {
     return (
       <PurchaseEditor
         purchase={purchase}
-        onSave={update => dispatch(api.addPurchase(update))}
+        onSave={update => dispatch(apiAddPurchase(update))}
       />
     );
   }
@@ -49,7 +51,7 @@ const PurchasePage: React.FC = () => {
     return (
       <PurchaseEditor
         purchase={purchase}
-        onSave={update => dispatch(api.updatePurchase(update))}
+        onSave={update => dispatch(apiUpdatePurchase(update))}
       />
     );
   }

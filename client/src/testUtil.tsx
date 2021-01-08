@@ -6,37 +6,28 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 
 import { fakeClient } from './data/FakeClient';
-import { Api, ApiContext, AppStore } from './data/store';
+import { AppStore, newStore } from './data/store';
 
-export const fakeApi = new Api(fakeClient);
+export const newTestStore = () => newStore(fakeClient);
 
-const TestProviders = (store: AppStore, api: Api, history?: string[]) => (
-  props: any,
-) => {
+const TestProviders = (store: AppStore, history?: string[]) => (props: any) => {
   return (
     <Provider store={store}>
-      <ApiContext.Provider value={api}>
-        <MuiPickersUtilsProvider utils={MomentUtil}>
-          <MemoryRouter initialEntries={history}>{props.children}</MemoryRouter>
-        </MuiPickersUtilsProvider>
-      </ApiContext.Provider>
+      <MuiPickersUtilsProvider utils={MomentUtil}>
+        <MemoryRouter initialEntries={history}>{props.children}</MemoryRouter>
+      </MuiPickersUtilsProvider>
     </Provider>
   );
 };
 
 export interface CustomRenderOptions {
   store: AppStore;
-  api?: Api;
   history?: string[];
 }
 
 const customRender = (ui: any, options: CustomRenderOptions) => {
   return render(ui, {
-    wrapper: TestProviders(
-      options.store,
-      options?.api ?? fakeApi,
-      options?.history,
-    ),
+    wrapper: TestProviders(options.store, options?.history),
   });
 };
 

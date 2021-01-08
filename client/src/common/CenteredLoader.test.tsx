@@ -1,9 +1,9 @@
 import React from 'react';
-import { newStore } from '../data/store';
-import { render } from '../testUtil';
+
+import { newTestStore, render } from '../testUtil';
 import CenteredLoader from './CenteredLoader';
 
 test('renders correctly', () => {
-  const { asFragment } = render(<CenteredLoader />, { store: newStore() });
+  const { asFragment } = render(<CenteredLoader />, { store: newTestStore() });
   expect(asFragment()).toMatchSnapshot();
 });

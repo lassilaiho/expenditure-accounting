@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { newStore } from '../data/store';
-import { fakeApi, render } from '../testUtil';
+import { apiReloadData } from '../data/store';
+import { newTestStore, render } from '../testUtil';
 import DailyExpenditurePage from './DailyExpenditurePage';
 
-const store = newStore();
+const store = newTestStore();
 
 test('renders correctly without data', () => {
   const { asFragment } = render(
@@ -15,7 +15,7 @@ test('renders correctly without data', () => {
 });
 
 test('renders correctly with data', async () => {
-  await store.dispatch(fakeApi.reloadData);
+  await store.dispatch(apiReloadData);
   const { asFragment } = render(
     <DailyExpenditurePage openNavigation={() => undefined} />,
     { store },

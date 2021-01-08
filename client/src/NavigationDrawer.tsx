@@ -9,9 +9,9 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import {
+  apiLogout,
   getCurrentEmail,
   getIsLoggedIn,
-  useApi,
   useAppDispatch,
   useAppSelector,
 } from './data/store';
@@ -28,7 +28,6 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = props => {
     currentEmail: getCurrentEmail(state),
   }));
   const dispatch = useAppDispatch();
-  const api = useApi(false);
 
   function linkOpener(url: string) {
     return () => {
@@ -49,7 +48,7 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = props => {
             <ListItem button onClick={linkOpener('/settings')}>
               <ListItemText>{currentEmail}</ListItemText>
             </ListItem>
-            <ListItem button onClick={() => dispatch(api.logout)}>
+            <ListItem button onClick={() => dispatch(apiLogout)}>
               <ListItemText>Logout</ListItemText>
             </ListItem>
             <Divider />

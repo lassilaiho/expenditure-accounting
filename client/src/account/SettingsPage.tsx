@@ -11,9 +11,9 @@ import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
 import {
   getCurrentEmail,
-  useApi,
   useAppDispatch,
   useAppSelector,
+  apiChangePassword,
 } from '../data/store';
 import PasswordChangeDialog from './PasswordChangeDialog';
 
@@ -23,13 +23,12 @@ export interface SettingsProps {
 
 const SettingsPage: React.FC<SettingsProps> = props => {
   const currentEmail = useAppSelector(getCurrentEmail);
-  const api = useApi(false);
   const dispatch = useAppDispatch();
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
   async function changePassword(oldPassword: string, newPassword: string) {
-    await dispatch(api.changePassword(oldPassword, newPassword));
+    await dispatch(apiChangePassword(oldPassword, newPassword));
     setDialogOpen(false);
   }
 

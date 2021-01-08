@@ -1,12 +1,12 @@
 import moment from 'moment';
 import React from 'react';
 
-import { getPurchases, newStore } from '../data/store';
-import { fakeApi, render } from '../testUtil';
+import { getPurchases, apiReloadData } from '../data/store';
+import { newTestStore, render } from '../testUtil';
 import { DateRange } from '../util';
 import ExpenditureByTags from './ExpenditureByTags';
 
-const store = newStore();
+const store = newTestStore();
 
 test('renders correctly without data', () => {
   const { asFragment } = render(
@@ -22,7 +22,7 @@ test('renders correctly without data', () => {
 });
 
 test('renders correctly with all data', async () => {
-  await store.dispatch(fakeApi.reloadData);
+  await store.dispatch(apiReloadData);
   const { asFragment } = render(
     <ExpenditureByTags
       purchases={getPurchases(store.getState())}

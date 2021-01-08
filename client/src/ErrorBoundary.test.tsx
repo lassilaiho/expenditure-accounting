@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { ConnectionError } from './data/HttpClient';
-import { newStore } from './data/store';
 import ErrorBoundary from './ErrorBoundary';
-import { render } from './testUtil';
+import { newTestStore, render } from './testUtil';
 
 const RenderErrorComponent: React.FC = () => {
   throw new Error('render error');
@@ -18,7 +17,7 @@ test('renders correctly when no error occurs', () => {
     <ErrorBoundary>
       <div>test</div>
     </ErrorBoundary>,
-    { store: newStore() },
+    { store: newTestStore() },
   );
   expect(asFragment()).toMatchSnapshot();
 });
@@ -31,7 +30,7 @@ test('handles an error during rendering correctly', () => {
     <ErrorBoundary>
       <RenderErrorComponent />
     </ErrorBoundary>,
-    { store: newStore() },
+    { store: newTestStore() },
   );
   expect(asFragment()).toMatchSnapshot();
 
@@ -46,7 +45,7 @@ test('handles a connection error correctly', () => {
     <ErrorBoundary>
       <ConnectionErrorComponent />
     </ErrorBoundary>,
-    { store: newStore() },
+    { store: newTestStore() },
   );
   expect(asFragment()).toMatchSnapshot();
 
