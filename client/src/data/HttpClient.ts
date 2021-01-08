@@ -25,31 +25,28 @@ async function apiFetch(input: RequestInfo, init?: RequestInit | undefined) {
   }
 }
 
-export default class HttpClient {
-  public baseUrl = '';
+export interface HttpClient {
+  get(url: string): Promise<Response>;
+  postJson(url: string, body: any): Promise<Response>;
+  patchJson(url: string, body: any): Promise<Response>;
+  delete(url: string): Promise<Response>;
+}
 
-  public defaultHeaders: Record<string, string> = {
-    Authorization: '',
-  };
+export class FetchHttpClient implements HttpClient {
+  public constructor(
+    private baseUrl: string,
+    private getToken: () => string | null,
+  ) {}
 
-  private _sessionToken: string | null = null;
-  public get sessionToken() {
-    return this._sessionToken;
-  }
-  public set sessionToken(token: string | null) {
-    this._sessionToken = token;
-    this.defaultHeaders['Authorization'] =
-      token === null ? '' : 'Basic ' + btoa(token);
-  }
-
-  public constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
+  private get defaultHeaders() {
+    const token = this.getToken();
+    return { Authorization: token === null ? '' : 'Basic ' + btoa(token) };
   }
 
   public async get(url: string) {
     return apiFetch(this.baseUrl + url, {
       mode: 'cors',
-      headers: { ...this.defaultHeaders },
+      headers: this.defaultHeaders,
     });
   }
 
@@ -81,7 +78,7 @@ export default class HttpClient {
     return apiFetch(this.baseUrl + url, {
       mode: 'cors',
       method: 'DELETE',
-      headers: { ...this.defaultHeaders },
+      headers: this.defaultHeaders,
     });
   }
 }

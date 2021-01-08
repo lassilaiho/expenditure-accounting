@@ -8,7 +8,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { fakeClient } from './data/FakeClient';
 import { Api, ApiContext, AppStore } from './data/store';
 
-export const newFakeApi = (store: AppStore) => new Api(fakeClient, store);
+export const fakeApi = new Api(fakeClient);
 
 const TestProviders = (store: AppStore, api: Api, history?: string[]) => (
   props: any,
@@ -34,7 +34,7 @@ const customRender = (ui: any, options: CustomRenderOptions) => {
   return render(ui, {
     wrapper: TestProviders(
       options.store,
-      options?.api ?? newFakeApi(options.store),
+      options?.api ?? fakeApi,
       options?.history,
     ),
   });

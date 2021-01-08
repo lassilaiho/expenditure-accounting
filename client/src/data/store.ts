@@ -10,7 +10,7 @@ import React, { useContext, useEffect } from 'react';
 import moment from 'moment';
 import { ensureOk } from '../util';
 
-import HttpClient from './HttpClient';
+import { HttpClient } from './HttpClient';
 import * as jsonConv from './jsonConvert';
 
 type Collection<T> = {
@@ -210,6 +210,7 @@ const sessionSlice = createSlice({
       ...action.payload,
       state: 'logged-in',
     }),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     logout: state => ({ state: 'logged-out' }),
   },
 });
@@ -258,11 +259,16 @@ export const getPurchases = (state: RootState) =>
 export const getProducts = (state: RootState) =>
   state.products.all.map(id => state.products.byId[id]);
 
+export const getSession = (state: RootState) => state.session;
+
 export const getIsLoggedIn = (state: RootState) =>
   state.session.state === 'logged-in';
 
 export const getCurrentEmail = (state: RootState) =>
   state.session.state === 'logged-in' ? state.session.email : '';
+
+export const getSessionToken = (state: RootState) =>
+  state.session.state === 'logged-in' ? state.session.token : null;
 
 export const getTags = (state: RootState) =>
   state.tags.all.map(id => state.tags.byId[id]);
@@ -346,17 +352,7 @@ function purchaseFromUpdate(
 export class AuthError extends Error {}
 
 export class Api {
-  public constructor(private client: HttpClient, private store: AppStore) {
-    this.onSessionUpdate();
-    store.subscribe(this.onSessionUpdate);
-  }
-
-  private onSessionUpdate = () => {
-    const session = this.store.getState().session;
-    localStorage.setItem('session', JSON.stringify(session));
-    this.client.sessionToken =
-      session.state === 'logged-in' ? session.token : null;
-  };
+  public constructor(private client: HttpClient) {}
 
   public static fromLocalStorage(client: HttpClient, store: AppStore) {
     try {
@@ -370,7 +366,7 @@ export class Api {
     } catch (e) {
       console.error(e);
     }
-    return new Api(client, store);
+    return new Api(client);
   }
 
   public login = (email: string, password: string) => async (
@@ -398,6 +394,7 @@ export class Api {
   };
 
   public changePassword = (oldPassword: string, newPassword: string) => async (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dispatch: AppDispatch,
   ) => {
     ensureOk(

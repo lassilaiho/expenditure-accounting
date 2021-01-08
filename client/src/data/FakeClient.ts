@@ -1,4 +1,4 @@
-import HttpClient from './HttpClient';
+import { HttpClient } from './HttpClient';
 
 export type FakeResponse = (
   method: string,
@@ -6,10 +6,8 @@ export type FakeResponse = (
   body?: any,
 ) => Promise<Response>;
 
-export class FakeClient extends HttpClient {
-  public constructor(private fakeResponse: FakeResponse) {
-    super('');
-  }
+export class FakeClient implements HttpClient {
+  public constructor(private fakeResponse: FakeResponse) {}
 
   public async get(url: string) {
     return this.fakeResponse('get', url);

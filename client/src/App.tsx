@@ -1,7 +1,7 @@
 import MomentUtil from '@date-io/moment';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -12,11 +12,14 @@ import {
 
 import ErrorBoundary from './ErrorBoundary';
 import DailyExpenditurePage from './expenditure/DailyExpenditurePage';
-import HttpClient from './data/HttpClient';
+import { FetchHttpClient } from './data/HttpClient';
 import {
   Api,
   ApiContext,
   getIsLoggedIn,
+  getSession,
+  getSessionToken,
+  Session,
   store,
   useAppSelector,
 } from './data/store';
@@ -75,13 +78,24 @@ const AppRoot: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  useEffect(() => {
+    let prevSession: Session | undefined;
+    return store.subscribe(() => {
+      const session = getSession(store.getState());
+      if (session !== prevSession) {
+        localStorage.setItem('session', JSON.stringify(session));
+        prevSession = session;
+      }
+    });
+  }, []);
   const api = useRef<Api | null>(null);
   if (api.current === null) {
     const apiUrl =
       typeof process.env.REACT_APP_API_URL === 'string'
         ? process.env.REACT_APP_API_URL
         : 'http://localhost:8080/api';
-    const client = new HttpClient(apiUrl);
+    const getToken = () => getSessionToken(store.getState());
+    const client = new FetchHttpClient(apiUrl, getToken);
     api.current = Api.fromLocalStorage(client, store);
   }
   return (
