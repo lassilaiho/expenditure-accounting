@@ -6,20 +6,22 @@ import { useHistory } from 'react-router-dom';
 
 import {
   getDataState,
-  getFilteredPurchases,
-  getPurchases,
-  Purchase,
-  useData,
   useAppDispatch,
   useAppSelector,
   useAppStore,
-  apiDeletePurchase,
-  apiRestorePurchase,
+  useData,
 } from '../data/store';
 import MenuButton from '../common/MenuButton';
 import SearchPage from '../common/SearchPage';
 import Scaffold from '../common/Scaffold';
 import CenteredLoader from '../common/CenteredLoader';
+import {
+  getPurchases,
+  getFilteredPurchases,
+  Purchase,
+  apiDeletePurchase,
+  apiRestorePurchase,
+} from '../data/purchases';
 import PurchaseList from './PurchaseList';
 
 export interface PurchasesPageProps {
@@ -27,7 +29,7 @@ export interface PurchasesPageProps {
 }
 
 const PurchasesPage: React.FC<PurchasesPageProps> = props => {
-  const api = useData();
+  useData();
   const store = useAppStore();
   const dispatch = useAppDispatch();
   const purchases = useAppSelector(getPurchases);
@@ -61,7 +63,7 @@ const PurchasesPage: React.FC<PurchasesPageProps> = props => {
       await dispatch(apiDeletePurchase(p.id));
       setUndoablePurchaseId(p.id);
     },
-    [dispatch, api],
+    [dispatch],
   );
 
   function undoDelete() {

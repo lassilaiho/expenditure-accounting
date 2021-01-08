@@ -5,7 +5,7 @@ import { History } from 'history';
 import { useHistory } from 'react-router-dom';
 
 import { currency, numOfBig } from '../util';
-import { Purchase, totalPrice } from '../data/store';
+import { Purchase, totalPrice } from '../data/purchases';
 
 export interface GroupedExpenditureViewProps {
   purchases: Purchase[];

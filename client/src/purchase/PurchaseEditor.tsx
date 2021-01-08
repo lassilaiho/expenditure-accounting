@@ -18,17 +18,14 @@ import { useHistory } from 'react-router-dom';
 
 import Scaffold from '../common/Scaffold';
 import BackButton from '../common/BackButton';
+import { useAppSelector, useAppStore } from '../data/store';
+import { getProductById, getProducts } from '../data/products';
 import {
-  getLatestPurchaseByProduct,
-  getProductById,
-  getProducts,
-  getTagsSortedByName,
-  getTags,
   Purchase,
   PurchaseUpdate,
-  useAppSelector,
-  useAppStore,
-} from '../data/store';
+  getLatestPurchaseByProduct,
+} from '../data/purchases';
+import { getTagsSortedByName, getTags } from '../data/tags';
 
 export interface PurchaseEditorProps {
   title?: string;

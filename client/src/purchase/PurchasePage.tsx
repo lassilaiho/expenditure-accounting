@@ -6,15 +6,13 @@ import { Redirect, useParams } from 'react-router-dom';
 
 import BackButton from '../common/BackButton';
 import Scaffold from '../common/Scaffold';
+import { useData, useAppDispatch, useAppSelector } from '../data/store';
+import CenteredLoader from '../common/CenteredLoader';
 import {
   getPurchaseById,
-  useData,
-  useAppDispatch,
-  useAppSelector,
   apiAddPurchase,
   apiUpdatePurchase,
-} from '../data/store';
-import CenteredLoader from '../common/CenteredLoader';
+} from '../data/purchases';
 import PurchaseEditor from './PurchaseEditor';
 
 interface PurchasePageParams {

@@ -8,13 +8,8 @@ import {
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import {
-  apiLogout,
-  getCurrentEmail,
-  getIsLoggedIn,
-  useAppDispatch,
-  useAppSelector,
-} from './data/store';
+import { getIsLoggedIn, getCurrentEmail, apiLogout } from './data/session';
+import { useAppDispatch, useAppSelector } from './data/store';
 
 export interface NavigationDrawerProps {
   open: boolean;

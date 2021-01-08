@@ -2,8 +2,9 @@ import { Store } from '@reduxjs/toolkit';
 import moment from 'moment';
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { apiReloadData, RootState } from '../data/store';
 
+import { apiReloadData } from '../data/purchases';
+import { RootState } from '../data/store';
 import { newTestStore, render as testUtilRender } from '../testUtil';
 import PurchasePage from './PurchasePage';
 

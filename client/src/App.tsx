@@ -13,13 +13,7 @@ import {
 import ErrorBoundary from './ErrorBoundary';
 import DailyExpenditurePage from './expenditure/DailyExpenditurePage';
 import { FetchHttpClient } from './data/HttpClient';
-import {
-  getIsLoggedIn,
-  getSessionToken,
-  newStore,
-  useAppSelector,
-  useLocalStorageSession,
-} from './data/store';
+import { newStore, useAppSelector } from './data/store';
 import ExpenditureDetailsPage from './expenditure/ExpenditureDetailsPage';
 import LoginPage from './account/LoginPage';
 import MonthlyExpenditurePage from './expenditure/MonthlyExpenditurePage';
@@ -27,6 +21,11 @@ import NavigationDrawer from './NavigationDrawer';
 import PurchasePage from './purchase/PurchasePage';
 import PurchasesPage from './purchase/PurchasesPage';
 import SettingsPage from './account/SettingsPage';
+import {
+  getSessionToken,
+  getIsLoggedIn,
+  useLocalStorageSession,
+} from './data/session';
 
 const store = newStore(
   new FetchHttpClient(

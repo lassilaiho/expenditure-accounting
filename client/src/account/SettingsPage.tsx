@@ -9,12 +9,8 @@ import React, { useState } from 'react';
 
 import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
-import {
-  getCurrentEmail,
-  useAppDispatch,
-  useAppSelector,
-  apiChangePassword,
-} from '../data/store';
+import { getCurrentEmail, apiChangePassword } from '../data/session';
+import { useAppDispatch, useAppSelector } from '../data/store';
 import PasswordChangeDialog from './PasswordChangeDialog';
 
 export interface SettingsProps {

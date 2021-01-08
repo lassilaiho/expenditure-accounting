@@ -1,14 +1,10 @@
 import { Box, List, ListItem, ListItemText } from '@material-ui/core';
 import Big from 'big.js';
 import React from 'react';
+import { Purchase, totalPrice } from '../data/purchases';
 
-import {
-  getTagsById,
-  Purchase,
-  Tag,
-  totalPrice,
-  useAppSelector,
-} from '../data/store';
+import { useAppSelector } from '../data/store';
+import { getTagsById, Tag } from '../data/tags';
 import { currency, DateRange, numOfBig } from '../util';
 
 export interface ExpenditureByTagsProps {

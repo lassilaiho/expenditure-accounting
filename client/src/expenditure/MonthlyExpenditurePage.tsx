@@ -3,15 +3,11 @@ import GroupedExpneditureView from 'expenditure/GroupedExpenditureView';
 import moment from 'moment';
 import React from 'react';
 
-import {
-  getDataState,
-  getPurchases,
-  Purchase,
-  useAppSelector,
-} from '../data/store';
+import { getDataState, useAppSelector } from '../data/store';
 import CenteredLoader from '../common/CenteredLoader';
 import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
+import { getPurchases, Purchase } from '../data/purchases';
 
 export interface MonthlyExpenditurePageProps {
   openNavigation: () => void;

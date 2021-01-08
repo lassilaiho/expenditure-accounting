@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { apiReloadData } from '../data/store';
+import { apiReloadData } from '../data/purchases';
 import { newTestStore, render } from '../testUtil';
 import MonthlyExpenditurePage from './MonthlyExpenditurePage';
 

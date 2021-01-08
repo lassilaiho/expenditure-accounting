@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 
-import { getPurchases, apiReloadData } from '../data/store';
+import { getPurchases, apiReloadData } from '../data/purchases';
 import { newTestStore, render } from '../testUtil';
 import { DateRange } from '../util';
 import ExpenditureByTags from './ExpenditureByTags';

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { AutoSizer } from 'react-virtualized';
 import { Virtuoso } from 'react-virtuoso';
 
-import { Purchase } from '../data/store';
+import { Purchase } from '../data/purchases';
 import PurchaseItem from './PurchaseItem';
 
 const useStyles = makeStyles((theme: Theme) =>

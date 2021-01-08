@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  apiReloadData,
-  AppStore,
-  getPurchaseById,
-  Purchase,
-} from '../data/store';
 
+import { Purchase, apiReloadData, getPurchaseById } from '../data/purchases';
+import { AppStore } from '../data/store';
 import { newTestStore, render } from '../testUtil';
 import PurchaseItem from './PurchaseItem';
 

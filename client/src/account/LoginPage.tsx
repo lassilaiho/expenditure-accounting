@@ -12,13 +12,8 @@ import React, { useState } from 'react';
 
 import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
-import {
-  AuthError,
-  getIsLoggedIn,
-  useAppDispatch,
-  useAppSelector,
-  apiLogin,
-} from '../data/store';
+import { getIsLoggedIn, apiLogin } from '../data/session';
+import { AuthError, useAppDispatch, useAppSelector } from '../data/store';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

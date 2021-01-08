@@ -11,14 +11,11 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
+import { getProductById } from '../data/products';
+import { Purchase, totalPrice } from '../data/purchases';
 
-import {
-  getProductById,
-  getTagsSortedByName,
-  Purchase,
-  totalPrice,
-  useAppSelector,
-} from '../data/store';
+import { useAppSelector } from '../data/store';
+import { getTagsSortedByName } from '../data/tags';
 import { currency, numOfBig, threeDecimals } from '../util';
 
 export interface PurchaseListItemProps {

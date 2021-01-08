@@ -2,15 +2,11 @@ import { Paper } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
 
-import {
-  getDataState,
-  getPurchases,
-  Purchase,
-  useAppSelector,
-} from '../data/store';
+import { getDataState, useAppSelector } from '../data/store';
 import MenuButton from '../common/MenuButton';
 import CenteredLoader from '../common/CenteredLoader';
 import Scaffold from '../common/Scaffold';
+import { getPurchases, Purchase } from '../data/purchases';
 import GroupedExpenditureView from './GroupedExpenditureView';
 
 export interface DailyExpenditurePageProps {

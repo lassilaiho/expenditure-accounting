@@ -1,6 +1,6 @@
 import { newTestStore } from '../testUtil';
 import { fakeData } from './FakeClient';
-import { apiReloadData } from './store';
+import { apiReloadData } from './purchases';
 
 const store = newTestStore();
 
