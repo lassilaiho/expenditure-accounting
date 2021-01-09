@@ -1,7 +1,7 @@
 import MomentUtil from '@date-io/moment';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -37,41 +37,34 @@ const store = newStore(
 );
 
 const AppRoot: React.FC = () => {
-  const [navigationOpen, setNavigationOpen] = useState(false);
   const loggedIn = useAppSelector(getIsLoggedIn);
-
-  const openNavigation = useCallback(() => setNavigationOpen(true), []);
-
   return (
     <Router>
       <ErrorBoundary>
-        <NavigationDrawer
-          open={navigationOpen}
-          onClose={() => setNavigationOpen(false)}
-        />
+        <NavigationDrawer />
         <Switch>
           {loggedIn ? null : (
             <Route path='/'>
-              <LoginPage openNavigation={openNavigation} />
+              <LoginPage />
             </Route>
           )}
           <Route path='/purchases/:id'>
             <PurchasePage />
           </Route>
           <Route path='/purchases'>
-            <PurchasesPage openNavigation={openNavigation} />
+            <PurchasesPage />
           </Route>
           <Route path='/expenditure/daily'>
-            <DailyExpenditurePage openNavigation={openNavigation} />
+            <DailyExpenditurePage />
           </Route>
           <Route path='/expenditure/monthly'>
-            <MonthlyExpenditurePage openNavigation={openNavigation} />
+            <MonthlyExpenditurePage />
           </Route>
           <Route path='/expenditure/'>
             <ExpenditureDetailsPage />
           </Route>
           <Route path='/settings'>
-            <SettingsPage openNavigation={openNavigation} />
+            <SettingsPage />
           </Route>
           <Route path='/'>
             <Redirect to='/purchases' />

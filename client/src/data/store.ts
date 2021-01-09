@@ -8,6 +8,7 @@ import { purchasesSlice, apiReloadData } from './purchases';
 import { sessionSlice } from './session';
 import { tagsSlice } from './tags';
 import { id } from './common';
+import { uiSlice } from './ui';
 
 export type Inject = {
   http: HttpClient;
@@ -21,6 +22,7 @@ export const newStore = (http: HttpClient) =>
       purchases: purchasesSlice.reducer,
       dataState: dataStateSlice.reducer,
       session: sessionSlice.reducer,
+      ui: uiSlice.reducer,
     },
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware({

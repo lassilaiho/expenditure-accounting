@@ -7,7 +7,11 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useCallback } from 'react';
+
+import { useAppDispatch } from '../data/store';
+import { openNavigation } from '../data/ui';
+import MenuButton from './MenuButton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,12 +38,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface ScaffoldProps {
   appBar?: JSX.Element;
-  nav?: JSX.Element;
+  nav?: JSX.Element | null;
   title?: string;
   actions?: JSX.Element;
   content?: JSX.Element;
   fab?: JSX.Element;
 }
+
+const ScaffoldNavButton: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const onClick = useCallback(() => dispatch(openNavigation()), []);
+  return <MenuButton onClick={onClick} />;
+};
 
 const Scaffold: React.FC<ScaffoldProps> = props => {
   const classes = useStyles();
@@ -50,7 +60,11 @@ const Scaffold: React.FC<ScaffoldProps> = props => {
       ) : (
         <AppBar position='static'>
           <Toolbar>
-            {props.nav}
+            {props.nav === undefined ? (
+              <ScaffoldNavButton />
+            ) : props.nav === null ? null : (
+              props.nav
+            )}
             <Typography variant='h6' className={classes.title}>
               {props.title}
             </Typography>

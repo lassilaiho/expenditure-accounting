@@ -10,29 +10,24 @@ import { useHistory } from 'react-router-dom';
 
 import { getIsLoggedIn, getCurrentEmail, apiLogout } from './data/session';
 import { useAppDispatch, useAppSelector } from './data/store';
+import { closeNavigation, getNavigationOpen } from './data/ui';
 
-export interface NavigationDrawerProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-const NavigationDrawer: React.FC<NavigationDrawerProps> = props => {
+const NavigationDrawer: React.FC = () => {
   const history = useHistory();
-  const { loggedIn, currentEmail } = useAppSelector(state => ({
-    loggedIn: getIsLoggedIn(state),
-    currentEmail: getCurrentEmail(state),
-  }));
+  const loggedIn = useAppSelector(getIsLoggedIn);
+  const currentEmail = useAppSelector(getCurrentEmail);
+  const navigationOpen = useAppSelector(getNavigationOpen);
   const dispatch = useAppDispatch();
 
   function linkOpener(url: string) {
     return () => {
-      props.onClose();
+      dispatch(closeNavigation());
       history.push(url);
     };
   }
 
   return (
-    <Drawer open={props.open} onClose={props.onClose}>
+    <Drawer open={navigationOpen} onClose={() => dispatch(closeNavigation())}>
       <List>
         <ListItem>
           <ListItemText>Expenditure Accounting</ListItemText>
@@ -58,7 +53,7 @@ const NavigationDrawer: React.FC<NavigationDrawerProps> = props => {
             </ListItem>
           </>
         ) : (
-          <ListItem button onClick={() => props.onClose()}>
+          <ListItem button onClick={() => dispatch(closeNavigation())}>
             <ListItemText>Login</ListItemText>
           </ListItem>
         )}

@@ -5,20 +5,14 @@ import React from 'react';
 
 import { getDataState, useAppSelector } from '../data/store';
 import CenteredLoader from '../common/CenteredLoader';
-import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
 import { getPurchases, Purchase } from '../data/purchases';
 
-export interface MonthlyExpenditurePageProps {
-  openNavigation: () => void;
-}
-
-const MonthlyExpenditurePage: React.FC<MonthlyExpenditurePageProps> = props => {
+const MonthlyExpenditurePage: React.FC = () => {
   const dataState = useAppSelector(getDataState);
   const purchases = useAppSelector(getPurchases);
   return (
     <Scaffold
-      nav={<MenuButton onClick={props.openNavigation} />}
       title='Monthly Expenditure'
       content={
         <Paper>

@@ -11,7 +11,6 @@ import {
   useAppStore,
   useData,
 } from '../data/store';
-import MenuButton from '../common/MenuButton';
 import SearchPage from '../common/SearchPage';
 import Scaffold from '../common/Scaffold';
 import CenteredLoader from '../common/CenteredLoader';
@@ -24,11 +23,7 @@ import {
 } from '../data/purchases';
 import PurchaseList from './PurchaseList';
 
-export interface PurchasesPageProps {
-  openNavigation: () => void;
-}
-
-const PurchasesPage: React.FC<PurchasesPageProps> = props => {
+const PurchasesPage: React.FC = () => {
   useData();
   const store = useAppStore();
   const dispatch = useAppDispatch();
@@ -93,7 +88,6 @@ const PurchasesPage: React.FC<PurchasesPageProps> = props => {
         </SearchPage>
       ) : (
         <Scaffold
-          nav={<MenuButton onClick={props.openNavigation} />}
           title='Purchases'
           actions={
             <IconButton color='inherit' onClick={() => setIsSearching(true)}>

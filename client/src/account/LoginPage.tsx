@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 import React, { useState } from 'react';
 
-import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
 import { getIsLoggedIn, apiLogin } from '../data/session';
 import { AuthError, useAppDispatch, useAppSelector } from '../data/store';
@@ -27,11 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export interface LoginPageProps {
-  openNavigation: () => void;
-}
-
-const LoginPage: React.FC<LoginPageProps> = props => {
+const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -59,7 +54,6 @@ const LoginPage: React.FC<LoginPageProps> = props => {
 
   return (
     <Scaffold
-      nav={<MenuButton onClick={props.openNavigation} />}
       title='Login'
       content={
         <Paper>

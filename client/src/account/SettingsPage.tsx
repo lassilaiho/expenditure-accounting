@@ -7,17 +7,12 @@ import {
 } from '@material-ui/core';
 import React, { useState } from 'react';
 
-import MenuButton from '../common/MenuButton';
 import Scaffold from '../common/Scaffold';
 import { getCurrentEmail, apiChangePassword } from '../data/session';
 import { useAppDispatch, useAppSelector } from '../data/store';
 import PasswordChangeDialog from './PasswordChangeDialog';
 
-export interface SettingsProps {
-  openNavigation: () => void;
-}
-
-const SettingsPage: React.FC<SettingsProps> = props => {
+const SettingsPage: React.FC = () => {
   const currentEmail = useAppSelector(getCurrentEmail);
   const dispatch = useAppDispatch();
 
@@ -31,7 +26,6 @@ const SettingsPage: React.FC<SettingsProps> = props => {
   return (
     <>
       <Scaffold
-        nav={<MenuButton onClick={props.openNavigation} />}
         title='Settings'
         content={
           <Paper>
