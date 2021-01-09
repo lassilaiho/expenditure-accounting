@@ -2,13 +2,14 @@ import { Paper } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
 
-import { getDataState, useAppSelector } from '../data/store';
+import { getDataState, useAppSelector, useData } from '../data/store';
 import CenteredLoader from '../common/CenteredLoader';
 import Scaffold from '../common/Scaffold';
 import { getPurchases, Purchase } from '../data/purchases';
 import GroupedExpenditureView from './GroupedExpenditureView';
 
 const DailyExpenditurePage: React.FC = () => {
+  useData();
   const dataState = useAppSelector(getDataState);
   const purchases = useAppSelector(getPurchases);
   return (

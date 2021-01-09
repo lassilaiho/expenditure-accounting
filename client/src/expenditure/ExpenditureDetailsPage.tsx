@@ -7,11 +7,12 @@ import CenteredLoader from '../common/CenteredLoader';
 import BackButton from '../common/BackButton';
 import Scaffold from '../common/Scaffold';
 import { DateRange } from '../util';
-import { getDataState, useAppSelector } from '../data/store';
+import { getDataState, useAppSelector, useData } from '../data/store';
 import { getPurchases } from '../data/purchases';
 import ExpenditureByTags from './ExpenditureByTags';
 
 const ExpenditureDetailsPage: React.FC = () => {
+  useData();
   const location = useLocation();
   const dataState = useAppSelector(getDataState);
   const purchases = useAppSelector(getPurchases);

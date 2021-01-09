@@ -3,12 +3,13 @@ import GroupedExpneditureView from 'expenditure/GroupedExpenditureView';
 import moment from 'moment';
 import React from 'react';
 
-import { getDataState, useAppSelector } from '../data/store';
+import { getDataState, useAppSelector, useData } from '../data/store';
 import CenteredLoader from '../common/CenteredLoader';
 import Scaffold from '../common/Scaffold';
 import { getPurchases, Purchase } from '../data/purchases';
 
 const MonthlyExpenditurePage: React.FC = () => {
+  useData();
   const dataState = useAppSelector(getDataState);
   const purchases = useAppSelector(getPurchases);
   return (
