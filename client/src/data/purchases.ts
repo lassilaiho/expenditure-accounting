@@ -1,26 +1,20 @@
 import Big from 'big.js';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, defaultMemoize } from 'reselect';
 
-import { ensureOk } from '../util';
+import { ensureOk, flip } from '../util';
 import { AsyncThunk, setDataState } from './store';
 import * as jsonConv from './jsonConvert';
 import {
   addProduct,
   apiAddProduct,
-  getProductById,
+  getProductsById,
   Product,
   productFromJson,
 } from './products';
-import { addTags, apiAddTags, Tag, tagFromJson } from './tags';
+import { addTags, apiAddTags, getTagsById, Tag, tagFromJson } from './tags';
 import { RootState } from './store';
-import {
-  id,
-  Collection,
-  emptyCollection,
-  clearRemoteData,
-  RemoteDataSet,
-  setRemoteData,
-} from './common';
+import { clearRemoteData, RemoteDataSet, setRemoteData } from './common';
 
 export type Purchase = {
   id: number;
@@ -46,37 +40,31 @@ export function purchaseFromJson(json: any): [Purchase, Product, Tag[]] {
   return [purchase, product, tags];
 }
 
+type Collection = {
+  byId: { [id: number]: Purchase };
+};
+
+const emptyCollection: Collection = { byId: {} };
+
 export const purchasesSlice = createSlice({
   name: 'purchases',
-  initialState: id<Collection<Purchase>>({ byId: {}, all: [] }),
+  initialState: emptyCollection,
   reducers: {
     addPurchase(state, action: PayloadAction<Purchase>) {
       const purchase = action.payload;
-      if (state.byId[purchase.id]) {
-        return;
+      if (!state.byId[purchase.id]) {
+        state.byId[purchase.id] = purchase;
       }
-      state.byId[purchase.id] = purchase;
-      for (let i = 0; i < state.all.length; i++) {
-        if (purchase.date > state.byId[state.all[i]].date) {
-          state.all.splice(i, 0, purchase.id);
-          return;
-        }
-      }
-      state.all.splice(state.all.length, 0, purchase.id);
     },
     updatePurchase(state, action: PayloadAction<Purchase>) {
       state.byId[action.payload.id] = action.payload;
     },
     deletePurchase(state, action: PayloadAction<number>) {
-      const i = state.all.indexOf(action.payload);
-      if (i !== -1) {
-        state.all.splice(i, 1);
-        delete state.byId[action.payload];
-      }
+      delete state.byId[action.payload];
     },
   },
   extraReducers: {
-    [clearRemoteData.type]: emptyCollection,
+    [clearRemoteData.type]: () => emptyCollection,
     [setRemoteData.type]: (state, action: PayloadAction<RemoteDataSet>) => {
       const {
         actions: { addPurchase },
@@ -99,43 +87,52 @@ export const totalPrice = (p: Purchase) => p.quantity.mul(p.price);
 export const getPurchaseById = (id: number) => (state: RootState) =>
   state.purchases.byId[id];
 
-export const getPurchases = (state: RootState) =>
-  state.purchases.all.map(id => state.purchases.byId[id]);
+export const getPurchases = createSelector(
+  (state: RootState) => state.purchases.byId,
+  byId =>
+    Object.values(byId).sort((a, b) => b.date.valueOf() - a.date.valueOf()),
+);
 
-export const getFilteredPurchases = (filter: string) => (state: RootState) => {
-  filter = filter.toLocaleLowerCase();
-  const result: Purchase[] = [];
-  for (const purchaseId of state.purchases.all) {
-    const purchase = getPurchaseById(purchaseId)(state);
-    const product = getProductById(purchase.product)(state);
-    if (product.name.toLocaleLowerCase().includes(filter)) {
-      result.push(purchase);
-      continue;
-    }
-    for (const tagId of purchase.tags) {
-      const tag = state.tags.byId[tagId];
-      if (tag.name.toLocaleLowerCase().includes(filter)) {
-        result.push(purchase);
-        break;
+export const getFilteredPurchases = flip(
+  createSelector(
+    [getPurchases, getProductsById, getTagsById],
+    (purchases, products, tags) =>
+      defaultMemoize((filter: string) => {
+        filter = filter.toLocaleLowerCase();
+        const result: Purchase[] = [];
+        for (const purchase of purchases) {
+          const product = products[purchase.product];
+          if (product.name.toLocaleLowerCase().includes(filter)) {
+            result.push(purchase);
+            continue;
+          }
+          for (const tagId of purchase.tags) {
+            const tag = tags[tagId];
+            if (tag.name.toLocaleLowerCase().includes(filter)) {
+              result.push(purchase);
+              break;
+            }
+          }
+        }
+        return result;
+      }),
+  ),
+);
+
+export const getLatestPurchaseByProduct = flip(
+  createSelector([getPurchases, getProductsById], (purchases, products) =>
+    defaultMemoize((productName: string) => {
+      productName = productName.toLocaleLowerCase();
+      for (const purchase of purchases) {
+        const product = products[purchase.product];
+        if (product.name.toLocaleLowerCase().includes(productName)) {
+          return purchase;
+        }
       }
-    }
-  }
-  return result;
-};
-
-export const getLatestPurchaseByProduct = (productName: string) => (
-  state: RootState,
-) => {
-  productName = productName.toLocaleLowerCase();
-  for (const purchaseId of state.purchases.all) {
-    const purchase = state.purchases.byId[purchaseId];
-    const product = state.products.byId[purchase.product];
-    if (product.name.toLocaleLowerCase().includes(productName)) {
-      return purchase;
-    }
-  }
-  return null;
-};
+      return null;
+    }),
+  ),
+);
 
 export interface PurchaseUpdate {
   id: number;

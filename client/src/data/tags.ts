@@ -1,19 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, defaultMemoize } from 'reselect';
 
-import { ensureOk } from '../util';
+import { ensureOk, flip } from '../util';
 import { AsyncThunk } from './store';
 import * as jsonConv from './jsonConvert';
 import { RootState } from './store';
-import {
-  id,
-  Collection,
-  emptyCollection,
-  clearRemoteData,
-  RemoteDataSet,
-  setRemoteData,
-} from './common';
+import { clearRemoteData, RemoteDataSet, setRemoteData } from './common';
 
 export type Tag = { id: number; name: string };
+
+type Collection = {
+  byId: { [id: number]: Tag };
+  byName: { [name: string]: number };
+};
+
+const emptyCollection: Collection = { byId: {}, byName: {} };
 
 export function tagFromJson(json: any): Tag {
   jsonConv.toObject(json);
@@ -22,19 +23,19 @@ export function tagFromJson(json: any): Tag {
 
 export const tagsSlice = createSlice({
   name: 'tags',
-  initialState: id<Collection<Tag>>({ byId: {}, all: [] }),
+  initialState: emptyCollection,
   reducers: {
     addTags(state, action: PayloadAction<Tag[]>) {
       for (const tag of action.payload) {
-        if (!state.byId[tag.id]) {
-          state.all.push(tag.id);
+        if (!state.byName[tag.name]) {
           state.byId[tag.id] = tag;
+          state.byName[tag.name] = tag.id;
         }
       }
     },
   },
   extraReducers: {
-    [clearRemoteData.type]: emptyCollection,
+    [clearRemoteData.type]: () => emptyCollection,
     [setRemoteData.type]: (state, action: PayloadAction<RemoteDataSet>) => {
       const {
         actions: { addTags },
@@ -48,36 +49,38 @@ export const tagsSlice = createSlice({
 });
 export const { addTags } = tagsSlice.actions;
 
-export const getTags = (state: RootState) =>
-  state.tags.all.map(id => state.tags.byId[id]);
+export const getTags = createSelector(
+  (state: RootState) => state.tags.byId,
+  byId => Object.values(byId),
+);
 
 export const getTagsById = (state: RootState) => state.tags.byId;
 
-export const getTagsSortedByName = (ids: number[]) => (state: RootState) => {
-  const tags = ids.map(id => state.tags.byId[id]);
-  return tags.sort((a, b) => {
-    const aName = a.name.toLocaleLowerCase();
-    const bName = b.name.toLocaleLowerCase();
-    if (aName < bName) {
-      return -1;
-    }
-    if (aName > bName) {
-      return 1;
-    }
-    return 0;
-  });
-};
+const getTagByName = (name: string, state: RootState) =>
+  state.tags.byId[state.tags.byName[name]] ?? null;
+
+export const getTagsSortedByName = flip(
+  createSelector(
+    (state: RootState) => state.tags.byId,
+    byId =>
+      defaultMemoize((ids: number[]) =>
+        ids
+          .map(id => byId[id])
+          .sort((a, b) => {
+            const aName = a.name.toLocaleLowerCase();
+            const bName = b.name.toLocaleLowerCase();
+            return aName < bName ? -1 : aName > bName ? 1 : 0;
+          }),
+      ),
+  ),
+);
 
 export function apiAddTags(names: string[]): AsyncThunk<Tag[]> {
   return async (dispatch, getState, { http }) => {
     const existing: Tag[] = [];
     const newTags: string[] = [];
-    const tagsByName = new Map<string, Tag>();
-    for (const tag of Object.values(getState().tags.byId)) {
-      tagsByName.set(tag.name, tag);
-    }
     for (const name of names) {
-      const tag = tagsByName.get(name);
+      const tag = getTagByName(name, getState());
       if (tag) {
         existing.push(tag);
       } else {

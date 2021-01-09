@@ -1,12 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ensureOk } from '../util';
 import { AsyncThunk } from './store';
 import * as jsonConv from './jsonConvert';
 import { RootState } from './store';
 import {
-  id,
-  Collection,
   emptyCollection,
   clearRemoteData,
   RemoteDataSet,
@@ -22,7 +20,7 @@ export function productFromJson(json: any): Product {
 
 export const productsSlice = createSlice({
   name: 'products',
-  initialState: id<Collection<Product>>({ byId: {}, all: [] }),
+  initialState: emptyCollection<Product>(),
   reducers: {
     addProduct(state, action: PayloadAction<Product>) {
       if (!state.byId[action.payload.id]) {
@@ -46,11 +44,14 @@ export const productsSlice = createSlice({
 });
 export const { addProduct } = productsSlice.actions;
 
+export const getProductsById = (state: RootState) => state.products.byId;
+
 export const getProductById = (id: number) => (state: RootState) =>
   state.products.byId[id];
 
-export const getProducts = (state: RootState) =>
-  state.products.all.map(id => state.products.byId[id]);
+export const getProducts = createSelector(getProductsById, byId =>
+  Object.values(byId),
+);
 
 export function apiAddProduct(name: string): AsyncThunk<Product> {
   return async (dispatch, getState, { http }) => {
