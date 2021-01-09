@@ -98,6 +98,9 @@ export const getFilteredPurchases = flip(
     [getPurchases, getProductsById, getTagsById],
     (purchases, products, tags) =>
       defaultMemoize((filter: string) => {
+        if (filter === '') {
+          return purchases;
+        }
         filter = filter.toLocaleLowerCase();
         const result: Purchase[] = [];
         for (const purchase of purchases) {

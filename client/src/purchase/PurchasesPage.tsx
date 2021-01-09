@@ -8,14 +8,12 @@ import {
   getDataState,
   useAppDispatch,
   useAppSelector,
-  useAppStore,
   useData,
 } from '../data/store';
 import SearchPage from '../common/SearchPage';
 import Scaffold from '../common/Scaffold';
 import CenteredLoader from '../common/CenteredLoader';
 import {
-  getPurchases,
   getFilteredPurchases,
   Purchase,
   apiDeletePurchase,
@@ -25,31 +23,19 @@ import PurchaseList from './PurchaseList';
 
 const PurchasesPage: React.FC = () => {
   useData();
-  const store = useAppStore();
-  const dispatch = useAppDispatch();
-  const purchases = useAppSelector(getPurchases);
-  const dataState = useAppSelector(getDataState);
-  const history = useHistory();
 
-  const [isSearching, setIsSearching] = useState(false);
-  const [shownPurchases, setShownPurchases] = useState(purchases);
+  const [searchString, setSearchString] = useState<string | null>(null);
   const [undoablePurchaseId, setUndoablePurchaseId] = useState<number | null>(
     null,
   );
 
-  function stopSearching() {
-    setShownPurchases(purchases);
-    setIsSearching(false);
-  }
+  const dispatch = useAppDispatch();
+  const purchases = useAppSelector(getFilteredPurchases(searchString ?? ''));
+  const dataState = useAppSelector(getDataState);
 
-  function searchPurchases(searchString: string) {
-    setShownPurchases(
-      searchString === ''
-        ? purchases
-        : getFilteredPurchases(searchString)(store.getState()),
-    );
-  }
+  const history = useHistory();
 
+  const stopSearching = useCallback(() => setSearchString(null), []);
   const onEdit = useCallback(p => history.push(`/purchases/${p.id}`), [
     history,
   ]);
@@ -60,37 +46,32 @@ const PurchasesPage: React.FC = () => {
     },
     [dispatch],
   );
-
-  function undoDelete() {
+  const undoDelete = async () => {
     if (undoablePurchaseId !== null) {
-      apiRestorePurchase(undoablePurchaseId);
+      await dispatch(apiRestorePurchase(undoablePurchaseId));
       setUndoablePurchaseId(null);
     }
-  }
+  };
 
-  function renderList() {
+  const renderList = useCallback(() => {
     return dataState !== 'finished' ? (
       <CenteredLoader />
     ) : (
       <PurchaseList
-        purchases={shownPurchases}
+        purchases={purchases}
         onEditPurchase={onEdit}
         onDeletePurchase={onDelete}
       />
     );
-  }
+  }, [dataState, purchases, onEdit, onDelete]);
 
   return (
     <>
-      {isSearching ? (
-        <SearchPage onCancel={stopSearching} onSearch={searchPurchases}>
-          {renderList()}
-        </SearchPage>
-      ) : (
+      {searchString === null ? (
         <Scaffold
           title='Purchases'
           actions={
-            <IconButton color='inherit' onClick={() => setIsSearching(true)}>
+            <IconButton color='inherit' onClick={() => setSearchString('')}>
               <SearchIcon />
             </IconButton>
           }
@@ -104,6 +85,10 @@ const PurchasesPage: React.FC = () => {
             </Fab>
           }
         />
+      ) : (
+        <SearchPage onCancel={stopSearching} onSearch={setSearchString}>
+          {renderList()}
+        </SearchPage>
       )}
       <Snackbar
         anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}

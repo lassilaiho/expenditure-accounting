@@ -61,16 +61,17 @@ const PurchaseList: React.FC<PurchaseListProps> = props => {
       </div>
     );
   }
-
   return (
     <AutoSizer>
-      {({ width, height }) => (
-        <Virtuoso
-          style={{ width, height }}
-          totalCount={purchases.length}
-          itemContent={renderPurchaseItem}
-        />
-      )}
+      {({ width, height }) => {
+        return (
+          <Virtuoso
+            style={{ width, height }}
+            data={purchases}
+            itemContent={renderPurchaseItem}
+          />
+        );
+      }}
     </AutoSizer>
   );
 };
