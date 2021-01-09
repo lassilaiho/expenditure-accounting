@@ -27,6 +27,7 @@ export const newStore = (http: HttpClient) =>
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware({
         serializableCheck: false,
+        immutableCheck: false,
         thunk: { extraArgument: { http } },
       }),
   });
