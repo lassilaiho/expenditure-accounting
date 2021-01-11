@@ -200,7 +200,7 @@ exports[`renders correctly with invalid scope 1`] = `<DocumentFragment />`;
 exports[`renders correctly with month scope with data 1`] = `
 <DocumentFragment>
   <div
-    class="makeStyles-root-17"
+    class="makeStyles-root-20"
   >
     <header
       class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
@@ -232,14 +232,14 @@ exports[`renders correctly with month scope with data 1`] = `
           />
         </button>
         <h6
-          class="MuiTypography-root makeStyles-title-19 MuiTypography-h6"
+          class="MuiTypography-root makeStyles-title-22 MuiTypography-h6"
         >
           Expenditure on 3/2020
         </h6>
       </div>
     </header>
     <div
-      class="makeStyles-contentRoot-18"
+      class="makeStyles-contentRoot-21"
     >
       <div
         class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
@@ -261,38 +261,12 @@ exports[`renders correctly with month scope with data 1`] = `
                   class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
                 >
                   <div
-                    class="MuiBox-root MuiBox-root-20"
-                  >
-                    <div
-                      class="MuiBox-root MuiBox-root-21"
-                    >
-                      tag 1
-                    </div>
-                    <div
-                      class="MuiBox-root MuiBox-root-22"
-                    >
-                      2,16 €
-                    </div>
-                  </div>
-                </span>
-              </div>
-            </li>
-            <li
-              class="MuiListItem-root MuiListItem-gutters"
-            >
-              <div
-                class="MuiListItemText-root"
-              >
-                <span
-                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
-                >
-                  <div
                     class="MuiBox-root MuiBox-root-23"
                   >
                     <div
                       class="MuiBox-root MuiBox-root-24"
                     >
-                      tag 3
+                      tag 1
                     </div>
                     <div
                       class="MuiBox-root MuiBox-root-25"
@@ -318,12 +292,12 @@ exports[`renders correctly with month scope with data 1`] = `
                     <div
                       class="MuiBox-root MuiBox-root-27"
                     >
-                      tag 2
+                      tag 3
                     </div>
                     <div
                       class="MuiBox-root MuiBox-root-28"
                     >
-                      0,16 €
+                      2,16 €
                     </div>
                   </div>
                 </span>
@@ -344,10 +318,36 @@ exports[`renders correctly with month scope with data 1`] = `
                     <div
                       class="MuiBox-root MuiBox-root-30"
                     >
-                      untagged
+                      tag 2
                     </div>
                     <div
                       class="MuiBox-root MuiBox-root-31"
+                    >
+                      0,16 €
+                    </div>
+                  </div>
+                </span>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters"
+            >
+              <div
+                class="MuiListItemText-root"
+              >
+                <span
+                  class="MuiTypography-root MuiListItemText-primary MuiTypography-body1 MuiTypography-displayBlock"
+                >
+                  <div
+                    class="MuiBox-root MuiBox-root-32"
+                  >
+                    <div
+                      class="MuiBox-root MuiBox-root-33"
+                    >
+                      untagged
+                    </div>
+                    <div
+                      class="MuiBox-root MuiBox-root-34"
                     >
                       0,00 €
                     </div>
@@ -366,7 +366,7 @@ exports[`renders correctly with month scope with data 1`] = `
 exports[`renders correctly with month scope without data 1`] = `
 <DocumentFragment>
   <div
-    class="makeStyles-root-33"
+    class="makeStyles-root-36"
   >
     <header
       class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
@@ -398,14 +398,14 @@ exports[`renders correctly with month scope without data 1`] = `
           />
         </button>
         <h6
-          class="MuiTypography-root makeStyles-title-35 MuiTypography-h6"
+          class="MuiTypography-root makeStyles-title-38 MuiTypography-h6"
         >
           Expenditure on 4/2020
         </h6>
       </div>
     </header>
     <div
-      class="makeStyles-contentRoot-34"
+      class="makeStyles-contentRoot-37"
     >
       <div
         class="MuiContainer-root MuiContainer-fixed MuiContainer-maxWidthLg"
@@ -415,7 +415,7 @@ exports[`renders correctly with month scope without data 1`] = `
           class="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
         >
           <div
-            class="makeStyles-centeredContainer-36"
+            class="makeStyles-centeredContainer-39"
           >
             <div
               class="MuiCircularProgress-root MuiCircularProgress-colorSecondary MuiCircularProgress-indeterminate"
