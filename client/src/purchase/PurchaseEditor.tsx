@@ -13,7 +13,13 @@ import DoneIcon from '@material-ui/icons/Done';
 import { Autocomplete, AutocompleteChangeReason } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import Big from 'big.js';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import Scaffold from '../common/Scaffold';
 import BackButton from '../common/BackButton';
@@ -96,8 +102,15 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = props => {
     }
   }
 
+  function onCtrlEnter(e: KeyboardEvent) {
+    if (!e.defaultPrevented && e.key === 'Enter' && e.ctrlKey) {
+      save();
+    }
+  }
+
   return (
     <Scaffold
+      onKeyDown={onCtrlEnter}
       nav={<BackButton onClick={routing.pop} />}
       title={props.title ?? 'Edit Purchase'}
       actions={

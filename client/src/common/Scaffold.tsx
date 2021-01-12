@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export interface ScaffoldProps {
+export interface ScaffoldProps
+  extends Omit<React.HTMLProps<HTMLDivElement>, 'content'> {
   appBar?: JSX.Element;
   nav?: JSX.Element | null;
   title?: string;
@@ -53,22 +54,23 @@ const ScaffoldNavButton: React.FC = () => {
 
 const Scaffold: React.FC<ScaffoldProps> = props => {
   const classes = useStyles();
+  const { appBar, nav, title, actions, content, fab, ...restProps } = props;
   return (
-    <div className={classes.root}>
-      {props.appBar ? (
-        props.appBar
+    <div {...restProps} className={classes.root}>
+      {appBar ? (
+        appBar
       ) : (
         <AppBar position='static'>
           <Toolbar>
-            {props.nav === undefined ? (
+            {nav === undefined ? (
               <ScaffoldNavButton />
-            ) : props.nav === null ? null : (
-              props.nav
+            ) : nav === null ? null : (
+              nav
             )}
             <Typography variant='h6' className={classes.title}>
-              {props.title}
+              {title}
             </Typography>
-            {props.actions}
+            {actions}
           </Toolbar>
         </AppBar>
       )}
@@ -80,10 +82,10 @@ const Scaffold: React.FC<ScaffoldProps> = props => {
             height: '100%',
           }}
         >
-          {props.content ?? ''}
+          {content ?? ''}
         </Container>
       </div>
-      {props.fab ? <div className={classes.fab}>{props.fab}</div> : null}
+      {fab ? <div className={classes.fab}>{fab}</div> : null}
     </div>
   );
 };
