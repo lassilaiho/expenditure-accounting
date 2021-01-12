@@ -1,11 +1,10 @@
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import React from 'react';
 import Big from 'big.js';
-import { History } from 'history';
-import { useHistory } from 'react-router-dom';
 
 import { currency, numOfBig } from '../util';
 import { Purchase, totalPrice } from '../data/purchases';
+import { useRouting } from '../data/ui';
 
 export interface GroupedExpenditureViewProps {
   purchases: Purchase[];
@@ -18,7 +17,7 @@ const GroupedExpneditureView: React.FC<GroupedExpenditureViewProps> = props => {
   if (purchases.length === 0) {
     return <List></List>;
   }
-  const history = useHistory();
+  const { push } = useRouting();
   const result: JSX.Element[] = [];
   let prev = getLatest(purchases);
   let expenditure = totalPrice(prev);
@@ -27,12 +26,12 @@ const GroupedExpneditureView: React.FC<GroupedExpenditureViewProps> = props => {
     if (props.splitHere(prev, current)) {
       expenditure = expenditure.add(totalPrice(current));
     } else {
-      result.push(makeItem(i, format(prev.date), expenditure, history));
+      result.push(makeItem(i, format(prev.date), expenditure, push));
       expenditure = totalPrice(current);
     }
     prev = current;
   }
-  result.push(makeItem(0, format(prev.date), expenditure, history));
+  result.push(makeItem(0, format(prev.date), expenditure, push));
   return <List>{result}</List>;
 };
 
@@ -46,13 +45,14 @@ function getLatest(purchases: Purchase[]) {
   return latest;
 }
 
-function makeItem(i: number, text: string, expenditure: Big, history: History) {
+function makeItem(
+  i: number,
+  text: string,
+  expenditure: Big,
+  push: (r: string) => void,
+) {
   return (
-    <ListItem
-      key={i}
-      button
-      onClick={() => history.push('/expenditure/' + text)}
-    >
+    <ListItem key={i} button onClick={() => push('/expenditure/' + text)}>
       <ListItemText
         primary={text}
         secondary={currency.format(numOfBig(expenditure))}

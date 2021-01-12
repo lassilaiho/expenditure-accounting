@@ -9,6 +9,7 @@ import Scaffold from '../common/Scaffold';
 import { DateRange } from '../util';
 import { getDataState, useAppSelector, useData } from '../data/store';
 import { getPurchases } from '../data/purchases';
+import { useRouting } from '../data/ui';
 import ExpenditureByTags from './ExpenditureByTags';
 
 const ExpenditureDetailsPage: React.FC = () => {
@@ -18,13 +19,16 @@ const ExpenditureDetailsPage: React.FC = () => {
   const purchases = useAppSelector(getPurchases);
 
   const dateScope = parseDateScope(location.pathname);
+  const routing = useRouting(
+    dateScope?.type === 'day' ? '/expenditure/daily' : '/expenditure/monthly',
+  );
   if (!dateScope) {
     return <Redirect to='/' />;
   }
 
   return (
     <Scaffold
-      nav={<BackButton />}
+      nav={<BackButton onClick={routing.pop} />}
       title={'Expenditure on ' + dateScopeToString(dateScope)}
       content={
         <Paper>

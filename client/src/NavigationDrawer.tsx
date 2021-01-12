@@ -6,14 +6,13 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { getIsLoggedIn, getCurrentEmail, apiLogout } from './data/session';
 import { useAppDispatch, useAppSelector } from './data/store';
-import { closeNavigation, getNavigationOpen } from './data/ui';
+import { closeNavigation, getNavigationOpen, useRouting } from './data/ui';
 
 const NavigationDrawer: React.FC = () => {
-  const history = useHistory();
+  const routing = useRouting();
   const loggedIn = useAppSelector(getIsLoggedIn);
   const currentEmail = useAppSelector(getCurrentEmail);
   const navigationOpen = useAppSelector(getNavigationOpen);
@@ -22,7 +21,7 @@ const NavigationDrawer: React.FC = () => {
   function linkOpener(url: string) {
     return () => {
       dispatch(closeNavigation());
-      history.push(url);
+      routing.replace(url);
     };
   }
 

@@ -2,7 +2,6 @@ import { Button, Fab, IconButton, Snackbar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import {
   getDataState,
@@ -19,6 +18,7 @@ import {
   apiDeletePurchase,
   apiRestorePurchase,
 } from '../data/purchases';
+import { useRouting } from '../data/ui';
 import PurchaseList from './PurchaseList';
 
 const PurchasesPage: React.FC = () => {
@@ -33,11 +33,11 @@ const PurchasesPage: React.FC = () => {
   const purchases = useAppSelector(getFilteredPurchases(searchString ?? ''));
   const dataState = useAppSelector(getDataState);
 
-  const history = useHistory();
+  const routing = useRouting();
 
   const stopSearching = useCallback(() => setSearchString(null), []);
-  const onEdit = useCallback(p => history.push(`/purchases/${p.id}`), [
-    history,
+  const onEdit = useCallback(p => routing.push(`/purchases/${p.id}`), [
+    routing,
   ]);
   const onDelete = useCallback(
     async (p: Purchase) => {
@@ -79,7 +79,7 @@ const PurchasesPage: React.FC = () => {
           fab={
             <Fab
               color='secondary'
-              onClick={() => history.push('/purchases/new')}
+              onClick={() => routing.push('/purchases/new')}
             >
               <AddIcon />
             </Fab>

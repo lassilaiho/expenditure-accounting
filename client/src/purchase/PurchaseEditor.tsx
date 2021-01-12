@@ -14,7 +14,6 @@ import { Autocomplete, AutocompleteChangeReason } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import Big from 'big.js';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import Scaffold from '../common/Scaffold';
 import BackButton from '../common/BackButton';
@@ -26,6 +25,7 @@ import {
   getLatestPurchaseByProduct,
 } from '../data/purchases';
 import { getTagsSortedByName, getTags } from '../data/tags';
+import { useRouting } from '../data/ui';
 
 export interface PurchaseEditorProps {
   title?: string;
@@ -53,7 +53,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = props => {
   const nameInputRef = useRef<HTMLElement>(null);
   useEffect(() => nameInputRef.current?.focus(), []);
 
-  const history = useHistory();
+  const routing = useRouting();
   const store = useAppStore();
 
   function save() {
@@ -65,7 +65,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = props => {
       price: new Big(price),
       tags,
     });
-    history.goBack();
+    routing.pop();
   }
 
   function prefillFields(
@@ -98,7 +98,7 @@ const PurchaseEditor: React.FC<PurchaseEditorProps> = props => {
 
   return (
     <Scaffold
-      nav={<BackButton />}
+      nav={<BackButton onClick={routing.pop} />}
       title={props.title ?? 'Edit Purchase'}
       actions={
         <IconButton color='inherit' onClick={save}>
